@@ -1,0 +1,6 @@
+﻿  Board.cpp
+  main.cpp
+C:\Users\Amir\Desktop\CS Academic\שנה ב\C++\Tetris\Tetris\main.cpp(22,15): warning C4101: 'choice': unreferenced local variable
+C:\Users\Amir\Desktop\CS Academic\שנה ב\C++\Tetris\Tetris\main.cpp(21,8): warning C4101: 'pGame': unreferenced local variable
+  Generating Code...
+  Tetris.vcxproj -> C:\Users\Amir\Desktop\CS Academic\שנה ב\C++\Tetris\x64\Debug\Tetris.exe
