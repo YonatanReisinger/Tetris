@@ -25,7 +25,7 @@ int main()
 	
 	board1.print();
 	board2.print();
-	cout << "gitHub test" << endl;
+	cout << "gitHub test 2" << endl;
 	//pGame = nullptr;
 	//printMenu(); //the program just started and therefore for sure no paused game exists
 	//cin >> choice;
