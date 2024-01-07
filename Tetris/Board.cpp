@@ -1,9 +1,11 @@
 #include "Board.h"
+#include "gameConfig.h"
 
 Board:: Board(const Point& topLeft, const Point& topRight, const Point& BottomLeft, const Point& BottomRight)
 {
 	setBorders(topLeft, topRight, BottomLeft, BottomRight);
 }
+
 Board:: Board(const Board* other)
 {
 	for (auto i = 0; i < 4; i++)
@@ -28,13 +30,16 @@ Point* Board:: getBorders()
 }
 bool Board:: isHeightValid(Point borders[4])
 {
-	// there should be HEIGHT points between the top and bottom borders
-	return ((borders[BOTTOM_LEFT].getY() - borders[TOP_LEFT].getY() + 1) == HEIGHT + 2) && ((borders[BOTTOM_RIGHT].getY() - borders[TOP_RIGHT].getY() + 1) == HEIGHT + 2);
+
+	//one end - other end + 1 = number of points between the two ends.
+	//there should be HEIGHT+2 points between them as there should also be two points on each end for the frame
+	return ((borders[BOTTOM_LEFT].getY() - borders[TOP_LEFT].getY() + 1) == GameConfig::HEIGHT + 2) && ((borders[BOTTOM_RIGHT].getY() - borders[TOP_RIGHT].getY() + 1) == GameConfig::HEIGHT + 2);
 }
 bool Board:: isWidthValid(Point borders[4])
 {
-	// there should be WIDTH points between the left and right borders
-	return (borders[TOP_RIGHT].getX() - borders[TOP_LEFT].getX() + 1 == WIDTH + 2) && (borders[BOTTOM_RIGHT].getX() - borders[BOTTOM_LEFT].getX() + 1== WIDTH + 2);
+	// one end - other end + 1 = number of points between the two ends.
+	//there should be WIDTH+2 points between them as there should also be two points on each end for the frame
+	return (borders[TOP_RIGHT].getX() - borders[TOP_LEFT].getX() + 1 == GameConfig::WIDTH + 2) && (borders[BOTTOM_RIGHT].getX() - borders[BOTTOM_LEFT].getX() + 1== GameConfig::WIDTH + 2);
 }
 void Board:: print()
 {
@@ -71,7 +76,7 @@ void Board:: printVerticalLine(Point& topEnd, Point& bottomEnd, char symbol)
 		cout << symbol;
 	}
 }
-bool Board:: clear()
+void Board:: clear()
 {
-	return true;
+	
 }
