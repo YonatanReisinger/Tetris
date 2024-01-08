@@ -23,7 +23,7 @@ public:
 	int getY();
 	void gotoxy();
 	void print(char ch = '*');
-	bool copy(const Point* other);
+	bool copy(const Point& other);
 	bool moveUp();
 	bool moveDown();
 	bool moveLeft();
