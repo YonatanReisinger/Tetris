@@ -6,26 +6,35 @@
 #include "Shape.h"
 #include "Game.h"
 #include "Point.h"
+#include "gameConfig.h"
 using namespace std;
 // <- Imports 
 
 // Macros and enums ->
 enum Choice{ START = 1, CONTINUE = 2, INSTRUCTIONS = 8, EXIT = 9};
-#define INSTRUCTIONS_STR "blabla"
-#define KEYS_STR "bloblo"
-
 // <- Macros and enums
 
 int main()
 {
 	Game* pGame;
 	unsigned int choice;
-	Board board1, board2(Point(18,0), Point(31, 0), Point(18, HEIGHT + 1), Point(31, HEIGHT + 1));
+	Board board1(Point(0, 0), Point(GameConfig::WIDTH + 1, 0), Point(0, GameConfig::HEIGHT + 1), Point(GameConfig::WIDTH + 1, GameConfig::HEIGHT + 1));
+	Board board2(Point(GameConfig::WIDTH + 1 + GameConfig::DISTANCE_BETWEEN_BOARDS + 1, 0)
+		, Point((GameConfig::WIDTH + 1) * 2 + GameConfig::DISTANCE_BETWEEN_BOARDS + 1, 0)
+		, Point(GameConfig::WIDTH + 1 + GameConfig::DISTANCE_BETWEEN_BOARDS + 1, GameConfig::HEIGHT + 1)
+		, Point((GameConfig::WIDTH + 1) * 2 + GameConfig::DISTANCE_BETWEEN_BOARDS + 1, GameConfig::HEIGHT + 1));
 	Player player1(board1, "Daniel"), player2(board2, "Yonatan");
 	
-	board1.print();
-	board2.print();
-	cout << "gitHub test 2" << endl;
+	//board1.print();
+	//board2.print();
+	
+	Point p1(10, 12), p2(14,19);
+	p1.print();
+	p1.moveRight();
+	Sleep(1000);
+	p1.print();
+	p1.copy(&p2);
+	p1.gotoxy();
 	//pGame = nullptr;
 	//printMenu(); //the program just started and therefore for sure no paused game exists
 	//cin >> choice;
@@ -47,7 +56,7 @@ int main()
 	//			cout << "No paused game to continue !" << endl;
 	//		break;
 	//	case(Choice::INSTRUCTIONS):
-	//		printInstructionsAndKeys(INSTRUCTIONS_STR, KEYS_STR);
+	//		printInstructionsAndKeys(GameConfig:: INSTRUCTIONS_STR, GameConfig:: KEYS_STR);
 	//		break;
 	//	default:
 	//		printChoiceError(); 
