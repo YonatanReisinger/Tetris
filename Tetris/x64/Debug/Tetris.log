@@ -1,2 +1,11 @@
-﻿  Point.cpp
-  Tetris.vcxproj -> C:\Users\Amir\Desktop\CS Academic\שנה ב\C++\Tetris\x64\Debug\Tetris.exe
+﻿  Board.cpp
+  Game.cpp
+  global_functions.cpp
+  main.cpp
+C:\Users\97252\source\repos\YonatanReisinger\Tetris\Tetris\main.cpp(20,15): warning C4101: 'choice': unreferenced local variable
+C:\Users\97252\source\repos\YonatanReisinger\Tetris\Tetris\main.cpp(19,8): warning C4101: 'pGame': unreferenced local variable
+  Player.cpp
+  Point.cpp
+  Shape.cpp
+  Generating Code...
+  Tetris.vcxproj -> C:\Users\97252\source\repos\YonatanReisinger\Tetris\x64\Debug\Tetris.exe
