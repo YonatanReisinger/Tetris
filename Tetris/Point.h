@@ -13,16 +13,16 @@ using namespace std;
 
 class Point {
 private:
-	int x;
-	int y;
+	short int x;
+	short int y;
 public:
-	Point(int x = 0, int y = 0);
-	bool setX(int x);
-	int getX();
-	bool setY(int y);
-	int getY();
+	Point(short int x = 0, short int y = 0);
+	bool setX(short int x);
+	short int getX();
+	bool setY(short int y);
+	short int getY();
 	void gotoxy();
-	void print(char ch = '*');
+	void print(char symbol = '*');
 	bool copy(const Point& other);
 	bool moveUp();
 	bool moveDown();

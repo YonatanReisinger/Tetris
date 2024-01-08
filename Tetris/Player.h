@@ -13,6 +13,7 @@ class Player {
 private:
 	char* name;
 	Board& board;
+	int score;
 public:
 	Player(Board& board, const char* name = "momo");
 	Player(const Player* other);

@@ -1,37 +1,41 @@
 #include "Point.h"
 
-Point::Point(int x, int y)
+Point::Point(short int x, short int y)
 {
 	setX(x);
 	setY(y);
 }
-bool Point:: setX(int x)
+bool Point:: setX(short int x)
 {
-	//if the x coordiante is after the end of the second board
-	if (x > ((GameConfig::WIDTH + 1) * 2 + GameConfig::DISTANCE_BETWEEN_BOARDS + 1))
-		return false;
+	bool res;
+	//if the x coordiante is after the end of the frame of the second board
+	if ((x > ((GameConfig::WIDTH + 2) * 2 + GameConfig::DISTANCE_BETWEEN_BOARDS)) || x < 0)
+		res = false;
 	else
 	{
 		this->x = x;
-		return true;
+		res = true;
 	}
+	return res;
 }
-bool Point:: setY(int y)
+bool Point:: setY(short int y)
 {
+	bool res;
 	//if the y coordiante is larger the fixed height of the board and its frame
-	if (y > (GameConfig::HEIGHT + 1))
-		return false;
+	if ((y > (GameConfig::HEIGHT + 1)) || y < 0)
+		res = false;
 	else
 	{
 		this->y = y;
-		return true;
+		res = true;
 	}
+	return res;
 }
-int Point:: getX()
+short int Point:: getX()
 {
 	return x;
 }
-int Point::getY()
+short int Point::getY()
 {
 	return y;
 }
@@ -45,10 +49,10 @@ void Point::gotoxy()
 	hConsoleOutput = GetStdHandle(STD_OUTPUT_HANDLE);
 	SetConsoleCursorPosition(hConsoleOutput, dwCursorPosition);
 }
-void Point:: print(char ch)
+void Point:: print(char symbol)
 {
 	gotoxy();
-	cout << ch;
+	cout << symbol;
 }
 bool Point:: copy(const Point& other)
 {

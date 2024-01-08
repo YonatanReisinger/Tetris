@@ -1,23 +1,27 @@
 #include "Board.h"
 #include "gameConfig.h"
 
-Board:: Board(const Point& topLeft, const Point& topRight, const Point& BottomLeft, const Point& BottomRight)
+Board:: Board(const Point& topLeft, const Point& topRight, const Point& bottomLeft, const Point& bottomRight)
 {
-	setBorders(topLeft, topRight, BottomLeft, BottomRight);
+	setBorders(topLeft, topRight, bottomLeft, bottomRight);
+	clear(); //when board is being made it need to be empty
 }
 
 Board:: Board(const Board* other)
 {
-	for (auto i = 0; i < 4; i++)
+	// might not need !!!!!!!!!!!! check !!!!!!!!!!!!!
+	short int i;
+	for (i = 0; i < 4; i++)
 		borders[i] = other->borders[i];
 }
-bool Board:: setBorders(const Point& topLeft, const Point& topRight, const Point& BottomLeft, const Point& BottomRight)
+bool Board:: setBorders(const Point& topLeft, const Point& topRight, const Point& bottomLeft, const Point& bottomRight)
 {
-	Point borders[4] = { topLeft , topRight , BottomLeft , BottomRight };
+	Point borders[4] = { topLeft , topRight , bottomLeft , bottomRight };
 	//check that the board has valid borders
 	if (isHeightValid(borders) && isWidthValid(borders))
 	{
-		for (auto i = 0; i < 4; i++)
+		short int i;
+		for (i = 0; i < 4; i++)
 			this->borders[i] = borders[i];
 		return true;
 	}
@@ -28,38 +32,83 @@ Point* Board:: getBorders()
 {
 	return borders;
 }
-bool Board:: isHeightValid(Point borders[4])
+bool Board:: setGameBoard(char boardSymbol)
 {
-
-	//one end - other end + 1 = number of points between the two ends.
-	//there should be HEIGHT+2 points between them as there should also be two points on each end for the frame
-	return ((borders[BOTTOM_LEFT].getY() - borders[TOP_LEFT].getY() + 1) == GameConfig::HEIGHT + 2) && ((borders[BOTTOM_RIGHT].getY() - borders[TOP_RIGHT].getY() + 1) == GameConfig::HEIGHT + 2);
+	bool res = true;
+	short int i;
+	if (boardSymbol == GameConfig::BORDER_SYMBOL) // not possible to fill the game board with a char exactly like the borders
+		res = false;
+	for (i = 0; i < GameConfig::HEIGHT && res; i++)
+		setRow(i, boardSymbol); // no need to check the value returned as here we know that the row index is valid
+	return res;
 }
-bool Board:: isWidthValid(Point borders[4])
+bool Board:: setRow(short int i, char boardSymbol)
 {
-	// one end - other end + 1 = number of points between the two ends.
-	//there should be WIDTH+2 points between them as there should also be two points on each end for the frame
-	return (borders[TOP_RIGHT].getX() - borders[TOP_LEFT].getX() + 1 == GameConfig::WIDTH + 2) && (borders[BOTTOM_RIGHT].getX() - borders[BOTTOM_LEFT].getX() + 1== GameConfig::WIDTH + 2);
+	if (i < 0 && GameConfig::HEIGHT <= i) //check if the "i" value is within the board borders
+		return false;
+	// else the "i" value is valid
+	for (char& cell : gameBoard[i])
+		cell = boardSymbol;
+	return true;
+}
+char(*Board::getGameBoard())[GameConfig::WIDTH]
+{
+	return gameBoard;
+}
+inline bool Board:: isHeightValid(Point borders[4])
+{
+	//one end - other end + 1 = length of the line between the two types (including them)
+	return ((borders[BOTTOM_LEFT].getY() - borders[TOP_LEFT].getY() + 1) == GameConfig::HEIGHT) && ((borders[BOTTOM_RIGHT].getY() - borders[TOP_RIGHT].getY() + 1) == GameConfig::HEIGHT);
+}
+inline bool Board:: isWidthValid(Point borders[4])
+{
+	// one end - other end + 1 = length of the line between the two types (including them)
+	return (borders[TOP_RIGHT].getX() - borders[TOP_LEFT].getX() + 1 == GameConfig::WIDTH) && (borders[BOTTOM_RIGHT].getX() - borders[BOTTOM_LEFT].getX() + 1== GameConfig::WIDTH);
 }
 void Board:: print()
 {
-	printHorizontalLine(borders[TOP_LEFT], borders[TOP_RIGHT]);
-	printHorizontalLine(borders[BOTTOM_LEFT], borders[BOTTOM_RIGHT]);
-	printVerticalLine(borders[TOP_LEFT], borders[BOTTOM_LEFT]);
-	printVerticalLine(borders[TOP_RIGHT], borders[BOTTOM_RIGHT]);
+	// print both parts of the board
+	printGameBoard();
+	printFrame();
+}
+void Board:: printGameBoard()
+{
+	short int i, j;
+	Point tempPoint(borders[Borders::TOP_LEFT].getX(), borders[Borders::TOP_LEFT].getY());
+	for (i = 0; i < GameConfig::HEIGHT; i++)
+	{
+		tempPoint.setX(borders[Borders::TOP_LEFT].getX()); //start each row from the left
+		for (j = 0; j < GameConfig::WIDTH; j++)
+		{
+			tempPoint.print(gameBoard[i][j]); 
+			tempPoint.moveRight(); // print the next cell in the board
+		}
+		tempPoint.moveDown(); // print the next line in the board
+	}
+}
+void Board:: printFrame()
+{
+	//the frame should be outside the borders of the board
+	Point topLeftBorderFrame(borders[TOP_LEFT].getX() - 1, borders[TOP_LEFT].getY() - 1)
+		, topRightBorderFrame(borders[TOP_RIGHT].getX() + 1, borders[TOP_RIGHT].getY() - 1)
+		, bottomLeftBorderFrame(borders[BOTTOM_LEFT].getX() - 1, borders[BOTTOM_LEFT].getY() + 1)
+		, bottomRightBorderFrame(borders[BOTTOM_RIGHT].getX() + 1, borders[BOTTOM_RIGHT].getY() + 1);
+	printHorizontalLine(topLeftBorderFrame, topRightBorderFrame);
+	printHorizontalLine(bottomLeftBorderFrame, bottomRightBorderFrame);
+	printVerticalLine(topLeftBorderFrame, bottomLeftBorderFrame);
+	printVerticalLine(topRightBorderFrame, bottomRightBorderFrame);
 }
 void Board:: printHorizontalLine(Point& leftEnd, Point& rightEnd, char symbol)
 {
 	//can't draw a straight line between two points that are not on in same "height"
 	if (leftEnd.getY() != rightEnd.getY())
 		return;
-	int startX = leftEnd.getX(), endX = rightEnd.getX();
-	Point p(startX, leftEnd.getY());  // change to copy ctor after !!!!!!!!!
-	for (int x = startX; x <= endX; x++)
+	short int x, startX = leftEnd.getX(), endX = rightEnd.getX();
+	Point p(leftEnd.getX(), leftEnd.getY());  // change to copy ctor after !!!!!!!!!
+	for (x = startX; x <= endX; x++)
 	{
 		p.setX(x);
-		p.gotoxy();
-		cout << symbol;
+		p.print(symbol);
 	}
 }
 void Board:: printVerticalLine(Point& topEnd, Point& bottomEnd, char symbol)
@@ -67,16 +116,35 @@ void Board:: printVerticalLine(Point& topEnd, Point& bottomEnd, char symbol)
 	//can't draw a straight line between two points that are not on in same "width"
 	if (topEnd.getX() != bottomEnd.getX())
 		return;
-	int startY = topEnd.getY(), endY = bottomEnd.getY();
-	Point p(topEnd.getX(), startY);  // change to copy ctor after !!!!!!!!!
-	for (int y = startY; y <= endY; y++)
+	short int y, startY = topEnd.getY(), endY = bottomEnd.getY();
+	Point p(topEnd.getX(), topEnd.getY());  // change to copy ctor after !!!!!!!!!
+	for (y = startY; y <= endY; y++)
 	{
 		p.setY(y);
-		p.gotoxy();
-		cout << symbol;
+		p.print(symbol);
 	}
 }
 void Board:: clear()
 {
+	setGameBoard(EMPTY);
+}
+
+bool Board:: clearRow(short int i)
+{
+	return setRow(i, EMPTY);
+}
+bool Board::isOverflowing()
+{
+	return false;
+
+	//need to check what is the definition of board over flowing in tetris !!!!!!!!!!
 	
+
+	//bool res = true;
+	//short int j;
+	//for (j = 0; j < GameConfig::WIDTH && res; j++)
+	//	// if the highest row is full it means that the whole board is full
+	//	if (gameBoard[0][j] == EMPTY) // if there is one place in the highest row which is empty then the row is not full
+	//		res = false;
+	//return res;
 }
