@@ -19,6 +19,9 @@ private:
 	points [1] is the most left-top point
 	points [2] is the most right-bottom point
 	points [3] is the most right-top point*/
+
+
+
 	Point points[NUM_OF_POINTS];
 	Color shapeColor;
 	char symbol;
