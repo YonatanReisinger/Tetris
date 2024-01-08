@@ -16,7 +16,7 @@ private:
 	int x;
 	int y;
 public:
-	Point(int x, int y);
+	Point(int x = 0, int y = 0);
 	bool setX(int x);
 	int getX();
 	bool setY(int y);
