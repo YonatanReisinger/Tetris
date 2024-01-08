@@ -8,4 +8,4 @@ public:
 	static constexpr int WIDTH = 12;
 	static constexpr int DISTANCE_BETWEEN_BOARDS = 6;
 };
-#endif //gameConfig.h
+#endif //GameConfig.h
