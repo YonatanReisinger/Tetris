@@ -50,9 +50,9 @@ void Point:: print(char ch)
 	gotoxy();
 	cout << ch;
 }
-bool Point:: copy(const Point* other)
+bool Point:: copy(const Point& other)
 {
-	return setX(other->x) && setY(other->y);
+	return setX(other.x) && setY(other.y);
 }
 bool Point:: moveUp()
 {
