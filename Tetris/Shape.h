@@ -22,7 +22,7 @@ private:
 	Point points[NUM_OF_POINTS];
 	Color shapeColor;
 	char symbol;
-	int x = 4;
+	int x = 8;
 public:
 	void setColor(Color color);
 	void moveDown();
