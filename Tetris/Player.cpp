@@ -3,6 +3,7 @@
 Player::Player(Board& board, const char* name) : board(board)
 {
 	setName(name);
+	score = 0;
 }
 bool Player:: setBoard(Board& board)
 {
