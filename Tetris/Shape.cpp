@@ -6,8 +6,8 @@
 the starting point of the tetronimo
 Creates a new shape based on the type and point*/
 Shape::Shape(Type t, Point& start) {
-	shapeType = t;
-	/*switch (t) {
+	shapeType = type;
+	/*switch (type) {
 	case STRAIGHT: {
 
 	}
