@@ -13,20 +13,27 @@ using namespace std;
 
 class Point {
 private:
-	int x;
-	int y;
+	short int x;
+	short int y;
+	char symbol;
+	//Color color;
 public:
-	Point(int x = 0, int y = 0);
-	bool setX(int x);
-	int getX();
-	bool setY(int y);
-	int getY();
+	Point(short int x = 0, short int y = 0, char symbol = '*');
+	bool setX(short int x);
+	short int getX();
+	bool setY(short int y);
+	short int getY();
+	bool setSymbol(char symbol);
+	char getSymbol();
+	//bool setColor(Color color);
+	//Color getColor();
 	void gotoxy();
-	void print(char ch = '*');
-	bool copy(const Point* other);
+	void print();
+	bool copy(const Point& other);
 	bool moveUp();
 	bool moveDown();
 	bool moveLeft();
 	bool moveRight();
+	bool isEqual(Point other);
 };
 #endif //Point.h

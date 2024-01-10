@@ -18,24 +18,18 @@ int main()
 {
 	Game* pGame;
 	unsigned int choice;
-	Board board1(Point(0, 0), Point(GameConfig::WIDTH + 1, 0), Point(0, GameConfig::HEIGHT + 1), Point(GameConfig::WIDTH + 1, GameConfig::HEIGHT + 1));
-	Board board2(Point(GameConfig::WIDTH + 1 + GameConfig::DISTANCE_BETWEEN_BOARDS + 1, 0)
-		, Point((GameConfig::WIDTH + 1) * 2 + GameConfig::DISTANCE_BETWEEN_BOARDS + 1, 0)
-		, Point(GameConfig::WIDTH + 1 + GameConfig::DISTANCE_BETWEEN_BOARDS + 1, GameConfig::HEIGHT + 1)
-		, Point((GameConfig::WIDTH + 1) * 2 + GameConfig::DISTANCE_BETWEEN_BOARDS + 1, GameConfig::HEIGHT + 1));
+	Board board1(Point(1, 1), Point(GameConfig::WIDTH, 1), Point(1, GameConfig::HEIGHT), Point(GameConfig::WIDTH, GameConfig::HEIGHT));
+	Board board2(Point(GameConfig::WIDTH + 2 + GameConfig::DISTANCE_BETWEEN_BOARDS + 1, 1)
+	, Point(GameConfig::WIDTH * 2 + 2 + GameConfig::DISTANCE_BETWEEN_BOARDS, 1)
+	, Point(GameConfig::WIDTH + 2 + GameConfig::DISTANCE_BETWEEN_BOARDS + 1, GameConfig::HEIGHT)
+	, Point(GameConfig::WIDTH * 2 + 2 + GameConfig::DISTANCE_BETWEEN_BOARDS, GameConfig::HEIGHT));
 	Player player1(board1, "Daniel"), player2(board2, "Yonatan");
 	
-	//board1.print();
-	//board2.print();
+
+	board1.print();
+	board2.print();
 	
-	Point p1(10, 12), p2(14,19);
-	p1.print();
-	p1.moveRight();
-	Sleep(1000);
-	p1.print();
-	p1.copy(&p2);
-	p1.gotoxy();
-	//pGame = nullptr;
+	//pGame = nullptr;    34        
 	//printMenu(); //the program just started and therefore for sure no paused game exists
 	//cin >> choice;
 
