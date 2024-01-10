@@ -8,7 +8,6 @@
 #include <iostream>
 using namespace std;
 // Macros ans enums->
-//enum Color { RED = FOREGROUND_RED, BLUE = FOREGROUND_BLUE, GREEN = FOREGROUND_GREEN };
 #define NUM_OF_POINTS  4
 // <- Macros and enums
 
