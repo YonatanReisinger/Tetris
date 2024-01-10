@@ -7,13 +7,14 @@ Board:: Board(const Point& topLeft, const Point& topRight, const Point& bottomLe
 	clear(); //when board is being made it need to be empty
 }
 
-Board:: Board(const Board* other)
-{
-	// might not need !!!!!!!!!!!! check !!!!!!!!!!!!!
-	short int i;
-	for (i = 0; i < 4; i++)
-		borders[i] = other->borders[i];
-}
+//Board:: Board(const Board* other)
+//{
+//	// might not need !!!!!!!!!!!! check !!!!!!!!!!!!!
+//	// default copy constructor does the same !!!!!!
+//	short int i;
+//	for (i = 0; i < 4; i++)
+//		borders[i] = other->borders[i];
+//}
 bool Board:: setBorders(const Point& topLeft, const Point& topRight, const Point& bottomLeft, const Point& bottomRight)
 {
 	Point borders[4] = { topLeft , topRight , bottomLeft , bottomRight };
@@ -44,14 +45,55 @@ bool Board:: setGameBoard(char boardSymbol)
 }
 bool Board:: setRow(short int i, char boardSymbol)
 {
+	bool res = true;
+	short int j;
 	if (i < 0 && GameConfig::HEIGHT <= i) //check if the "i" value is within the board borders
-		return false;
-	// else the "i" value is valid
-	for (char& cell : gameBoard[i])
-		cell = boardSymbol;
-	return true;
+		res = false;
+	else // else the "i" value is valid
+	{
+		short int leftBorderXVal = borders[Borders::BOTTOM_LEFT].getX(), upperBorderYVal = borders[Borders::TOP_LEFT].getY();
+		for (j = 0; j < GameConfig::WIDTH; j++)
+		{
+			//the j cell in the row is j x values to the right of the border
+			gameBoard[i][j].setX(leftBorderXVal + j);
+			gameBoard[i][j].setY(upperBorderYVal + i);
+			gameBoard[i][j].setSymbol(boardSymbol);
+		}
+		res = true;
+	}
+	return res;
 }
-char(*Board::getGameBoard())[GameConfig::WIDTH]
+bool Board:: setPointInGameBoardByInd(short int i, short int j, char symbol)
+{
+	short int leftBorderXVal = borders[Borders::BOTTOM_LEFT].getX(), upperBorderYVal = borders[Borders::TOP_LEFT].getY();
+	Point tempPoint(leftBorderXVal + j, upperBorderYVal + i,symbol);
+	return setPointInGameBoard(tempPoint);
+}
+bool Board::setPointInGameBoard(Point& point)
+{
+	bool res = true;
+	short int i, j, leftBorderXVal = borders[Borders::BOTTOM_LEFT].getX()
+		, upperBorderYVal = borders[Borders::TOP_LEFT].getY();
+
+	if (isPointInBoard(point)) // check that the point is inside the board ranges
+	{
+		//get relative place of the point
+		i = point.getX() - leftBorderXVal;
+		j = point.getY() - upperBorderYVal;
+		// can set a place in the board just if the place is empty or you want to clear it
+		if (gameBoard[i][j].getSymbol() == EMPTY || (gameBoard[i][j].getSymbol() != EMPTY && point.getSymbol() == EMPTY))
+		{
+			gameBoard[i][j].copy(point);
+			res = true;
+		}
+		else 	// cant change a place that is already full
+			res = false;
+	}
+	else
+		res = false;
+	return res;
+}
+Point(*Board::getGameBoard())[GameConfig::WIDTH]
 {
 	return gameBoard;
 }
@@ -74,17 +116,10 @@ void Board:: print()
 void Board:: printGameBoard()
 {
 	short int i, j;
-	Point tempPoint(borders[Borders::TOP_LEFT].getX(), borders[Borders::TOP_LEFT].getY());
+	//add color after !!!!!!!!
 	for (i = 0; i < GameConfig::HEIGHT; i++)
-	{
-		tempPoint.setX(borders[Borders::TOP_LEFT].getX()); //start each row from the left
 		for (j = 0; j < GameConfig::WIDTH; j++)
-		{
-			tempPoint.print(gameBoard[i][j]); 
-			tempPoint.moveRight(); // print the next cell in the board
-		}
-		tempPoint.moveDown(); // print the next line in the board
-	}
+			gameBoard[i][j].print();
 }
 void Board:: printFrame()
 {
@@ -104,11 +139,11 @@ void Board:: printHorizontalLine(Point& leftEnd, Point& rightEnd, char symbol)
 	if (leftEnd.getY() != rightEnd.getY())
 		return;
 	short int x, startX = leftEnd.getX(), endX = rightEnd.getX();
-	Point p(leftEnd.getX(), leftEnd.getY());  // change to copy ctor after !!!!!!!!!
+	Point p(leftEnd.getX(), leftEnd.getY(), symbol);  // change to copy ctor after !!!!!!!!!
 	for (x = startX; x <= endX; x++)
 	{
 		p.setX(x);
-		p.print(symbol);
+		p.print();
 	}
 }
 void Board:: printVerticalLine(Point& topEnd, Point& bottomEnd, char symbol)
@@ -117,11 +152,11 @@ void Board:: printVerticalLine(Point& topEnd, Point& bottomEnd, char symbol)
 	if (topEnd.getX() != bottomEnd.getX())
 		return;
 	short int y, startY = topEnd.getY(), endY = bottomEnd.getY();
-	Point p(topEnd.getX(), topEnd.getY());  // change to copy ctor after !!!!!!!!!
+	Point p(topEnd.getX(), topEnd.getY(), symbol);  // change to copy ctor after !!!!!!!!!
 	for (y = startY; y <= endY; y++)
 	{
 		p.setY(y);
-		p.print(symbol);
+		p.print();
 	}
 }
 void Board:: clear()
@@ -147,4 +182,23 @@ bool Board::isOverflowing()
 	//	if (gameBoard[0][j] == EMPTY) // if there is one place in the highest row which is empty then the row is not full
 	//		res = false;
 	//return res;
+}
+bool Board:: isPointFull(Point& point)
+{
+	short int i,j, leftBorderXVal = borders[Borders::BOTTOM_LEFT].getX()
+		, upperBorderYVal = borders[Borders::TOP_LEFT].getY();
+	//get relative place of the point
+	i = point.getX() - leftBorderXVal;
+	j = point.getY() - upperBorderYVal;
+	// if the point is on the board and it is not empty
+	return isPointInBoard(point) && gameBoard[i][j].getSymbol() != EMPTY;
+}
+bool Board:: isPointInBoard(Point& point)
+{
+	short int leftBorderXVal = borders[Borders::BOTTOM_LEFT].getX()
+		, rightBorderXVal = borders[Borders::BOTTOM_RIGHT].getX()
+		, upperBorderYVal = borders[Borders::TOP_LEFT].getY()
+		, lowerBorderYVal = borders[Borders::BOTTOM_LEFT].getY();
+	return point.getX() >= leftBorderXVal && point.getX() <= rightBorderXVal
+		&& point.getY() >= upperBorderYVal && point.getY() <= lowerBorderYVal;
 }

@@ -25,9 +25,9 @@ int main()
 	, Point(GameConfig::WIDTH * 2 + 2 + GameConfig::DISTANCE_BETWEEN_BOARDS, GameConfig::HEIGHT));
 	Player player1(board1, "Daniel"), player2(board2, "Yonatan");
 	
+
 	board1.print();
 	board2.print();
-	
 	
 	//pGame = nullptr;    34        
 	//printMenu(); //the program just started and therefore for sure no paused game exists

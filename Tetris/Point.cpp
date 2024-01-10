@@ -1,9 +1,10 @@
 #include "Point.h"
 
-Point::Point(short int x, short int y)
+Point::Point(short int x, short int y, char symbol)
 {
 	setX(x);
 	setY(y);
+	setSymbol(symbol);
 }
 bool Point:: setX(short int x)
 {
@@ -35,10 +36,41 @@ short int Point:: getX()
 {
 	return x;
 }
-short int Point::getY()
+short int Point:: getY()
 {
 	return y;
 }
+bool Point:: setSymbol(char symbol)
+{
+	// we allow symbols that are chars in the ascii table
+	char asciiTableStart = ' ', asciiTableEnd = '~';
+	if (asciiTableStart <= symbol && symbol <= asciiTableEnd)
+	{
+		this->symbol = symbol;
+		return true;
+	}
+	else
+		return false;
+}
+char Point:: getSymbol()
+{
+	return symbol;
+}
+//bool Point:: setColor(Color color)
+//{
+//	// check that the input color is one of the supported colors
+//	if (color == Color::RED || color == Color::BLUE || color == Color::GREEN || color == Color::WHITE)
+//	{
+//		this->color = color;
+//		return true;
+//	}
+//	else
+//		return false;
+//}
+//Color Point:: getColor()
+//{
+//	return color;
+//}
 void Point::gotoxy()
 {
 	HANDLE hConsoleOutput;
@@ -49,14 +81,16 @@ void Point::gotoxy()
 	hConsoleOutput = GetStdHandle(STD_OUTPUT_HANDLE);
 	SetConsoleCursorPosition(hConsoleOutput, dwCursorPosition);
 }
-void Point:: print(char symbol)
+void Point:: print()
 {
 	gotoxy();
+	/*HANDLE hStdOut = GetStdHandle(STD_OUTPUT_HANDLE);
+	SetConsoleTextAttribute(hStdOut, WORD(color));*/
 	cout << symbol;
 }
 bool Point:: copy(const Point& other)
 {
-	return setX(other.x) && setY(other.y);
+	return setX(other.x) && setY(other.y) && setSymbol(other.symbol);
 }
 bool Point:: moveUp()
 {
@@ -73,4 +107,8 @@ bool Point::moveLeft()
 bool Point::moveRight()
 {
 	return setX(x + 1);
+}
+bool Point:: isEqual(Point other)
+{
+	return x == other.getX() && y == other.getY();
 }

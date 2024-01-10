@@ -15,18 +15,25 @@ class Point {
 private:
 	short int x;
 	short int y;
+	char symbol;
+	//Color color;
 public:
-	Point(short int x = 0, short int y = 0);
+	Point(short int x = 0, short int y = 0, char symbol = '*');
 	bool setX(short int x);
 	short int getX();
 	bool setY(short int y);
 	short int getY();
+	bool setSymbol(char symbol);
+	char getSymbol();
+	//bool setColor(Color color);
+	//Color getColor();
 	void gotoxy();
-	void print(char symbol = '*');
+	void print();
 	bool copy(const Point& other);
 	bool moveUp();
 	bool moveDown();
 	bool moveLeft();
 	bool moveRight();
+	bool isEqual(Point other);
 };
 #endif //Point.h
