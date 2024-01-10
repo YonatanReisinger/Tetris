@@ -12,7 +12,9 @@ Shape::Shape(Type t, Point& start) {
 	case SQUARE: {
 
 	}
-
+	case STRAIGHT:{
+	
+	}
 	}*/
 
 }
