@@ -8,6 +8,7 @@
 #include <iostream>
 using namespace std;
 // Macros ans enums->
+enum Type{PLUS,SQUARE,STRAIGHT,SKEW,MIRROR_SKEW,L,MIRROR_L};
 #define NUM_OF_POINTS  4
 // <- Macros and enums
 
