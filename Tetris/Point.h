@@ -35,5 +35,7 @@ public:
 	bool moveLeft();
 	bool moveRight();
 	bool isInSameCoordinate(const Point& other);
+
+	friend class Board;
 };
 #endif //Point.h

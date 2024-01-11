@@ -26,7 +26,7 @@ private:
 	void printFrame();
 	void printHorizontalLine(Point& leftEnd, Point& rightEnd, char symbol = GameConfig:: BORDER_SYMBOL);
 	void printVerticalLine(Point& topEnd, Point& bottomEnd, char symbol = GameConfig:: BORDER_SYMBOL);
-	bool isPointInBoard(Point& point);
+	bool isPointInBoard(const Point& point);
 
 public:
 	bool setRow(short int i, char boardSymbol);
@@ -34,13 +34,13 @@ public:
 	//Board(const Board* other);
 	Point* getBorders();
 	bool setPointInGameBoardByInd(short int i, short int j, char symbol);
-	bool setPointInGameBoard(Point& point);
+	bool setPointInGameBoard(const Point& point);
 	void print();
 	void printGameBoard();
 	void clear();
 	bool clearRow(short int i);
 	bool isOverflowing();
-	bool isPointFull(Point& point);
+	bool isPointFull(const Point& point);
 };
 
 #endif // Board.h
