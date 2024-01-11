@@ -27,8 +27,10 @@ int main()
 	
 
 	board1.print();
+	Point p1(1,2), p2(13,4);
+	p1 = p2;
 	board2.print();
-	
+
 	//pGame = nullptr;    34        
 	//printMenu(); //the program just started and therefore for sure no paused game exists
 	//cin >> choice;

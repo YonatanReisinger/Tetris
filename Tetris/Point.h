@@ -29,7 +29,6 @@ public:
 	//Color getColor();
 	void gotoxy();
 	void print();
-	bool copy(const Point& other);
 	bool moveUp();
 	bool moveDown();
 	bool moveLeft();

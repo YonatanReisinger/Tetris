@@ -1,14 +1,9 @@
 #include "Player.h"
 
-Player::Player(Board& board, const char* name) : board(board)
+Player::Player(const Board& board, const char* name, int score) : board(board)
 {
 	setName(name);
-	score = 0;
-}
-bool Player:: setBoard(Board& board)
-{
-	this->board = board;
-	return true;
+	this->score = score;
 }
 Board& Player:: getBoard()
 {
@@ -20,7 +15,7 @@ bool Player:: setName(const char* name)
 		return false;
 	else
 	{
-		this->name = new char[strlen(name)];
+		this->name = new char[strlen(name) + 1];
 		return true;
 	}
 }

@@ -88,10 +88,6 @@ void Point:: print()
 	SetConsoleTextAttribute(hStdOut, WORD(color));*/
 	cout << symbol;
 }
-bool Point:: copy(const Point& other)
-{
-	return setX(other.x) && setY(other.y) && setSymbol(other.symbol);
-}
 bool Point:: moveUp()
 {
 	return setY(y - 1);

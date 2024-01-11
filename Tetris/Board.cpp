@@ -83,7 +83,7 @@ bool Board::setPointInGameBoard(Point& point)
 		// can set a place in the board just if the place is empty or you want to clear it
 		if (gameBoard[i][j].getSymbol() == EMPTY || (gameBoard[i][j].getSymbol() != EMPTY && point.getSymbol() == EMPTY))
 		{
-			gameBoard[i][j].copy(point);
+			gameBoard[i][j] = point;
 			res = true;
 		}
 		else 	// cant change a place that is already full
@@ -92,10 +92,6 @@ bool Board::setPointInGameBoard(Point& point)
 	else
 		res = false;
 	return res;
-}
-Point(*Board::getGameBoard())[GameConfig::WIDTH]
-{
-	return gameBoard;
 }
 inline bool Board:: isHeightValid(Point borders[4])
 {
