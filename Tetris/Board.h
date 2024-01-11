@@ -9,7 +9,6 @@ using namespace std;
 // <- Imports
 
 // Macros ans enums->
-#define EMPTY ' '
 enum Borders {TOP_LEFT, TOP_RIGHT, BOTTOM_LEFT, BOTTOM_RIGHT};
 // <- Macros and enums
 
@@ -27,6 +26,7 @@ private:
 	void printHorizontalLine(Point& leftEnd, Point& rightEnd, char symbol = GameConfig:: BORDER_SYMBOL);
 	void printVerticalLine(Point& topEnd, Point& bottomEnd, char symbol = GameConfig:: BORDER_SYMBOL);
 	bool isPointInBoard(const Point& point);
+	bool isPointFull(const Point& point);
 
 public:
 	bool setRow(short int i, char boardSymbol);
@@ -40,7 +40,7 @@ public:
 	void clear();
 	bool clearRow(short int i);
 	bool isOverflowing();
-	bool isPointFull(const Point& point);
+	bool canPointMove(Point point, Directions direction);
 };
 
 #endif // Board.h
