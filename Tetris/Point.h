@@ -23,6 +23,7 @@ public:
 	short int getX();
 	bool setY(short int y);
 	short int getY();
+	bool setXY(short int x, short int y);
 	bool setSymbol(char symbol);
 	char getSymbol();
 	//bool setColor(Color color);
@@ -33,6 +34,6 @@ public:
 	bool moveDown();
 	bool moveLeft();
 	bool moveRight();
-	bool isEqual(Point other);
+	bool isInSameCoordinate(const Point& other);
 };
 #endif //Point.h

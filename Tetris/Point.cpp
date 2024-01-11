@@ -33,6 +33,10 @@ bool Point:: setY(short int y)
 	}
 	return res;
 }
+bool Point:: setXY(short int x, short int y)
+{
+	return setX(x) && setY(y);
+}
 short int Point:: getX()
 {
 	return x;
@@ -105,7 +109,7 @@ bool Point::moveRight()
 {
 	return setX(x + 1);
 }
-bool Point:: isEqual(Point other)
+bool Point:: isInSameCoordinate(const Point& other)
 {
-	return x == other.getX() && y == other.getY();
+	return x == other.x && y == other.y;
 }
