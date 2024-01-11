@@ -1,7 +1,5 @@
 #include "Shape.h"
 
-#include "Shape.h"
-
 /*input: gets a type that represents the tetronimo type, and a point that repreesents
 the starting point of the tetronimo
 Creates a new shape based on the type and point*/
@@ -14,7 +12,9 @@ Shape::Shape(Type t, Point& start) {
 	case SQUARE: {
 
 	}
+	case STRAIGHT:{
 
+	}
 	}*/
 
 }
