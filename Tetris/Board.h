@@ -19,29 +19,28 @@ private:
 	Point gameBoard[GameConfig:: HEIGHT][GameConfig:: WIDTH];
 
 	// Shape** activeShapes;
+	bool setBorders(const Point& topLeft, const Point& topRight, const Point& bottomLeft, const Point& bottomRight);
+	bool setGameBoard(char boardSymbol);
 	inline bool isHeightValid(Point borders[4]);
 	inline bool isWidthValid(Point borders[4]);
 	void printFrame();
 	void printHorizontalLine(Point& leftEnd, Point& rightEnd, char symbol = GameConfig:: BORDER_SYMBOL);
 	void printVerticalLine(Point& topEnd, Point& bottomEnd, char symbol = GameConfig:: BORDER_SYMBOL);
-	bool isPointInBoard(Point& point);
+	bool isPointInBoard(const Point& point);
 
 public:
 	bool setRow(short int i, char boardSymbol);
 	Board(const Point& topLeft, const Point& topRight, const Point& bottomLeft, const Point& bottomRight);
 	//Board(const Board* other);
-	bool setBorders(const Point& topLeft, const Point& topRight, const Point& bottomLeft, const Point& bottomRight);
 	Point* getBorders();
-	bool setGameBoard(char boardSymbol);
 	bool setPointInGameBoardByInd(short int i, short int j, char symbol);
-	bool setPointInGameBoard(Point& point);
-	Point(*getGameBoard())[GameConfig::WIDTH];
+	bool setPointInGameBoard(const Point& point);
 	void print();
 	void printGameBoard();
 	void clear();
 	bool clearRow(short int i);
 	bool isOverflowing();
-	bool isPointFull(Point& point);
+	bool isPointFull(const Point& point);
 };
 
 #endif // Board.h

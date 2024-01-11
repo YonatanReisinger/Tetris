@@ -4,7 +4,8 @@ Point::Point(short int x, short int y, char symbol)
 {
 	setX(x);
 	setY(y);
-	setSymbol(symbol);
+	setSymbol(symbol); //dasdsa
+	print();
 }
 bool Point:: setX(short int x)
 {
@@ -31,6 +32,10 @@ bool Point:: setY(short int y)
 		res = true;
 	}
 	return res;
+}
+bool Point:: setXY(short int x, short int y)
+{
+	return setX(x) && setY(y);
 }
 short int Point:: getX()
 {
@@ -88,10 +93,6 @@ void Point:: print()
 	SetConsoleTextAttribute(hStdOut, WORD(color));*/
 	cout << symbol;
 }
-bool Point:: copy(const Point& other)
-{
-	return setX(other.x) && setY(other.y) && setSymbol(other.symbol);
-}
 bool Point:: moveUp()
 {
 	return setY(y - 1);
@@ -108,7 +109,7 @@ bool Point::moveRight()
 {
 	return setX(x + 1);
 }
-bool Point:: isEqual(Point other)
+bool Point:: isInSameCoordinate(const Point& other)
 {
-	return x == other.getX() && y == other.getY();
+	return x == other.x && y == other.y;
 }
