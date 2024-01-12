@@ -9,7 +9,10 @@
 using namespace std;
 // Macros ans enums->
 enum Type{PLUS,SQUARE,STRAIGHT,SKEW,MIRROR_SKEW,L,MIRROR_L};
+enum Direction{FACE_UP,FACE_DOWN,FACE_LEFT,FACE_RIGHT};
 #define NUM_OF_POINTS  4
+#define LEFT -1
+#define RIGHT 1
 // <- Macros and enums
 
 class Shape {
@@ -18,14 +21,30 @@ private:
 	the shape type*/
 	Point points[NUM_OF_POINTS];
 	Type shapeType;
+	Direction shapeDirection;
 public:
-	Shape(Type t, Point& start);
+	Shape(Type t, Point& start,Direction shapeDirection = FACE_UP);
 	//void setColor(Color color);
 	void moveDown();
 	void moveLeft();
 	void moveRight();
 	void rotateLeft(Type t);
 	void rotateRight(Type t);
+	void createSquare(Point* points,Point& start);
+	void createStraight(Point* points, Point& start);
+	void createPlus(Point* points, Point& start);
+	void createSkew(Point* points, Point& start);
+	void createMirrorSkew(Point* points, Point& start);
+	void createL(Point* points, Point& start);
+	void createMirrorL(Point* points, Point& start);
+	void printShape();
+	void rotatePlus(int direction);
+	void rotateMirrorL(int direction);
+	void rotateStraight(int direction);
+	void rotateL(int direction);
+	void rotateMirrorSkew(int direction);
+	void rotateSkew(int direction);
+	
 };
 
 
