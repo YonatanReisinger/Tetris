@@ -6,7 +6,6 @@
 // <- Imports
 
 // Macros ans enums->
-
 // <- Macros and enums
 
 class Player {
