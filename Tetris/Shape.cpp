@@ -3,7 +3,7 @@
 /*input: gets a type that represents the tetronimo type, and a point that represents
 the starting point of the tetronimo
 Creates a new shape based on the type and point*/
-Shape::Shape(Type t, Point& start,RotationDirection shapeDirection = FACE_UP) {
+Shape::Shape(Type t, Point& start,RotationDirection shapeDirection) {
 	shapeType = t;
 	this->shapeDirection = shapeDirection;
 	switch (t) {
@@ -317,7 +317,8 @@ void Shape::rotateMirrorL(int direction) {
 		}
 	}
 }
-
+/*input: a number that represents left/right rotation
+This function rotates the straight shape tetronimo left/right based on the given number*/
 void Shape::rotateStraight(int direction) {
 	if (direction == ROTATE_LEFT) {
 		switch (shapeDirection) {
@@ -372,6 +373,7 @@ void Shape::rotateStraight(int direction) {
 		}
 	}
 }
+
 void Shape::rotateL(int direction) {
 
 }
