@@ -26,7 +26,7 @@ GameStatus Game:: run()
 			key = _getch();
 			keyInd1 = player1.getKeyInd(key);
 			keyInd2 = player2.getKeyInd(key);
-			if (keyInd1 != NOT_FOUND && board1.canShapeMove(shape1, keyInd1)) // if a valid key was pressed
+			if (keyInd1 != NOT_FOUND && board1.canShapeMove(shape1, (ShapeMovement)keyInd1)) // if a valid key was pressed
 			{
 				shape1.move((ShapeMovement)keyInd1); // move the shape according to the key pressed
 				if (!board1.isShapeInBoard(shape1)) // if a rotation caused the shape to go out of the board
@@ -34,7 +34,7 @@ GameStatus Game:: run()
 
 				}
 			}
-			if (keyInd2 != NOT_FOUND && board2.canShapeMove(shape2, keyInd2)) // if a valid key was pressed
+			if (keyInd2 != NOT_FOUND && board2.canShapeMove(shape2, (ShapeMovement)keyInd2)) // if a valid key was pressed
 			{
 				shape1.move((ShapeMovement)keyInd1); // move the shape according to the key pressed
 				if (!board1.isShapeInBoard(shape1)) // if a rotation caused the shape to go out of the board
