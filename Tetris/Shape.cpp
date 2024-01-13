@@ -394,5 +394,11 @@ void Shape::setSymbol(char symbol) {
 	}
 }
 
+void Shape::print() {
+	for (int i = 0; i < 4; i++) {
+		points[i].print();
+	}
+}
+
 
 
