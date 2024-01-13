@@ -18,22 +18,25 @@ private:
 	char symbol;
 	//Color color;
 public:
-	Point(short int x = 0, short int y = 0, char symbol = '*');
+	Point(short int x = 0, short int y = 0, char symbol = EMPTY);
 	bool setX(short int x);
 	short int getX();
 	bool setY(short int y);
 	short int getY();
+	bool setXY(short int x, short int y);
 	bool setSymbol(char symbol);
 	char getSymbol();
 	//bool setColor(Color color);
 	//Color getColor();
 	void gotoxy();
 	void print();
-	bool copy(const Point& other);
 	bool moveUp();
 	bool moveDown();
 	bool moveLeft();
 	bool moveRight();
-	bool isEqual(Point other);
+	bool move(Directions direction);
+	bool isInSameCoordinate(const Point& other);
+
+	friend class Board;
 };
 #endif //Point.h

@@ -7,6 +7,9 @@ enum class Color {
 	, WHITE = FOREGROUND_WHITE
 };
 
+enum class Directions {UP, DOWN, LEFT, RIGHT};
+#define EMPTY ' '
+
 class GameConfig {
 public:
 	static constexpr char INSTRUCTIONS_STR[] = "instructions";
