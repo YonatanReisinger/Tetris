@@ -36,6 +36,7 @@ Shape::Shape(Type t, Point& start,RotationDirection shapeDirection) {
 			break;
 		}
 	}
+	setSymbol(GameConfig::SHAPE_SYMBOL);
 }
 /*this function make the shape move down on the board*/
 void Shape::moveDown() {
@@ -383,5 +384,15 @@ void Shape::rotateMirrorSkew(int direction) {
 void Shape::rotateSkew(int direction) {
 
 }
+void Shape:: clearShape() {
+	setSymbol(EMPTY);
+}
+
+void Shape::setSymbol(char symbol) {
+	for (int i = 0; i < 4; i++) {
+		points[i].setSymbol(symbol);
+	}
+}
+
 
 
