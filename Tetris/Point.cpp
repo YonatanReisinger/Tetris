@@ -5,7 +5,6 @@ Point::Point(short int x, short int y, char symbol)
 	setX(x);
 	setY(y);
 	setSymbol(symbol); //dasdsa
-	print();
 }
 bool Point:: setX(short int x)
 {
@@ -88,10 +87,36 @@ void Point::gotoxy()
 }
 void Point:: print()
 {
-	gotoxy();
-	/*HANDLE hStdOut = GetStdHandle(STD_OUTPUT_HANDLE);
-	SetConsoleTextAttribute(hStdOut, WORD(color));*/
-	cout << symbol;
+	if (symbol != EMPTY) // print just a point with a symbol that can be seen
+	{
+		gotoxy();
+		/*HANDLE hStdOut = GetStdHandle(STD_OUTPUT_HANDLE);
+		SetConsoleTextAttribute(hStdOut, WORD(color));*/
+		cout << symbol;
+	}
+}
+bool Point:: move(Directions direction)
+{
+	bool res = true;
+	switch (direction)
+	{
+	case Directions::UP:
+		res = moveUp();
+		break;
+	case Directions::DOWN:
+		res = moveDown();
+		break;
+	case Directions::LEFT:
+		res = moveLeft();
+		break;
+	case Directions::RIGHT:
+		res = moveRight();
+		break;
+	default:
+		res = false;
+		break;
+	}
+	return res;
 }
 bool Point:: moveUp()
 {
@@ -108,8 +133,4 @@ bool Point::moveLeft()
 bool Point::moveRight()
 {
 	return setX(x + 1);
-}
-bool Point:: isInSameCoordinate(const Point& other)
-{
-	return x == other.x && y == other.y;
 }

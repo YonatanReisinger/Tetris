@@ -18,7 +18,7 @@ private:
 	char symbol;
 	//Color color;
 public:
-	Point(short int x = 0, short int y = 0, char symbol = '*');
+	Point(short int x = 0, short int y = 0, char symbol = EMPTY);
 	bool setX(short int x);
 	short int getX();
 	bool setY(short int y);
@@ -34,7 +34,7 @@ public:
 	bool moveDown();
 	bool moveLeft();
 	bool moveRight();
-	bool isInSameCoordinate(const Point& other);
+	bool move(Directions direction);
 
 	friend class Board;
 };
