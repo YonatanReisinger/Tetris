@@ -36,7 +36,6 @@ Shape::Shape(Type t, Point& start,RotationDirection shapeDirection = FACE_UP) {
 			break;
 		}
 	}
-
 }
 /*this function make the shape move down on the board*/
 void Shape::moveDown() {

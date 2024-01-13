@@ -55,8 +55,7 @@ bool Board:: setRow(short int i, char boardSymbol)
 		for (j = 0; j < GameConfig::WIDTH; j++)
 		{
 			//the j cell in the row is j x values to the right of the border
-			gameBoard[i][j].setX(leftBorderXVal + j);
-			gameBoard[i][j].setY(upperBorderYVal + i);
+			gameBoard[i][j].setXY(leftBorderXVal + j, upperBorderYVal + i);
 			gameBoard[i][j].setSymbol(boardSymbol);
 		}
 		res = true;
@@ -69,7 +68,7 @@ bool Board:: setPointInGameBoardByInd(short int i, short int j, char symbol)
 	Point tempPoint(leftBorderXVal + j, upperBorderYVal + i,symbol);
 	return setPointInGameBoard(tempPoint);
 }
-bool Board::setPointInGameBoard(Point& point)
+bool Board::setPointInGameBoard(const Point& point)
 {
 	bool res = true;
 	short int i, j, leftBorderXVal = borders[Borders::BOTTOM_LEFT].getX()
@@ -78,12 +77,12 @@ bool Board::setPointInGameBoard(Point& point)
 	if (isPointInBoard(point)) // check that the point is inside the board ranges
 	{
 		//get relative place of the point
-		i = point.getX() - leftBorderXVal;
-		j = point.getY() - upperBorderYVal;
+		j = point.x - leftBorderXVal;
+		i = point.y - upperBorderYVal;
 		// can set a place in the board just if the place is empty or you want to clear it
-		if (gameBoard[i][j].getSymbol() == EMPTY || (gameBoard[i][j].getSymbol() != EMPTY && point.getSymbol() == EMPTY))
+		if (gameBoard[i][j].getSymbol() == EMPTY || (gameBoard[i][j].getSymbol() != EMPTY && point.symbol == EMPTY))
 		{
-			gameBoard[i][j].copy(point);
+			gameBoard[i][j] = point;
 			res = true;
 		}
 		else 	// cant change a place that is already full
@@ -92,10 +91,6 @@ bool Board::setPointInGameBoard(Point& point)
 	else
 		res = false;
 	return res;
-}
-Point(*Board::getGameBoard())[GameConfig::WIDTH]
-{
-	return gameBoard;
 }
 inline bool Board:: isHeightValid(Point borders[4])
 {
@@ -183,22 +178,27 @@ bool Board::isOverflowing()
 	//		res = false;
 	//return res;
 }
-bool Board:: isPointFull(Point& point)
+bool Board:: isPointFull(const Point& point)
 {
 	short int i,j, leftBorderXVal = borders[Borders::BOTTOM_LEFT].getX()
 		, upperBorderYVal = borders[Borders::TOP_LEFT].getY();
 	//get relative place of the point
-	i = point.getX() - leftBorderXVal;
-	j = point.getY() - upperBorderYVal;
+	j = point.x - leftBorderXVal;
+	i = point.y - upperBorderYVal;
 	// if the point is on the board and it is not empty
 	return isPointInBoard(point) && gameBoard[i][j].getSymbol() != EMPTY;
 }
-bool Board:: isPointInBoard(Point& point)
+bool Board:: isPointInBoard(const Point& point)
 {
 	short int leftBorderXVal = borders[Borders::BOTTOM_LEFT].getX()
 		, rightBorderXVal = borders[Borders::BOTTOM_RIGHT].getX()
 		, upperBorderYVal = borders[Borders::TOP_LEFT].getY()
 		, lowerBorderYVal = borders[Borders::BOTTOM_LEFT].getY();
-	return point.getX() >= leftBorderXVal && point.getX() <= rightBorderXVal
-		&& point.getY() >= upperBorderYVal && point.getY() <= lowerBorderYVal;
+	return point.x >= leftBorderXVal && point.x <= rightBorderXVal
+		&& point.y >= upperBorderYVal && point.y <= lowerBorderYVal;
+}
+bool Board:: canPointMove(Point point, Directions direction)
+{
+	// if the point can move to that direction and that future place is not full then the point can move 
+	return point.move(direction) && isPointInBoard(point) && !isPointFull(point);
 }

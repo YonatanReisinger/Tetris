@@ -6,19 +6,17 @@
 // <- Imports
 
 // Macros ans enums->
-
 // <- Macros and enums
 
 class Player {
 private:
 	char* name;
-	Board& board;
+	Board board;
 	int score;
 public:
-	Player(Board& board, const char* name = "momo");
-	Player(const Player* other);
+	Player(const Board& board, const char* name = "momo", int score = 0);
+	Player(const Player& other);
 
-	bool setBoard(Board& board);
 	Board& getBoard();
 	bool setName(const char* name);
 	char* getName();
