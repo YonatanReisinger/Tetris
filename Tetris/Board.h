@@ -45,6 +45,7 @@ public:
 	bool canPointMove(Point point, Directions direction);
 	bool canShapeMove(Shape& shape, Directions direction);
 	Point getStartingPoint();
+	bool isShapeInBoard(const Shape& shape);
 };
 
 #endif // Board.h
