@@ -10,9 +10,8 @@ using namespace std;
 // Macros ans enums->
 enum Type{PLUS,SQUARE,STRAIGHT,SKEW,MIRROR_SKEW,L,MIRROR_L};
 enum RotationDirection{FACE_UP,FACE_DOWN,FACE_LEFT,FACE_RIGHT};
+enum ShapeMovement{LEFT,RIGHT,ROTATE_LEFT,ROTATE_RIGHT,DROP};
 #define NUM_OF_POINTS  4
-#define ROTATE_LEFT -1
-#define ROTATE_RIGHT 1
 // <- Macros and enums
 
 class Shape {
@@ -38,14 +37,15 @@ public:
 	void createL(Point* points, Point& start);
 	void createMirrorL(Point* points, Point& start);
 	void print();
-	void rotatePlus(int direction);
-	void rotateMirrorL(int direction);
-	void rotateStraight(int direction);
-	void rotateL(int direction);
-	void rotateMirrorSkew(int direction);
-	void rotateSkew(int direction);
+	void rotatePlus(ShapeMovement direction);
+	void rotateMirrorL(ShapeMovement direction);
+	void rotateStraight(ShapeMovement direction);
+	void rotateL(ShapeMovement direction);
+	void rotateMirrorSkew(ShapeMovement direction);
+	void rotateSkew(ShapeMovement direction);
 	void clearShape();
 	void setSymbol(char symbol);
+	void move(ShapeMovement movement);
 	friend class Board;
 };
 
