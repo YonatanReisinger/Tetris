@@ -160,7 +160,7 @@ void Shape::rotateLeft(Type t) {
 	}
 }
 /*input: a number that represents left/right rotation
-This function rotates the plus shape tetronimo left/right based on the given number*/
+This function rotates the plus shape tetronimo left/right based on the given number!*/
 void Shape::rotatePlus(int direction) {
 	if (direction == ROTATE_LEFT) {
 		points[3] = points[0];
