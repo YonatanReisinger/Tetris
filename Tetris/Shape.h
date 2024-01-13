@@ -44,6 +44,8 @@ public:
 	void rotateL(int direction);
 	void rotateMirrorSkew(int direction);
 	void rotateSkew(int direction);
+	void clearShape();
+	void setSymbol(char symbol);
 	friend class Board;
 };
 
