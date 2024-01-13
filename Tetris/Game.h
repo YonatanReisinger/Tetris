@@ -4,7 +4,9 @@
 // Imports ->
 #include "Board.h"
 #include "Player.h"
+#include "Shape.h"
 #include <iostream>
+#include <conio.h> // for _kbhit() and _getch()
 using namespace std;
 // <- Imports
 
@@ -17,13 +19,15 @@ class Game {
 private:
 	GameStatus status;
 	Player &player1, &player2;
+	GameStatus run(); //game logic
+	inline Shape getRandomShape(Point& startPoint);
 public:
 	Game(Player& player1, Player& player2);
 	void start();
-	void pause();
-	void resume();
+	bool pause();
+	bool resume();
 	GameStatus getStatus();
-	void setStatus(GameStatus status);
+	bool setStatus(GameStatus status);
 	Player& getPlayer(int playerNum);
 };
 #endif //Game.h

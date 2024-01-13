@@ -3,6 +3,7 @@
 
 // Imports ->
 #include "Point.h"
+#include "Shape.h"
 #include "gameConfig.h"
 #include <iostream>
 using namespace std;
@@ -35,12 +36,15 @@ public:
 	Point* getBorders();
 	bool setPointInGameBoardByInd(short int i, short int j, char symbol);
 	bool setPointInGameBoard(const Point& point);
+	bool setShapeInGameBoard(const Shape& shape);
 	void print();
 	void printGameBoard();
 	void clear();
 	bool clearRow(short int i);
 	bool isOverflowing();
 	bool canPointMove(Point point, Directions direction);
+	bool canShapeMove(Shape& shape, Directions direction);
+	Point getStartingPoint();
 };
 
 #endif // Board.h
