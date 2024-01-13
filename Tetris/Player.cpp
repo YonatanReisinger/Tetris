@@ -1,7 +1,7 @@
 #include "Player.h"
 
 Player::Player(const Board& board, const Key keys[], const char* name, int score): board(board)
-	, keys{keys[KeyInd:: LEFT], keys[KeyInd::RIGHT], keys[KeyInd::ROTATE_CW], keys[KeyInd::ROTATE_COUNTER_CW], keys[KeyInd::DROP] }
+	, keys{keys[KeyInd:: LEFT_IND], keys[KeyInd::RIGHT_IND], keys[KeyInd::ROTATE_RIGHT_IND], keys[KeyInd::ROTATE_LEFT_IND], keys[KeyInd::DROP_IND] }
 {
 	setName(name);
 	setScore(score);
@@ -52,12 +52,14 @@ void Player:: reset()
 	board.clear();
 	setScore(0);
 }
-bool Player:: isInKeys(Key inputKey)
+int Player:: getKeyInd(Key inputKey)
 {
+	short int i;
+	int resInd = NOT_FOUND;
 	// search if the input key is part of the players keys
-	for (const Key& key : keys)
+	for (i = 0; i < NUM_OF_KEYS && resInd == NOT_FOUND; i++)
 		// the input key can be either small letters or capital letters
-		if (inputKey == key || inputKey + ('a' - 'A') == key)
-			return true;
-	return false;
+		if (inputKey == keys[i] || inputKey + ('a' - 'A') == keys[i])
+			resInd = i;
+	return resInd;
 }

@@ -7,7 +7,6 @@
 // <- Imports
 
 // Macros ans enums->
-enum KeyInd { LEFT, RIGHT, ROTATE_CW, ROTATE_COUNTER_CW, DROP };
 typedef unsigned char Key;
 // <- Macros and enums
 
@@ -28,6 +27,6 @@ public:
 	int getScore();
 	bool increaseScore(int increase);
 	void reset();
-	bool isInKeys(Key inputKey);
+	int getKeyInd(Key inputKey);
 };
 #endif // PLAYER.h

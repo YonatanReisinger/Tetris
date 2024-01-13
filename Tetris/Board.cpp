@@ -210,7 +210,7 @@ bool Board:: canPointMove(Point point, Directions direction)
 	// if the point can move to that direction and that future place is not full then the point can move 
 	return point.move(direction) && isPointInBoard(point) && !isPointFull(point);
 }
-bool Board:: canShapeMove(Shape& shape, Directions direction)
+bool Board::canShapeChangeDirection(Shape& shape, Directions direction)
 {
 	short int i;
 	bool res = true;
@@ -232,4 +232,19 @@ bool Board:: isShapeInBoard(const Shape& shape)
 	for (i = 0; i < NUM_OF_POINTS && res; i++)
 		res = isPointInBoard(shape.points[i]);
 	return res;
+}
+void Board:: moveShapeDown(Shape& shape, GamePace pace)
+{
+	Sleep((DWORD)pace);
+	shape.clearShape(); // clear the shape from the screen to make it look like it's moving
+	shape.print();
+	shape.moveDown();
+	shape.setSymbol(GameConfig::SHAPE_SYMBOL); // after it moved down, print it again in it's new place
+	shape.print();
+}
+bool Board:: canShapeMove(const Shape& shape, ShapeMovment movement)
+{
+	if (movement == ShapeMovment::LEFT || movement == ShapeMovment::RIGHT)
+		return canShapeChangeDirection(shape, 0);
+	return true;
 }

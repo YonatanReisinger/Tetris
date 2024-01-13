@@ -12,7 +12,6 @@ using namespace std;
 
 // Macros ans enums->
 enum class GameStatus {PAUSED, PLAYING, FINISHED};
-
 // <- Macros and enums
 
 class Game {
