@@ -160,8 +160,39 @@ void Shape::rotateLeft(Type t) {
 		}
 	}
 }
-/*input: a number that represents left/right rotation
-This function rotates the plus shape tetronimo left/right based on the given number!*/
+/*input: an enum type that represents the type of the shape we want to rotate left
+ this function rotate the given shape right */
+void Shape::rotateRight(Type t) {
+	switch (t) {
+	case SQUARE: {
+		break;
+	}
+	case STRAIGHT: {
+		rotateStraight(ROTATE_RIGHT);
+		break;
+	}
+	case PLUS: {
+		rotatePlus(ROTATE_RIGHT);
+		break;
+	}
+	case SKEW: {
+		rotateSkew(ROTATE_RIGHT);
+		break;
+	}
+	case MIRROR_SKEW: {
+		rotateMirrorSkew(ROTATE_RIGHT);
+		break;
+	}
+	case L: {
+		rotateL(ROTATE_RIGHT);
+		break;
+	}
+	case MIRROR_L: {
+		rotateMirrorL(ROTATE_RIGHT);
+		break;
+	}
+	}
+}
 void Shape::rotatePlus(ShapeMovement direction) {
 	if (direction == ROTATE_LEFT) {
 		points[3] = points[0];
