@@ -77,8 +77,8 @@ bool Board::setPointInGameBoard(const Point& point)
 	if (isPointInBoard(point)) // check that the point is inside the board ranges
 	{
 		//get relative place of the point
-		i = point.x - leftBorderXVal;
-		j = point.y - upperBorderYVal;
+		j = point.x - leftBorderXVal;
+		i = point.y - upperBorderYVal;
 		// can set a place in the board just if the place is empty or you want to clear it
 		if (gameBoard[i][j].getSymbol() == EMPTY || (gameBoard[i][j].getSymbol() != EMPTY && point.symbol == EMPTY))
 		{
@@ -90,6 +90,14 @@ bool Board::setPointInGameBoard(const Point& point)
 	}
 	else
 		res = false;
+	return res;
+}
+bool Board:: setShapeInGameBoard(const Shape& shape)
+{
+	short int i;
+	bool res = true;
+	for (i = 0; i < NUM_OF_POINTS && res; i++)
+		//res = setPointInGameBoard(shape.points[i]);
 	return res;
 }
 inline bool Board:: isHeightValid(Point borders[4])
@@ -183,8 +191,8 @@ bool Board:: isPointFull(const Point& point)
 	short int i,j, leftBorderXVal = borders[Borders::BOTTOM_LEFT].getX()
 		, upperBorderYVal = borders[Borders::TOP_LEFT].getY();
 	//get relative place of the point
-	i = point.x - leftBorderXVal;
-	j = point.y - upperBorderYVal;
+	j = point.x - leftBorderXVal;
+	i = point.y - upperBorderYVal;
 	// if the point is on the board and it is not empty
 	return isPointInBoard(point) && gameBoard[i][j].getSymbol() != EMPTY;
 }
@@ -196,4 +204,23 @@ bool Board:: isPointInBoard(const Point& point)
 		, lowerBorderYVal = borders[Borders::BOTTOM_LEFT].getY();
 	return point.x >= leftBorderXVal && point.x <= rightBorderXVal
 		&& point.y >= upperBorderYVal && point.y <= lowerBorderYVal;
+}
+bool Board:: canPointMove(Point point, Directions direction)
+{
+	// if the point can move to that direction and that future place is not full then the point can move 
+	return point.move(direction) && isPointInBoard(point) && !isPointFull(point);
+}
+bool Board:: canShapeMove(Shape& shape, Directions direction)
+{
+	short int i;
+	bool res = true;
+	// a shape can move iff all of its points can move
+	for (i = 0; i < NUM_OF_POINTS && res; i++)
+		//res = canPointMove(shape.points[i], direction);
+		return res;
+}
+Point Board:: getStartingPoint()
+{
+	// the place that the shapes should start falling from is the middle point on the first row
+	return gameBoard[0][GameConfig:: WIDTH / 2];
 }

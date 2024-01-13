@@ -7,6 +7,12 @@ enum class Color {
 	, WHITE = FOREGROUND_WHITE
 };
 
+enum class Directions {UP, DOWN, LEFT, RIGHT};
+
+#define EMPTY ' '
+#define ESC 27
+#define NUM_OF_KEYS 5
+#define NUM_OF_SHAPES 7
 class GameConfig {
 public:
 	static constexpr char INSTRUCTIONS_STR[] = "instructions";
@@ -16,6 +22,9 @@ public:
 	static constexpr int DISTANCE_BETWEEN_BOARDS = 6;
 	static constexpr char BORDER_SYMBOL = 'X';
 	static constexpr char SHAPE_SYMBOL = '*';
+	static constexpr unsigned char player1Keys[NUM_OF_KEYS] = {'a', 'd', 's', 'w', 'x'};
+	static constexpr unsigned char player2Keys[NUM_OF_KEYS] = { 'j', 'l', 'k', 'i', 'm' };
+
 	//static constexpr Color BORDER_COLOR = Color::WHITE;
 };
 #endif //GameConfig.h
