@@ -92,6 +92,14 @@ bool Board::setPointInGameBoard(const Point& point)
 		res = false;
 	return res;
 }
+bool Board:: setShapeInGameBoard(const Shape& shape)
+{
+	short int i;
+	bool res = true;
+	for (i = 0; i < NUM_OF_POINTS && res; i++)
+		//res = setPointInGameBoard(shape.points[i]);
+	return res;
+}
 inline bool Board:: isHeightValid(Point borders[4])
 {
 	//one end - other end + 1 = length of the line between the two types (including them)
@@ -201,4 +209,18 @@ bool Board:: canPointMove(Point point, Directions direction)
 {
 	// if the point can move to that direction and that future place is not full then the point can move 
 	return point.move(direction) && isPointInBoard(point) && !isPointFull(point);
+}
+bool Board:: canShapeMove(Shape& shape, Directions direction)
+{
+	short int i;
+	bool res = true;
+	// a shape can move iff all of its points can move
+	for (i = 0; i < NUM_OF_POINTS && res; i++)
+		//res = canPointMove(shape.points[i], direction);
+		return res;
+}
+Point Board:: getStartingPoint()
+{
+	// the place that the shapes should start falling from is the middle point on the first row
+	return gameBoard[0][GameConfig:: WIDTH / 2];
 }

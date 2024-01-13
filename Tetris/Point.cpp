@@ -5,7 +5,6 @@ Point::Point(short int x, short int y, char symbol)
 	setX(x);
 	setY(y);
 	setSymbol(symbol); //dasdsa
-	print();
 }
 bool Point:: setX(short int x)
 {
@@ -134,8 +133,4 @@ bool Point::moveLeft()
 bool Point::moveRight()
 {
 	return setX(x + 1);
-}
-bool Point:: isInSameCoordinate(const Point& other)
-{
-	return x == other.x && y == other.y;
 }
