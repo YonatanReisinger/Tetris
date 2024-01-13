@@ -43,9 +43,11 @@ public:
 	bool clearRow(short int i);
 	bool isOverflowing();
 	bool canPointMove(Point point, Directions direction);
-	bool canShapeMove(Shape& shape, Directions direction);
+	bool canShapeChangeDirection(const Shape& shape, Directions direction);
 	Point getStartingPoint();
 	bool isShapeInBoard(const Shape& shape);
+	void moveShapeDown(Shape& shape, GamePace pace);
+	bool canShapeMove(const Shape& shape, ShapeMovment movement);
 };
 
 #endif // Board.h

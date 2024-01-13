@@ -13,46 +13,59 @@ GameStatus Game:: run()
 	Key key;
 	GameStatus gameStatus = GameStatus:: PLAYING;
 	bool flag1 = false, flag2 = false;
+	int keyInd1, keyInd2;
 
 	board1.print();
 	board2.print();
 	shape1.print();
 	shape2.print();
-	while (board1.canShapeMove(shape1, Directions::DOWN) || board2.canShapeMove(shape2, Directions::DOWN))
+	// while both boards have space
+	while (!board1.isOverflowing() && !board2.isOverflowing())
 	{
-		if (board1.canShapeMove(shape1, Directions::DOWN))
-		{
-			Sleep(250);
-			shape1.clearShape();
-			shape1.print();
-			shape1.moveDown();
-			shape1.setSymbol(GameConfig::SHAPE_SYMBOL);
-			shape1.print();
+		if (_kbhit()) {
+			key = _getch();
+			keyInd1 = player1.getKeyInd(key);
+			keyInd2 = player2.getKeyInd(key);
+			if (keyInd1 != NOT_FOUND && board1.canShapeMove(shape1, keyInd1)) // if a valid key was pressed
+			{
+				shape1.move((ShapeMovement)keyInd1); // move the shape according to the key pressed
+				if (!board1.isShapeInBoard(shape1)) // if a rotation caused the shape to go out of the board
+				{
+
+				}
+			}
+			if (keyInd2 != NOT_FOUND && board2.canShapeMove(shape2, keyInd2)) // if a valid key was pressed
+			{
+				shape1.move((ShapeMovement)keyInd1); // move the shape according to the key pressed
+				if (!board1.isShapeInBoard(shape1)) // if a rotation caused the shape to go out of the board
+				{
+
+				}
+			}
 		}
-		else if (!flag1)
+		while (board1.canShapeChangeDirection(shape1, Directions::DOWN) || board2.canShapeChangeDirection(shape2, Directions::DOWN))
 		{
-			//p1.move(Directions::UP);
-			board1.setShapeInGameBoard(shape1);
-			board1.printGameBoard();
-			flag1 = true;
-		}
-		if (board2.canShapeMove(shape2, Directions::DOWN))
-		{
-			Sleep(250);
-			shape2.clearShape();
-			shape2.print();
-			shape2.moveDown();
-			shape2.setSymbol(GameConfig::SHAPE_SYMBOL);
-			shape2.print();
-		}
-		else if (!flag2)
-		{
-			//p1.move(Directions::UP);
-			board2.setShapeInGameBoard(shape2);
-			board2.printGameBoard();
-			flag2 = true;
+			if (board1.canShapeChangeDirection(shape1, Directions::DOWN))
+				board1.moveShapeDown(shape1, GamePace::NORMAL);
+			else if (!flag1)
+			{
+				//p1.move(Directions::UP);
+				board1.setShapeInGameBoard(shape1);
+				board1.printGameBoard();
+				flag1 = true;
+			}
+			if (board2.canShapeChangeDirection(shape2, Directions::DOWN))
+				board2.moveShapeDown(shape2, GamePace::NORMAL);
+			else if (!flag2)
+			{
+				//p1.move(Directions::UP);
+				board2.setShapeInGameBoard(shape2);
+				board2.printGameBoard();
+				flag2 = true;
+			}
 		}
 	}
+	
 	return gameStatus;
 }
 void Game::start()
