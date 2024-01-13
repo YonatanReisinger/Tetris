@@ -3,7 +3,7 @@
 /*input: gets a type that represents the tetronimo type, and a point that represents
 the starting point of the tetronimo
 Creates a new shape based on the type and point*/
-Shape::Shape(Type t, Point& start,Direction shapeDirection = UP) {
+Shape::Shape(Type t, Point& start,RotationDirection shapeDirection = FACE_UP) {
 	shapeType = t;
 	this->shapeDirection = shapeDirection;
 	switch (t) {
