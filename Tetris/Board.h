@@ -47,7 +47,7 @@ public:
 	Point getStartingPoint();
 	bool isShapeInBoard(const Shape& shape);
 	void moveShapeDown(Shape& shape, GamePace pace);
-	bool canShapeMove(const Shape& shape, ShapeMovment movement);
+	bool canShapeMove(const Shape& shape, ShapeMovement movement);
 };
 
 #endif // Board.h
