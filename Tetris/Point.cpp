@@ -23,7 +23,7 @@ bool Point:: setY(short int y)
 {
 	bool res;
 	//if the y coordiante is larger the fixed height of the board and its frame
-	if ((y > (GameConfig::HEIGHT + 1)) || y < 0)
+	if ((y > (GameConfig::HEIGHT + 2)) || y < 0)
 		res = false;
 	else
 	{
@@ -87,13 +87,10 @@ void Point::gotoxy()
 }
 void Point:: print()
 {
-	if (symbol != EMPTY) // print just a point with a symbol that can be seen
-	{
-		gotoxy();
-		/*HANDLE hStdOut = GetStdHandle(STD_OUTPUT_HANDLE);
-		SetConsoleTextAttribute(hStdOut, WORD(color));*/
-		cout << symbol;
-	}
+	gotoxy();
+	/*HANDLE hStdOut = GetStdHandle(STD_OUTPUT_HANDLE);
+	SetConsoleTextAttribute(hStdOut, WORD(color));*/
+	cout << symbol;
 }
 bool Point:: move(Directions direction)
 {

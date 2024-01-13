@@ -11,23 +11,47 @@ GameStatus Game:: run()
 	Point startPoint1 = board1.getStartingPoint(), startPoint2 = board2.getStartingPoint();
 	Shape shape1 = getRandomShape(startPoint1), shape2 = getRandomShape(startPoint2);
 	Key key;
-	GameStatus gameStatus;
+	GameStatus gameStatus = GameStatus:: PLAYING;
+	bool flag1 = false, flag2 = false;
 
-	while (true)
+	board1.print();
+	board2.print();
+	shape1.print();
+	shape2.print();
+	while (board1.canShapeMove(shape1, Directions::DOWN) || board2.canShapeMove(shape2, Directions::DOWN))
 	{
-		// Check if a key is pressed for player 1
-		if (_kbhit()) {
-			key = _getch();
-			if (player1.isInKeys(key))
-				std::cout << "Player 1 pressed: " << key << std::endl;
-			if (player2.isInKeys(key))
-				std::cout << "Player 2 pressed: " << key << std::endl;
+		if (board1.canShapeMove(shape1, Directions::DOWN))
+		{
+			Sleep(250);
+			shape1.clearShape();
+			shape1.print();
+			shape1.moveDown();
+			shape1.setSymbol(GameConfig::SHAPE_SYMBOL);
+			shape1.print();
 		}
-
-		// Exit the loop if a specific key is pressed (for example, 'q')
-		if (key == ESC)
-			gameStatus = GameStatus::PAUSED;
-			break;
+		else if (!flag1)
+		{
+			//p1.move(Directions::UP);
+			board1.setShapeInGameBoard(shape1);
+			board1.printGameBoard();
+			flag1 = true;
+		}
+		if (board2.canShapeMove(shape2, Directions::DOWN))
+		{
+			Sleep(250);
+			shape2.clearShape();
+			shape2.print();
+			shape2.moveDown();
+			shape2.setSymbol(GameConfig::SHAPE_SYMBOL);
+			shape2.print();
+		}
+		else if (!flag2)
+		{
+			//p1.move(Directions::UP);
+			board2.setShapeInGameBoard(shape2);
+			board2.printGameBoard();
+			flag2 = true;
+		}
 	}
 	return gameStatus;
 }
