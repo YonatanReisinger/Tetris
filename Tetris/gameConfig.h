@@ -7,8 +7,8 @@ enum class Color {
 	, WHITE = FOREGROUND_WHITE
 };
 
-enum class Directions {UP, DOWN, LEFT, RIGHT};
-enum class GamePace { NORMAL = 500, FAST = 100 };
+enum class Directions {LEFT, RIGHT, UP, DOWN};
+enum class GamePace { NORMAL = 500, FAST = 50 };
 
 #define EMPTY ' '
 #define NOT_FOUND -1
