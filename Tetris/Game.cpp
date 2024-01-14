@@ -10,6 +10,7 @@ GameStatus Game:: run()
 	// get the place that the shapes should start falling from
 	Point startPoint1 = board1.getStartingPoint(), startPoint2 = board2.getStartingPoint();
 	Shape shape1 = getRandomShape(startPoint1), shape2 = getRandomShape(startPoint2);
+	//shape1 = Shape(PLUS, startPoint1);
 	Key key;
 	GameStatus gameStatus = GameStatus:: PLAYING;
 	bool flag1 = false, flag2 = false;
@@ -20,50 +21,76 @@ GameStatus Game:: run()
 	shape1.print();
 	shape2.print();
 	// while both boards have space
-	while (!board1.isOverflowing() && !board2.isOverflowing())
+	
+	while (board1.canShapeChangeDirection(shape1, Directions::DOWN) || board2.canShapeChangeDirection(shape2, Directions::DOWN))
 	{
 		if (_kbhit()) {
 			key = _getch();
 			keyInd1 = player1.getKeyInd(key);
+			if (keyInd1 != NOT_FOUND) // if a valid key was pressed
+				moveShapeOnScreen(shape1, (ShapeMovement)keyInd1, (GamePace)50);
 			keyInd2 = player2.getKeyInd(key);
-			if (keyInd1 != NOT_FOUND && board1.canShapeMove(shape1, (ShapeMovement)keyInd1)) // if a valid key was pressed
-			{
-				shape1.move((ShapeMovement)keyInd1); // move the shape according to the key pressed
-				if (!board1.isShapeInBoard(shape1)) // if a rotation caused the shape to go out of the board
-				{
-
-				}
-			}
-			if (keyInd2 != NOT_FOUND && board2.canShapeMove(shape2, (ShapeMovement)keyInd2)) // if a valid key was pressed
-			{
-				shape1.move((ShapeMovement)keyInd1); // move the shape according to the key pressed
-				if (!board1.isShapeInBoard(shape1)) // if a rotation caused the shape to go out of the board
-				{
-
-				}
-			}
+			if (keyInd2 != NOT_FOUND) // if a valid key was pressed
+				moveShapeOnScreen(shape2, (ShapeMovement)keyInd2, (GamePace)50);
 		}
-		while (board1.canShapeChangeDirection(shape1, Directions::DOWN) || board2.canShapeChangeDirection(shape2, Directions::DOWN))
+		if (_kbhit()) {
+			key = _getch();
+			keyInd1 = player1.getKeyInd(key);
+			if (keyInd1 != NOT_FOUND) // if a valid key was pressed
+				moveShapeOnScreen(shape1, (ShapeMovement)keyInd1, (GamePace)50);
+			keyInd2 = player2.getKeyInd(key);
+			if (keyInd2 != NOT_FOUND) // if a valid key was pressed
+				moveShapeOnScreen(shape2, (ShapeMovement)keyInd2, (GamePace)50);
+		}
+		
+		if (board1.canShapeChangeDirection(shape1, Directions::DOWN))
+			moveShapeDownTheScreen(shape1, GamePace::NORMAL);
+		else if (!flag1)
 		{
-			if (board1.canShapeChangeDirection(shape1, Directions::DOWN))
-				board1.moveShapeDown(shape1, GamePace::NORMAL);
-			else if (!flag1)
-			{
-				//p1.move(Directions::UP);
-				board1.setShapeInGameBoard(shape1);
-				board1.printGameBoard();
-				flag1 = true;
-			}
-			if (board2.canShapeChangeDirection(shape2, Directions::DOWN))
-				board2.moveShapeDown(shape2, GamePace::NORMAL);
-			else if (!flag2)
-			{
-				//p1.move(Directions::UP);
-				board2.setShapeInGameBoard(shape2);
-				board2.printGameBoard();
-				flag2 = true;
-			}
+			//p1.move(Directions::UP);
+			board1.setShapeInGameBoard(shape1);
+			board1.printGameBoard();
+			flag1 = true;
 		}
+		
+		if (board2.canShapeChangeDirection(shape2, Directions::DOWN))
+			moveShapeDownTheScreen(shape2, GamePace::NORMAL);
+		else if (!flag2) //if you can't move anymore, insert the shape into the board
+		{
+			//p1.move(Directions::UP);
+			board2.setShapeInGameBoard(shape2);
+			board2.printGameBoard();
+			flag2 = true;
+		}
+		board1.clearFullRows();
+		board2.clearFullRows();
+		//if (_kbhit()) {
+		//	key = _getch();
+		//	keyInd1 = player1.getKeyInd(key);
+		//	key = _getch();
+		//	keyInd2 = player2.getKeyInd(key);
+		//	if (keyInd1 != NOT_FOUND) // if a valid key was pressed
+		//	{
+		//		Sleep(250);
+		//		shape1.clearShape(); // clear the shape from the screen to make it look like it's moving
+		//		shape1.print();
+		//		shape1.move((ShapeMovement)keyInd1); // move the shape according to the key pressed
+		//		shape1.setSymbol(GameConfig::SHAPE_SYMBOL);
+		//		shape1.print();
+		//	}
+		//	if (keyInd2 != NOT_FOUND) // if a valid key was pressed
+		//	{
+		//		Sleep(250);
+		//		shape2.clearShape(); // clear the shape from the screen to make it look like it's moving
+		//		shape2.print();
+		//		shape2.move((ShapeMovement)keyInd2); // move the shape according to the key pressed
+		//		shape2.setSymbol(GameConfig::SHAPE_SYMBOL);
+		//		shape2.print();
+		//	}
+		//}
+
+		
+		
 	}
 	
 	return gameStatus;
@@ -120,4 +147,22 @@ Player& Game:: getPlayer(int playerNum)
 inline Shape Game:: getRandomShape(Point& startPoint)
 {
 	return Shape(Type(rand() % NUM_OF_SHAPES), startPoint);
+}
+void Game:: moveShapeOnScreen(Shape& shape, ShapeMovement movement, GamePace pace)
+{
+	Sleep((DWORD)pace);
+	shape.clearShape(); // clear the shape from the screen to make it look like it's moving
+	shape.print();
+	shape.move(movement);
+	shape.setSymbol(GameConfig::SHAPE_SYMBOL); // after it moved down, print it again in it's new place
+	shape.print();
+}
+void Game:: moveShapeDownTheScreen(Shape& shape, GamePace pace)
+{
+	Sleep((DWORD)pace);
+	shape.clearShape(); // clear the shape from the screen to make it look like it's moving
+	shape.print();
+	shape.moveDown();
+	shape.setSymbol(GameConfig::SHAPE_SYMBOL); // after it moved down, print it again in it's new place
+	shape.print();
 }

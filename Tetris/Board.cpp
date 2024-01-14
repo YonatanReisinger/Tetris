@@ -171,6 +171,20 @@ bool Board:: clearRow(short int i)
 {
 	return setRow(i, EMPTY);
 }
+void Board:: clearFullRows()
+{
+	short int i;
+	for (i = 0; i < GameConfig::HEIGHT; i++)
+		if (isRowFull(i))
+			clearRow(i);
+}
+bool Board:: isRowFull(short int i)
+{
+	for (Point& point : gameBoard[i])
+		if (!isPointFull(point)) // if one point is not full thus the whole row is not full
+			return false;
+	return true;
+}
 bool Board::isOverflowing()
 {
 	return false;
@@ -232,15 +246,6 @@ bool Board:: isShapeInBoard(const Shape& shape)
 	for (i = 0; i < NUM_OF_POINTS && res; i++)
 		res = isPointInBoard(shape.points[i]);
 	return res;
-}
-void Board:: moveShapeDown(Shape& shape, GamePace pace)
-{
-	Sleep((DWORD)pace);
-	shape.clearShape(); // clear the shape from the screen to make it look like it's moving
-	shape.print();
-	shape.moveDown();
-	shape.setSymbol(GameConfig::SHAPE_SYMBOL); // after it moved down, print it again in it's new place
-	shape.print();
 }
 bool Board:: canShapeMove(const Shape& shape, ShapeMovement movement)
 {
