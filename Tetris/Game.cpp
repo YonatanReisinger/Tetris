@@ -27,41 +27,68 @@ GameStatus Game:: run()
 		if (_kbhit()) {
 			key = _getch();
 			keyInd1 = player1.getKeyInd(key);
-			if (keyInd1 != NOT_FOUND) // if a valid key was pressed
-				moveShapeOnScreen(shape1, (ShapeMovement)keyInd1, (GamePace)50);
+			if (keyInd1 != NOT_FOUND && board1.canShapeMove(shape1, (ShapeMovement)keyInd1)) // if a valid key was pressed
+			{
+				// if the player pressed the drop bottom, drop the shape down the board while it can
+				if ((ShapeMovement)keyInd1 == ShapeMovement::DROP)
+					while (board1.canShapeChangeDirection(shape1, Directions:: DOWN))
+						moveShapeDownTheScreen(shape1, GamePace::FAST);
+				else // else, move the shape according to the movement selected
+					moveShapeOnScreen(shape1, (ShapeMovement)keyInd1, GamePace::FAST);
+			}
 			keyInd2 = player2.getKeyInd(key);
-			if (keyInd2 != NOT_FOUND) // if a valid key was pressed
-				moveShapeOnScreen(shape2, (ShapeMovement)keyInd2, (GamePace)50);
+			if (keyInd2 != NOT_FOUND && board2.canShapeMove(shape2, (ShapeMovement)keyInd2)) // if a valid key was pressed
+			{
+				// if the player pressed the drop bottom, drop the shape down the board while it can
+				if ((ShapeMovement)keyInd2 == ShapeMovement::DROP)
+					while (board2.canShapeChangeDirection(shape2, Directions::DOWN))
+						moveShapeDownTheScreen(shape2, GamePace::FAST);
+				else // else, move the shape according to the movement selected
+					moveShapeOnScreen(shape2, (ShapeMovement)keyInd2, GamePace::FAST);
+			}
 		}
 		if (_kbhit()) {
 			key = _getch();
 			keyInd1 = player1.getKeyInd(key);
-			if (keyInd1 != NOT_FOUND) // if a valid key was pressed
-				moveShapeOnScreen(shape1, (ShapeMovement)keyInd1, (GamePace)50);
+			if (keyInd1 != NOT_FOUND && board1.canShapeMove(shape1, (ShapeMovement)keyInd1)) // if a valid key was pressed
+			{
+				// if the player pressed the drop bottom, drop the shape down the board while it can
+				if ((ShapeMovement)keyInd1 == ShapeMovement::DROP)
+					while (board1.canShapeChangeDirection(shape1, Directions::DOWN))
+						moveShapeDownTheScreen(shape1, GamePace::FAST);
+				else // else, move the shape according to the movement selected
+					moveShapeOnScreen(shape1, (ShapeMovement)keyInd1, GamePace::FAST);//moving to the sides should be faster the moving down
+			}
 			keyInd2 = player2.getKeyInd(key);
-			if (keyInd2 != NOT_FOUND) // if a valid key was pressed
-				moveShapeOnScreen(shape2, (ShapeMovement)keyInd2, (GamePace)50);
+			if (keyInd2 != NOT_FOUND && board2.canShapeMove(shape2, (ShapeMovement)keyInd2)) // if a valid key was pressed
+			{
+				// if the player pressed the drop bottom, drop the shape down the board while it can
+				if ((ShapeMovement)keyInd2 == ShapeMovement::DROP)
+					while (board2.canShapeChangeDirection(shape2, Directions::DOWN))
+						moveShapeDownTheScreen(shape2, GamePace::FAST);
+				else // else, move the shape according to the movement selected
+					moveShapeOnScreen(shape2, (ShapeMovement)keyInd2, GamePace::FAST);//moving to the sides should be faster the moving down
+			}
 		}
 		
 		if (board1.canShapeChangeDirection(shape1, Directions::DOWN))
 			moveShapeDownTheScreen(shape1, GamePace::NORMAL);
-		else if (!flag1)
+		else //if you can't move anymore, insert the shape into the board
 		{
-			//p1.move(Directions::UP);
 			board1.setShapeInGameBoard(shape1);
 			board1.printGameBoard();
-			flag1 = true;
+			shape1 = getRandomShape(startPoint1);
 		}
 		
 		if (board2.canShapeChangeDirection(shape2, Directions::DOWN))
 			moveShapeDownTheScreen(shape2, GamePace::NORMAL);
-		else if (!flag2) //if you can't move anymore, insert the shape into the board
+		else //if you can't move anymore, insert the shape into the board
 		{
-			//p1.move(Directions::UP);
 			board2.setShapeInGameBoard(shape2);
 			board2.printGameBoard();
-			flag2 = true;
+			shape2 = getRandomShape(startPoint2); // get a new shape
 		}
+		
 		board1.clearFullRows();
 		board2.clearFullRows();
 		//if (_kbhit()) {

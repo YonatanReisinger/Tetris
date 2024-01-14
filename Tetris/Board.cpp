@@ -251,5 +251,7 @@ bool Board:: canShapeMove(const Shape& shape, ShapeMovement movement)
 {
 	if (movement == ShapeMovement::LEFT || movement == ShapeMovement::RIGHT)
 		return canShapeChangeDirection(shape, (Directions)movement);
+	else if (movement == ShapeMovement:: DROP)
+		return canShapeChangeDirection(shape, Directions:: DOWN);
 	return true;
 }
