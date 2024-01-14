@@ -7,6 +7,7 @@
 // <- Imports
 
 // Macros ans enums->
+enum KeyInd { LEFT_IND, RIGHT_IND, ROTATE_LEFT_IND, ROTATE_RIGHT_IND, DROP_IND};
 typedef unsigned char Key;
 // <- Macros and enums
 

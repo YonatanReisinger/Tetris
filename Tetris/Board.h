@@ -28,6 +28,7 @@ private:
 	void printVerticalLine(Point& topEnd, Point& bottomEnd, char symbol = GameConfig:: BORDER_SYMBOL);
 	bool isPointInBoard(const Point& point);
 	bool isPointFull(const Point& point);
+	bool isRowFull(short int i);
 
 public:
 	bool setRow(short int i, char boardSymbol);
@@ -41,12 +42,12 @@ public:
 	void printGameBoard();
 	void clear();
 	bool clearRow(short int i);
+	void clearFullRows();
 	bool isOverflowing();
 	bool canPointMove(Point point, Directions direction);
 	bool canShapeChangeDirection(const Shape& shape, Directions direction);
 	Point getStartingPoint();
 	bool isShapeInBoard(const Shape& shape);
-	void moveShapeDown(Shape& shape, GamePace pace);
 	bool canShapeMove(const Shape& shape, ShapeMovement movement);
 };
 

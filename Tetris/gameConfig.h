@@ -8,8 +8,7 @@ enum class Color {
 };
 
 enum class Directions {UP, DOWN, LEFT, RIGHT};
-enum class GamePace { NORMAL = 250, FAST = 100 };
-enum KeyInd { LEFT_IND, RIGHT_IND, ROTATE_RIGHT_IND, ROTATE_LEFT_IND, DROP_IND, NOT_FOUND = -1 };
+enum class GamePace { NORMAL = 500, FAST = 100 };
 
 #define EMPTY ' '
 #define NOT_FOUND -1

@@ -20,6 +20,8 @@ private:
 	Player &player1, &player2;
 	GameStatus run(); //game logic
 	inline Shape getRandomShape(Point& startPoint);
+	void moveShapeOnScreen(Shape& shape, ShapeMovement movement, GamePace pace);
+	void moveShapeDownTheScreen(Shape& shape, GamePace pace);
 public:
 	Game(Player& player1, Player& player2);
 	void start();
