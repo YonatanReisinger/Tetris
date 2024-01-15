@@ -17,7 +17,7 @@ class Board{
 private:
 	Point borders[4];
 	Point gameBoard[GameConfig:: HEIGHT][GameConfig:: WIDTH];
-	Shape* activeShapes;
+	Shape activeShapes[GameConfig::HEIGHT * GameConfig::WIDTH];
 	short int numOfActiveShapes;
 
 	// Shape** activeShapes;
@@ -35,7 +35,7 @@ private:
 
 public:
 	bool setRow(short int i, char boardSymbol);
-	Board(Shape& testtttt, const Point& topLeft, const Point& topRight, const Point& bottomLeft, const Point& bottomRight);
+	Board(const Point& topLeft, const Point& topRight, const Point& bottomLeft, const Point& bottomRight);
 	//Board(const Board* other);
 	Point* getBorders();
 	bool setNumOfShapes(short int num);
