@@ -55,6 +55,7 @@ public:
 	bool canShapeMove(const Shape& shape, ShapeMovement movement);
 	bool canShapeDrop(Shape& shape);
 	void dropActiveShapes();
+	bool isShapeStuck(const Shape& shape);
 };
 
 #endif // Board.h

@@ -341,3 +341,10 @@ void Board:: clearShapeFromGameBoard(Shape& shape)
 			shape.points[i].setSymbol(GameConfig:: SHAPE_SYMBOL);
 		}
 }
+// a shape is stuck if it can't move to any direction
+bool Board::isShapeStuck(const Shape& shape)
+{
+	return !canShapeChangeDirection(shape, Directions::DOWN)
+		&& !canShapeChangeDirection(shape, Directions::LEFT)
+		&& !canShapeChangeDirection(shape, Directions::RIGHT);
+}
