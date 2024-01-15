@@ -107,8 +107,10 @@ bool Board:: setShapeInGameBoard(const Shape& shape)
 {
 	short int i;
 	bool res = true;
-	for (i = 0; i < NUM_OF_POINTS && res; i++)
+	for (i = 0; i < NUM_OF_POINTS && res; i++) // if all the points could be set on the board thus all the shape can
 		res = setPointInGameBoard(shape.points[i]);
+	if (res == true) // add the shape to the active shape array
+		activeShapes[numOfActiveShapes++];
 	return res;
 }
 inline bool Board:: isHeightValid(Point borders[4])
@@ -176,6 +178,7 @@ void Board:: printVerticalLine(Point& topEnd, Point& bottomEnd, char symbol)
 void Board:: clear()
 {
 	setGameBoard(EMPTY);
+	setNumOfShapes(0);
 }
 
 bool Board:: clearRow(short int i)
@@ -184,12 +187,21 @@ bool Board:: clearRow(short int i)
 }
 int Board:: clearFullRows()
 {
-	short int i, fullRowsCounter = 0;
+	short int i, j,k,fullRowsCounter = 0,  removedPointInd;
 	for (i = 0; i < GameConfig::HEIGHT; i++)
 		if (isRowFull(i))
 		{
 			clearRow(i);
 			fullRowsCounter++;
+			// clear the removed points from all the shape
+			for (j = 0; j < GameConfig:: WIDTH; j++)
+				for (k = 0; k < numOfActiveShapes; k++)
+				{
+					removedPointInd = activeShapes[k].getPointInd(gameBoard[i][j]);
+					if (removedPointInd != NOT_FOUND)
+						activeShapes[k].points[removedPointInd].setSymbol(EMPTY);
+				}
+
 		}
 	return fullRowsCounter;
 }
@@ -280,12 +292,38 @@ bool Board:: canShapeDrop(Shape& shape)
 	{
 		tempPoint = shape.points[i];
 		tempPoint.move(Directions::DOWN);
-		// a point can drop if either the place below is free or it is a part of the current shape 
-		res = canPointMove(shape.points[i], Directions::DOWN) || shape.isPointInside(tempPoint);
+		// a point can drop if either the place below is free or if the place below it is part of it's own shape
+		res = canPointMove(shape.points[i], Directions::DOWN) || shape.getPointInd(tempPoint) != NOT_FOUND;
 	}
 	return res;
 }
 void Board:: dropActiveShapes()
 {
-
+	short int i;
+	bool dropped = false;
+	for (i = 0; i < numOfActiveShapes; i++)
+	{
+		Shape& shape = activeShapes[i];
+		// if after the clearing of line a shape can drop down the board, drop while it can
+		while (canShapeDrop(shape))
+		{
+			// update the place of the shape
+			clearShapeFromGameBoard(shape);
+			shape.moveDown();
+			dropped = true;
+		}
+		if (dropped) // set the board in it's new place on the board
+			setShapeInGameBoard(shape);
+	}
+}
+void Board:: clearShapeFromGameBoard(Shape& shape)
+{
+	short int i;
+	for (i = 0; i < NUM_OF_POINTS; i++)
+		if (shape.points[i].symbol != EMPTY) // clear just the points that are part of the game
+		{
+			shape.points[i].setSymbol(EMPTY);
+			setPointInGameBoard(shape.points[i]);
+			shape.points[i].setSymbol(GameConfig:: SHAPE_SYMBOL);
+		}
 }

@@ -80,6 +80,7 @@ GameStatus Game:: run()
 			shape1 = getRandomShape(startPoint1);
 			// increase the score of the player according to how many rows he cleared
 			player1.increaseScore(GameConfig::SCORE_FOR_FULL_LINE * board1.clearFullRows());
+			board1.dropActiveShapes();
 		}
 		
 		if (board2.canShapeChangeDirection(shape2, Directions::DOWN))
@@ -91,6 +92,7 @@ GameStatus Game:: run()
 			shape2 = getRandomShape(startPoint2); // get a new shape
 			// increase the score of the player according to how many rows he cleared
 			player2.increaseScore(GameConfig::SCORE_FOR_FULL_LINE * board2.clearFullRows());
+			board2.dropActiveShapes();
 		}
 		//if (_kbhit()) {
 		//	key = _getch();

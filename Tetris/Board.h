@@ -32,6 +32,7 @@ private:
 	bool isPointInBoard(const Point& point);
 	bool isPointFull(const Point& point);
 	bool isRowFull(short int i);
+	void clearShapeFromGameBoard(Shape& shape);
 
 public:
 	bool setRow(short int i, char boardSymbol);
