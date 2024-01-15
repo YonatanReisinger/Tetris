@@ -1,5 +1,12 @@
 #include "Shape.h"
 
+
+
+/*Default constructor */
+Shape::Shape() {
+	shapeDirection = FACE_UP;
+	shapeType = SQUARE;
+}
 /*input: gets a type that represents the tetronimo type, and a point that represents
 the starting point of the tetronimo
 Creates a new shape based on the type and point*/
