@@ -58,74 +58,81 @@ void Shape::moveRight() {
 }
 /*Creates a square shape tetronimo*/
 void Shape::createSquare(Point* points, Point& start) {
-	points[0] = start;//copies the starting point
-	start.moveLeft();//takes the starting point and moves it left
-	points[1] = start;//copies the "new" starting point
-	start.moveDown();
-	points[2] = start;
-	start.moveRight();
-	points[3] = start;
+	Point p1 = start;
+	points[0] = p1;//copies the starting point
+	p1.moveLeft();//takes the starting point and moves it left
+	points[1] = p1;//copies the "new" starting point
+	p1.moveDown();
+	points[2] = p1;
+	p1.moveRight();
+	points[3] = p1;
 }
 /*Creates a straight line tetronimo shape*/
 void Shape::createStraight(Point* points, Point& start) {
-	points[0] = start;//copies the starting point
-	start.moveLeft();//takes the starting point and moves it left
-	points[1] = start;//copies the "new" starting point
-	start.moveLeft();
-	points[2] =start;
-	start.moveLeft();
-	points[3] =start;
+	Point p1 = start;
+	points[0] = p1;//copies the starting point
+	p1.moveDown();//takes the starting point and moves it left
+	points[1] = p1;//copies the "new" starting point
+	p1.moveDown();
+	points[2] =p1;
+	p1.moveDown();
+	points[3] =p1;
 }
 /*Creates a plus tetronimo shape*/
 void Shape::createPlus(Point* points, Point& start) {
-	points[0] = start;
-	start.moveDown();
-	points[1] = start;
-	start.moveLeft();
-	points[2] = start;
-	start.moveRight();
-	start.moveRight();
-	points[3] = start;
+	Point p1 = start;
+	points[0] = p1;
+	p1.moveDown();
+	points[1] = p1;
+	p1.moveLeft();
+	points[2] = p1;
+	p1.moveRight();
+	p1.moveRight();
+	points[3] = p1;
 }
 /*Creates an 'L' shape tetronimo*/
 void Shape::createL(Point* points, Point& start) {
-	points[0] = start;
-	start.moveDown();
-	points[1] = start;
-	start.moveDown();
-	points[2] = start;
-	start.moveRight();
-	points[3] = start;
+	Point p1 = start;
+	points[0] = p1;
+	p1.moveDown();
+	points[1] = p1;
+	p1.moveDown();
+	points[2] = p1;
+	p1.moveRight();
+	points[3] = p1;
 }
 /*Creates a mirrored 'L' shape tetronimo*/
 void Shape::createMirrorL(Point* points, Point& start) {
-	points[0] = start;
-	start.moveDown();
-	points[1] = start;
-	start.moveDown();
-	points[2] = start;
-	start.moveLeft();
-	points[3] = start;
+	Point p1 = start;
+	points[0] = p1;
+	p1.moveDown();
+	points[1] = p1;
+	p1.moveDown();
+	points[2] = p1;
+	p1.moveLeft();
+	points[3] = p1;
 }
 /*Creates a skew tetronimo shape*/
 void Shape::createSkew(Point* points, Point& start) {
-	points[0] = start;
-	start.moveLeft();
-	points[1] = start;
-	start.moveDown();
-	points[2] = start;
-	start.moveLeft();
-	points[3] = start;
+	Point p1 = start;
+	points[0] = p1;
+	p1.moveDown();
+	points[1] = p1;
+	p1.moveRight();
+	points[2] = p1;
+	p1.moveDown();
+	points[3] = p1;
 }
 /*Creates a mirrored skew tetronimo shape*/
 void Shape::createMirrorSkew(Point* points, Point& start) {
-	points[0] = start;
-	start.moveRight();
-	points[1] = start;
-	start.moveDown();
-	points[2] = start;
-	start.moveRight();
-	points[3] = start;
+	Point p1 = start;
+	points[0] = p1;
+	p1.moveDown();
+	points[1] = p1;
+	p1.moveLeft();
+	points[2] = p1;
+	p1.moveDown();
+	points[3] = p1;
 }
 /*input: an enum type that represents the type of the shape we want to rotate left
  this function rotate the given shape left */
@@ -199,26 +206,26 @@ void Shape::rotatePlus(ShapeMovement direction) {
 		points[0] = points[2];
 		switch (shapeDirection) {
 			case FACE_UP: {
-				points[2].setX(points[1].getX());
-				points[2].setY(points[1].getY() - 1);
+				points[2].moveRight();
+				points[2].moveDown();
 				shapeDirection = FACE_LEFT;
 				break;
 			}
 			case FACE_LEFT: {
-				points[2].setX(points[1].getX() + 1);
-				points[2].setY(points[1].getY());
+				points[2].moveUp();
+				points[2].moveRight();
 				shapeDirection = FACE_DOWN;
 				break;
 			}
 			case FACE_DOWN: {
-				points[2].setX(points[1].getX());
-				points[2].setY(points[1].getY() + 1);
+				points[2].moveLeft();
+				points[2].moveUp();
 				shapeDirection = FACE_RIGHT;
 				break;
 			}
 			case FACE_RIGHT: {
-				points[2].setX(points[1].getX() - 1);
-				points[2].setY(points[1].getY());
+				points[2].moveLeft();
+				points[2].moveDown();
 				shapeDirection = FACE_UP;
 				break;
 			}
@@ -229,27 +236,27 @@ void Shape::rotatePlus(ShapeMovement direction) {
 		points[0] = points[3];
 		switch (shapeDirection) {
 			case FACE_UP: {
-				points[3].setX(points[1].getX());
-				points[3].setY(points[1].getY() - 1);
+				points[3].moveLeft();
+				points[3].moveDown();
 				shapeDirection = FACE_RIGHT;
 				break;
 			}
-			case FACE_LEFT: {
-				points[3].setX(points[1].getX() + 1);
-				points[3].setY(points[1].getY());
-				shapeDirection = FACE_UP;
+			case FACE_RIGHT: {
+				points[3].moveLeft();
+				points[3].moveUp();
+				shapeDirection = FACE_DOWN;
 				break;
 			}
 			case FACE_DOWN: {
-				points[3].setX(points[1].getX());
-				points[3].setY(points[1].getY() + 1);
+				points[3].moveRight();
+				points[3].moveUp();
 				shapeDirection = FACE_LEFT;
 				break;
 			}
-			case FACE_RIGHT: {
-				points[2].setX(points[1].getX() - 1);
-				points[2].setY(points[1].getY());
-				shapeDirection = FACE_DOWN;
+			case FACE_LEFT: {
+				points[3].moveRight();
+				points[3].moveDown();
+				shapeDirection = FACE_UP;
 				break;
 			}
 		}
@@ -272,10 +279,10 @@ void Shape::rotateMirrorL(ShapeMovement direction) {
 				break;
 			}
 			case FACE_RIGHT: {
-				points[0].moveRight();
-				points[0].moveDown();
-				points[2].moveLeft();
-				points[2].moveUp();
+				points[0].moveLeft();
+				points[0].moveUp();
+				points[2].moveRight();
+				points[2].moveDown();
 				points[3].moveDown();
 				points[3].moveDown();
 				shapeDirection = FACE_UP;
