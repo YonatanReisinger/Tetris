@@ -131,3 +131,7 @@ bool Point::moveRight()
 {
 	return setX(x + 1);
 }
+bool Point:: areCoordinatesEqual(const Point& other)
+{
+	return x == other.x && y == other.y;
+}
