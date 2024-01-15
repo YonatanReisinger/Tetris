@@ -484,8 +484,8 @@ void Shape::rotateL(ShapeMovement direction) {
 				points[0].moveRight();
 				points[2].moveLeft();
 				points[2].moveUp();
-				points[3].moveRight();
-				points[3].moveRight();
+				points[3].moveLeft();
+				points[3].moveLeft();
 				shapeDirection = FACE_DOWN;
 				break;
 			}
@@ -593,8 +593,8 @@ void Shape::rotateMirrorSkew(ShapeMovement direction) {
 				points[0] = points[2];
 				points[2].moveLeft();
 				points[2].moveDown();
-				points[3].moveUp();
-				points[3].moveUp();
+				points[3].moveDown();
+				points[3].moveDown();
 				shapeDirection = FACE_UP;
 				break;
 			}
