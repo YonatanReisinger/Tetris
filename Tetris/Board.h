@@ -17,8 +17,7 @@ class Board{
 private:
 	Point borders[4];
 	Point gameBoard[GameConfig:: HEIGHT][GameConfig:: WIDTH];
-	//the maximum amout of shapes is that all the board is full of shapes that transformed into points
-	Shape activeShapes[GameConfig::HEIGHT * GameConfig::WIDTH];
+	Shape* activeShapes;
 	short int numOfActiveShapes;
 
 	// Shape** activeShapes;
@@ -36,7 +35,7 @@ private:
 
 public:
 	bool setRow(short int i, char boardSymbol);
-	Board(const Point& topLeft, const Point& topRight, const Point& bottomLeft, const Point& bottomRight);
+	Board(Shape& testtttt, const Point& topLeft, const Point& topRight, const Point& bottomLeft, const Point& bottomRight);
 	//Board(const Board* other);
 	Point* getBorders();
 	bool setNumOfShapes(short int num);
