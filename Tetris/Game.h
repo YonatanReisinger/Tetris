@@ -5,6 +5,7 @@
 #include "Board.h"
 #include "Player.h"
 #include "Shape.h"
+#include "gameConfig.h"
 #include <iostream>
 #include <conio.h> // for _kbhit() and _getch()
 using namespace std;
