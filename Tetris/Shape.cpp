@@ -768,5 +768,15 @@ void Shape::move(ShapeMovement movement) {
 	}
 }
 
+int Shape::getPointInd(const Point& p1) {
+	int index = NOT_FOUND;
+	for (int i = 0; i < NUM_OF_POINTS; i++) {
+		if (points[i].areCoordinatesEqual(p1)) {
+			index = i;
+		}
+	}
+	return index;
+}
+
 
 
