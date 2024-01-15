@@ -22,6 +22,7 @@ private:
 	Type shapeType;
 	RotationDirection shapeDirection;
 public:
+	Shape();
 	Shape(Type t, Point& start,RotationDirection shapeDirection = FACE_UP);
 	//void setColor(Color color);
 	void moveDown();
