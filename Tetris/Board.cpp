@@ -1,7 +1,7 @@
 #include "Board.h"
 #include "gameConfig.h"
 
-Board:: Board(const Point& topLeft, const Point& topRight, const Point& bottomLeft, const Point& bottomRight)
+Board:: Board(Shape& testtttt,const Point& topLeft, const Point& topRight, const Point& bottomLeft, const Point& bottomRight)
 {
 	setBorders(topLeft, topRight, bottomLeft, bottomRight);
 	clear(); //when board is being made it need to be empty
