@@ -15,9 +15,11 @@ enum Borders {TOP_LEFT, TOP_RIGHT, BOTTOM_LEFT, BOTTOM_RIGHT};
 
 class Board{
 private:
-	Point borders[4]; // maybe change to dynamic after ??????????
+	Point borders[4];
 	Point gameBoard[GameConfig:: HEIGHT][GameConfig:: WIDTH];
-	Shape* activeShapes;
+	//the maximum amout of shapes is that all the board is full of shapes that transformed into points
+	Shape activeShapes[GameConfig::HEIGHT * GameConfig::WIDTH];
+	short int numOfActiveShapes;
 
 	// Shape** activeShapes;
 	bool setBorders(const Point& topLeft, const Point& topRight, const Point& bottomLeft, const Point& bottomRight);
@@ -36,6 +38,7 @@ public:
 	Board(const Point& topLeft, const Point& topRight, const Point& bottomLeft, const Point& bottomRight);
 	//Board(const Board* other);
 	Point* getBorders();
+	bool setNumOfShapes(short int num);
 	bool setPointInGameBoardByInd(short int i, short int j, char symbol);
 	bool setPointInGameBoard(const Point& point);
 	bool setShapeInGameBoard(const Shape& shape);
@@ -50,6 +53,8 @@ public:
 	Point getStartingPoint();
 	bool isShapeInBoard(const Shape& shape);
 	bool canShapeMove(const Shape& shape, ShapeMovement movement);
+	bool canShapeDrop(Shape& shape);
+	void dropActiveShapes();
 };
 
 #endif // Board.h

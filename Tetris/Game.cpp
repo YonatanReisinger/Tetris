@@ -10,7 +10,7 @@ GameStatus Game:: run()
 	// get the place that the shapes should start falling from
 	Point startPoint1 = board1.getStartingPoint(), startPoint2 = board2.getStartingPoint();
 	Shape shape1 = getRandomShape(startPoint1), shape2 = getRandomShape(startPoint2);
-	//shape1 = Shape(PLUS, startPoint1);
+	//shape1 = Shape(MIRROR_L, startPoint1);
 	Key key;
 	GameStatus gameStatus = GameStatus:: PLAYING;
 	bool flag1 = false, flag2 = false;
@@ -78,6 +78,8 @@ GameStatus Game:: run()
 			board1.setShapeInGameBoard(shape1);
 			board1.printGameBoard();
 			shape1 = getRandomShape(startPoint1);
+			// increase the score of the player according to how many rows he cleared
+			player1.increaseScore(GameConfig::SCORE_FOR_FULL_LINE * board1.clearFullRows());
 		}
 		
 		if (board2.canShapeChangeDirection(shape2, Directions::DOWN))
@@ -87,12 +89,9 @@ GameStatus Game:: run()
 			board2.setShapeInGameBoard(shape2);
 			board2.printGameBoard();
 			shape2 = getRandomShape(startPoint2); // get a new shape
+			// increase the score of the player according to how many rows he cleared
+			player2.increaseScore(GameConfig::SCORE_FOR_FULL_LINE * board2.clearFullRows());
 		}
-		
-		// increase the score of the player according to how many rows he cleared
-		player1.increaseScore(GameConfig::SCORE_FOR_FULL_LINE * board1.clearFullRows());
-		player2.increaseScore(GameConfig::SCORE_FOR_FULL_LINE * board2.clearFullRows());
-
 		//if (_kbhit()) {
 		//	key = _getch();
 		//	keyInd1 = player1.getKeyInd(key);

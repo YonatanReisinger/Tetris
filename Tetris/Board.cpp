@@ -5,6 +5,7 @@ Board:: Board(const Point& topLeft, const Point& topRight, const Point& bottomLe
 {
 	setBorders(topLeft, topRight, bottomLeft, bottomRight);
 	clear(); //when board is being made it need to be empty
+	setNumOfShapes(0);
 }
 
 //Board:: Board(const Board* other)
@@ -32,6 +33,16 @@ bool Board:: setBorders(const Point& topLeft, const Point& topRight, const Point
 Point* Board:: getBorders()
 {
 	return borders;
+}
+bool Board:: setNumOfShapes(short int num)
+{
+	if (num < 0 || num >(GameConfig::HEIGHT * GameConfig::WIDTH))
+		return false;
+	else
+	{
+		numOfActiveShapes = num;
+		return true;
+	}
 }
 bool Board:: setGameBoard(char boardSymbol)
 {
@@ -258,4 +269,23 @@ bool Board:: canShapeMove(const Shape& shape, ShapeMovement movement)
 	else if (movement == ShapeMovement:: DROP)
 		return canShapeChangeDirection(shape, Directions:: DOWN);
 	return true;
+}
+bool Board:: canShapeDrop(Shape& shape)
+{
+	short int i;
+	bool res = true;
+	Point tempPoint;
+	// a shape can move iff all of its points can move
+	for (i = 0; i < NUM_OF_POINTS && res; i++)
+	{
+		tempPoint = shape.points[i];
+		tempPoint.move(Directions::DOWN);
+		// a point can drop if either the place below is free or it is a part of the current shape 
+		res = canPointMove(shape.points[i], Directions::DOWN) || shape.isPointInside(tempPoint);
+	}
+	return res;
+}
+void Board:: dropActiveShapes()
+{
+
 }
