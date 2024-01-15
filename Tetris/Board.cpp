@@ -171,12 +171,16 @@ bool Board:: clearRow(short int i)
 {
 	return setRow(i, EMPTY);
 }
-void Board:: clearFullRows()
+int Board:: clearFullRows()
 {
-	short int i;
+	short int i, fullRowsCounter = 0;
 	for (i = 0; i < GameConfig::HEIGHT; i++)
 		if (isRowFull(i))
+		{
 			clearRow(i);
+			fullRowsCounter++;
+		}
+	return fullRowsCounter;
 }
 bool Board:: isRowFull(short int i)
 {

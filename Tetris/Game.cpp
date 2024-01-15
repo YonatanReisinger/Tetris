@@ -89,8 +89,10 @@ GameStatus Game:: run()
 			shape2 = getRandomShape(startPoint2); // get a new shape
 		}
 		
-		board1.clearFullRows();
-		board2.clearFullRows();
+		// increase the score of the player according to how many rows he cleared
+		player1.increaseScore(GameConfig::SCORE_FOR_FULL_LINE * board1.clearFullRows());
+		player2.increaseScore(GameConfig::SCORE_FOR_FULL_LINE * board2.clearFullRows());
+
 		//if (_kbhit()) {
 		//	key = _getch();
 		//	keyInd1 = player1.getKeyInd(key);

@@ -17,6 +17,7 @@ class Board{
 private:
 	Point borders[4]; // maybe change to dynamic after ??????????
 	Point gameBoard[GameConfig:: HEIGHT][GameConfig:: WIDTH];
+	Shape* activeShapes;
 
 	// Shape** activeShapes;
 	bool setBorders(const Point& topLeft, const Point& topRight, const Point& bottomLeft, const Point& bottomRight);
@@ -42,7 +43,7 @@ public:
 	void printGameBoard();
 	void clear();
 	bool clearRow(short int i);
-	void clearFullRows();
+	int clearFullRows();
 	bool isOverflowing();
 	bool canPointMove(Point point, Directions direction);
 	bool canShapeChangeDirection(const Shape& shape, Directions direction);
