@@ -22,7 +22,8 @@ private:
 	GameStatus run(); //game logic
 	inline Shape getRandomShape(Point& startPoint);
 	void moveShapeOnScreen(Shape& shape, ShapeMovement movement, GamePace pace);
-	void moveShapeDownTheScreen(Shape& shape, GamePace pace);
+	bool checkAndProcessKeyboardInput();
+	void processPlayerInput(Key key, Player& player);
 public:
 	Game(Player& player1, Player& player2);
 	void start();

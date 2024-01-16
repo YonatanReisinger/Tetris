@@ -1,7 +1,7 @@
 #include "Board.h"
 #include "gameConfig.h"
 
-Board:: Board(Shape& testtttt,const Point& topLeft, const Point& topRight, const Point& bottomLeft, const Point& bottomRight)
+Board:: Board(const Point& topLeft, const Point& topRight, const Point& bottomLeft, const Point& bottomRight)
 {
 	setBorders(topLeft, topRight, bottomLeft, bottomRight);
 	clear(); //when board is being made it need to be empty
@@ -107,10 +107,14 @@ bool Board:: setShapeInGameBoard(const Shape& shape)
 {
 	short int i;
 	bool res = true;
+	// maybe add just the points that are in the game still !!!!!!!!!!!!!!!!!!!!1
 	for (i = 0; i < NUM_OF_POINTS && res; i++) // if all the points could be set on the board thus all the shape can
-		res = setPointInGameBoard(shape.points[i]);
+	{
+		if (shape.points[i].symbol != EMPTY) // insert just non empty points
+			res = setPointInGameBoard(shape.points[i]);
+	}
 	if (res == true) // add the shape to the active shape array
-		activeShapes[numOfActiveShapes++];
+		activeShapes[numOfActiveShapes++] = shape;
 	return res;
 }
 inline bool Board:: isHeightValid(Point borders[4])
@@ -284,17 +288,26 @@ bool Board:: canShapeMove(const Shape& shape, ShapeMovement movement)
 }
 bool Board:: canShapeDrop(Shape& shape)
 {
-	short int i;
+	short int i, emptyCounter = 0;
 	bool res = true;
 	Point tempPoint;
-	// a shape can move iff all of its points can move
+	// a shape can move iff all of its points that are still in the game can move
 	for (i = 0; i < NUM_OF_POINTS && res; i++)
 	{
-		tempPoint = shape.points[i];
-		tempPoint.move(Directions::DOWN);
-		// a point can drop if either the place below is free or if the place below it is part of it's own shape
-		res = canPointMove(shape.points[i], Directions::DOWN) || shape.getPointInd(tempPoint) != NOT_FOUND;
+		if (shape.points[i].symbol != EMPTY)
+		{
+			tempPoint = shape.points[i];
+			tempPoint.move(Directions::DOWN);
+			// a point can drop if either the place below is free or if the place below it is part of it's own shape
+			res = canPointMove(shape.points[i], Directions::DOWN)
+				|| (shape.getPointInd(tempPoint) != NOT_FOUND && isPointInBoard(tempPoint));
+		}
+		else
+			emptyCounter++;
 	}
+	// an empty shape can't drop
+	if (emptyCounter == NUM_OF_POINTS)
+		return false;
 	return res;
 }
 void Board:: dropActiveShapes()
@@ -309,6 +322,7 @@ void Board:: dropActiveShapes()
 		{
 			// update the place of the shape
 			clearShapeFromGameBoard(shape);
+			// moveShapeDownTheScreen()
 			shape.moveDown();
 			dropped = true;
 		}
@@ -326,4 +340,11 @@ void Board:: clearShapeFromGameBoard(Shape& shape)
 			setPointInGameBoard(shape.points[i]);
 			shape.points[i].setSymbol(GameConfig:: SHAPE_SYMBOL);
 		}
+}
+// a shape is stuck if it can't move to any direction
+bool Board::isShapeStuck(const Shape& shape)
+{
+	return !canShapeChangeDirection(shape, Directions::DOWN)
+		&& !canShapeChangeDirection(shape, Directions::LEFT)
+		&& !canShapeChangeDirection(shape, Directions::RIGHT);
 }
