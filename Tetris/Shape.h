@@ -47,7 +47,7 @@ public:
 	void clearShape();
 	void setSymbol(char symbol);
 	void move(ShapeMovement movement);
-	int getPointInd(const Point& p1);
+	int getPointInd(const Point& p1) const;
 	friend class Board;
 };
 

@@ -7,15 +7,6 @@ Board:: Board(const Point& topLeft, const Point& topRight, const Point& bottomLe
 	clear(); //when board is being made it need to be empty
 	setNumOfShapes(0);
 }
-
-//Board:: Board(const Board* other)
-//{
-//	// might not need !!!!!!!!!!!! check !!!!!!!!!!!!!
-//	// default copy constructor does the same !!!!!!
-//	short int i;
-//	for (i = 0; i < 4; i++)
-//		borders[i] = other->borders[i];
-//}
 bool Board:: setBorders(const Point& topLeft, const Point& topRight, const Point& bottomLeft, const Point& bottomRight)
 {
 	Point borders[4] = { topLeft , topRight , bottomLeft , bottomRight };
@@ -34,13 +25,13 @@ Point* Board:: getBorders()
 {
 	return borders;
 }
-bool Board:: setNumOfShapes(short int num)
+bool Board:: setNumOfShapes(size_t size)
 {
-	if (num < 0 || num >(GameConfig::HEIGHT * GameConfig::WIDTH))
+	if (size < 0 || size >(GameConfig::HEIGHT * GameConfig::WIDTH))
 		return false;
 	else
 	{
-		numOfActiveShapes = num;
+		numOfActiveShapes = size;
 		return true;
 	}
 }
@@ -259,12 +250,13 @@ bool Board:: canShapeChangeDirection(const Shape& shape, Directions direction)
 {
 	short int i;
 	bool res = true;
-	// a shape can move iff all of its points can move
+	// a shape can move iff all of its active points can move
 	for (i = 0; i < NUM_OF_POINTS && res; i++)
-		res = canPointMove(shape.points[i], direction);
+		if (shape.points[i].symbol != EMPTY)
+			res = canPointMove(shape.points[i], direction);
 	return res;
 }
-Point Board:: getStartingPoint()
+Point Board:: getStartingPoint() const
 {
 	// the place that the shapes should start falling from is the middle point on the first row
 	return gameBoard[0][GameConfig:: WIDTH / 2];
@@ -282,11 +274,12 @@ bool Board:: canShapeMove(const Shape& shape, ShapeMovement movement)
 {
 	if (movement == ShapeMovement::LEFT || movement == ShapeMovement::RIGHT)
 		return canShapeChangeDirection(shape, (Directions)movement);
-	else if (movement == ShapeMovement:: DROP)
-		return canShapeChangeDirection(shape, Directions:: DOWN);
-	return true;
+	else if (movement == ShapeMovement::DROP)
+		return canShapeChangeDirection(shape, Directions::DOWN);
+	else // rotation
+		return canShapeRotate(shape, movement);
 }
-bool Board:: canShapeDrop(Shape& shape)
+bool Board::canActiveShapeDrop(const Shape& shape)
 {
 	short int i, emptyCounter = 0;
 	bool res = true;
@@ -318,7 +311,7 @@ void Board:: dropActiveShapes()
 	{
 		Shape& shape = activeShapes[i];
 		// if after the clearing of line a shape can drop down the board, drop while it can
-		while (canShapeDrop(shape))
+		while (canActiveShapeDrop(shape))
 		{
 			// update the place of the shape
 			clearShapeFromGameBoard(shape);
@@ -347,4 +340,15 @@ bool Board::isShapeStuck(const Shape& shape)
 	return !canShapeChangeDirection(shape, Directions::DOWN)
 		&& !canShapeChangeDirection(shape, Directions::LEFT)
 		&& !canShapeChangeDirection(shape, Directions::RIGHT);
+}
+bool Board:: canShapeRotate(const Shape& shape, ShapeMovement movement)
+{
+	bool res = true;
+	short int i;
+	Shape tempShape(shape);
+	tempShape.move(movement);
+	for (i = 0; i < NUM_OF_POINTS && res; i++)
+		if (shape.points[i].symbol != EMPTY)
+			res = !isPointFull(shape.points[i]); // shapes can always rotate unless the new place will be full
+	return res;
 }
