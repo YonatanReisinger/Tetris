@@ -17,6 +17,7 @@ private:
 	Board board;
 	int score;
 	const Key keys[NUM_OF_KEYS];
+	Shape* currPlayingShape;
 public:
 	Player(const Board& board, const Key keys[], const char* name = "momo", int score = 0);
 	Player(const Player& other);
@@ -29,5 +30,7 @@ public:
 	bool increaseScore(int increase);
 	void reset();
 	int getKeyInd(Key inputKey);
+	Shape* getCurrShape();
+	void setCurrShape(Shape* currShape);
 };
 #endif // PLAYER.h

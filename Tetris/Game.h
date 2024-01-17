@@ -20,9 +20,10 @@ private:
 	GameStatus status;
 	Player &player1, &player2;
 	GameStatus run(); //game logic
-	inline Shape getRandomShape(Point& startPoint);
+	inline Shape* getRandomShape(Point& startPoint);
 	void moveShapeOnScreen(Shape& shape, ShapeMovement movement, GamePace pace);
-	void moveShapeDownTheScreen(Shape& shape, GamePace pace);
+	bool checkAndProcessKeyboardInput();
+	void processPlayerInput(Key key, Player& player);
 public:
 	Game(Player& player1, Player& player2);
 	void start();
@@ -31,5 +32,6 @@ public:
 	GameStatus getStatus();
 	bool setStatus(GameStatus status);
 	Player& getPlayer(int playerNum);
+	void setCurrentShape(Player& player,Point& startPoint);
 };
 #endif //Game.h
