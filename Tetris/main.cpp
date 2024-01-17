@@ -38,40 +38,33 @@ int main()
 	Key key = ' ';*/
 
 	pGame = new Game(player1,player2);
-	pGame->start();
-	Point point(1, GameConfig::HEIGHT + 2);
-	point.gotoxy();
-	// print the whole board including the frame
-	
-	//pGame = nullptr;    34        
-	//printMenu(); //the program just started and therefore for sure no paused game exists
-	//cin >> choice;
+	printMenu(); //the program just started and therefore for sure no paused game exists
+	cin >> choice;
 
-	//while (choice != Choice::EXIT)
-	//{
-	//	switch (choice)
-	//	{
-	//	case(Choice::START):
-	//		pGame->start();
-	//		if (pGame->getStatus == GameStatus:: PAUSED)
-	//			system("cls");
-	//		break;
-	//	case(Choice::CONTINUE):
-	//		if (pGame != nullptr && pGame->getStatus() == GameStatus::PAUSED)
-	//			pGame->resume();
-	//		else
-	//			cout << "No paused game to continue !" << endl;
-	//		break;
-	//	case(Choice::INSTRUCTIONS):
-	//		printInstructionsAndKeys(GameConfig:: INSTRUCTIONS_STR, GameConfig:: KEYS_STR);
-	//		break;
-	//	default:
-	//		printChoiceError(); 
-	//		break;
-	//	}
-	//	printMenu(pGame->getStatus());
-	//	cin >> choice;
-	//}
-	//cout << "Good Game! Goodbye!" << endl;
+	while (choice != Choice::EXIT)
+	{
+		switch (choice)
+		{
+		case(Choice::START):
+			system("cls");
+			pGame->start();
+			break;
+		case(Choice::CONTINUE):
+			if (pGame != nullptr && pGame->getStatus() == GameStatus::PAUSED)
+				pGame->resume();
+			else
+				cout << "No paused game to continue !" << endl;
+			break;
+		case(Choice::INSTRUCTIONS):
+			printInstructionsAndKeys(GameConfig:: INSTRUCTIONS_STR, GameConfig:: KEYS_STR);
+			break;
+		default:
+			printChoiceError(); 
+			break;
+		}
+		printMenu(pGame->getStatus());
+		cin >> choice;
+	}
+	cout << "Good Game! Goodbye!" << endl;
 	return 0;
 }

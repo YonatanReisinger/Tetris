@@ -5,6 +5,7 @@ Player::Player(const Board& board, const Key keys[], const char* name, int score
 {
 	setName(name);
 	setScore(score);
+	setCurrShape(nullptr);
 }
 Board& Player:: getBoard()
 {
@@ -51,6 +52,9 @@ void Player:: reset()
 {
 	board.clear();
 	setScore(0);
+	if (currPlayingShape != nullptr) {
+		delete currPlayingShape;
+	}
 }
 int Player:: getKeyInd(Key inputKey)
 {
@@ -62,4 +66,14 @@ int Player:: getKeyInd(Key inputKey)
 		if (inputKey == keys[i] || inputKey + ('a' - 'A') == keys[i])
 			resInd = i;
 	return resInd;
+}
+
+Shape* Player::getCurrShape()
+{
+	return currPlayingShape;
+}
+
+void Player:: setCurrShape(Shape* currShape)
+{
+	currPlayingShape = currShape;
 }

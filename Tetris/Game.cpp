@@ -4,14 +4,20 @@ Game:: Game(Player &player1, Player &player2) : player1(player1), player2(player
 {
 	setStatus(GameStatus:: PLAYING); // new game is automatically being played
 }
-GameStatus Game:: run()
+GameStatus Game::run()
 {
+	bool isGamePlaying = true;
 	Board board1 = player1.getBoard(), board2 = player2.getBoard();
-	// get the place that the shapes should start falling from
 	Point startPoint1 = board1.getStartingPoint(), startPoint2 = board2.getStartingPoint();
-	Shape shape1 = getRandomShape(startPoint1), shape2 = getRandomShape(startPoint2);
+	if (getStatus() != GameStatus::PAUSED)
+	{
+		player1.setCurrShape(getRandomShape(startPoint1));
+		player2.setCurrShape(getRandomShape(startPoint2));
+	}
+	// get the place that the shapes should start falling from
+	//Shape shape1 = getRandomShape(startPoint1), shape2 = getRandomShape(startPoint2);
 	//shape1 = Shape(STRAIGHT, startPoint1);
-	
+
 	/*Point p1(6, 15), p2(6, 11), p3(6, 7), p4(6,4), p5(6,1);
 	Shape s1(STRAIGHT, p1, FACE_UP), s2(STRAIGHT, p2, FACE_UP), s3(STRAIGHT, p3, FACE_UP);
 	Shape L1(L, p4, FACE_UP), L2(L, p5, FACE_UP);
@@ -20,23 +26,32 @@ GameStatus Game:: run()
 	board1.setShapeInGameBoard(s3);
 	board1.setShapeInGameBoard(L1);
 	board1.setShapeInGameBoard(L2);*/
-	char strTest[100]; int stam = 0;
-
 	Key key;
-	GameStatus gameStatus = GameStatus:: PLAYING;
+	GameStatus gameStatus = GameStatus::PLAYING;
 	bool flag1 = false, flag2 = false;
 	int keyInd1, keyInd2, clearRowsForPlayer1InRound = 0, clearRowsForPlayer2InRound = 0;
 
 	board1.print();
 	board2.print();
-	shape1.print();
-	shape2.print();
+	player1.getCurrShape()->print();
+	player2.getCurrShape()->print();
 
 	// while both boards have space
-	while (!board1.isShapeStuck(shape1) && !board2.isShapeStuck(shape2))
+	while (!board1.isShapeStuck(*(player1.getCurrShape())) && !board2.isShapeStuck(*(player2.getCurrShape())) && isGamePlaying)
 	{
-		//checkAndProcessKeyboardInput();
-		//checkAndProcessKeyboardInput();
+		isGamePlaying = checkAndProcessKeyboardInput();
+		if (!isGamePlaying)
+		{
+			gameStatus = GameStatus::PAUSED;
+			break;
+		}
+		isGamePlaying = checkAndProcessKeyboardInput();
+		if (!isGamePlaying)
+		{
+			gameStatus = GameStatus::PAUSED;
+			break;
+		}
+		/*
 
 		if (_kbhit()) {
 			key = _getch();
@@ -87,7 +102,11 @@ GameStatus Game:: run()
 					moveShapeOnScreen(shape2, (ShapeMovement)keyInd2, GamePace::MODERATE);
 			}
 		}
-		
+		*/
+		setCurrentShape(player1, startPoint1);
+		setCurrentShape(player2, startPoint2);
+		/*
+
 		if (board1.canShapeChangeDirection(shape1, Directions::DOWN))
 			moveShapeOnScreen(shape1, ShapeMovement:: DROP, GamePace::NORMAL);
 		else //if you can't move anymore, insert the shape into the board
@@ -104,7 +123,7 @@ GameStatus Game:: run()
 				board1.printGameBoard();
 			}
 		}
-		
+
 		if (board2.canShapeChangeDirection(shape2, Directions::DOWN))
 			moveShapeOnScreen(shape2, ShapeMovement::DROP, GamePace::NORMAL);
 		else //if you can't move anymore, insert the shape into the board
@@ -122,9 +141,9 @@ GameStatus Game:: run()
 			}
 		}
 	}
-	shape1.print();
-	shape2.print();
-	return gameStatus;
+		*/
+	}
+		return gameStatus;
 }
 void Game::start()
 {
@@ -175,9 +194,10 @@ Player& Game:: getPlayer(int playerNum)
 {
 	return playerNum == 1 ? player1 : player2; 
 }
-inline Shape Game:: getRandomShape(Point& startPoint)
+inline Shape* Game:: getRandomShape(Point& startPoint)
 {
-	return Shape(Type(rand() % NUM_OF_SHAPES), startPoint);
+	Shape* s = new Shape(Type(rand() % NUM_OF_SHAPES), startPoint);
+	return s;
 }
 void Game:: moveShapeOnScreen(Shape& shape, ShapeMovement movement, GamePace pace)
 {
@@ -190,33 +210,56 @@ void Game:: moveShapeOnScreen(Shape& shape, ShapeMovement movement, GamePace pac
 }
 bool Game:: checkAndProcessKeyboardInput()
 {
+	bool res = true;
 	Key key;
-	if (_kbhit()) 
-	{
+	if (_kbhit()) {
 		key = _getch();
-		if (key != ESC)
-		{
-			processPlayerInput(key, player1);
-			processPlayerInput(key, player2);
-			return true;
+		if (key != ESC) {
+		processPlayerInput(key, player1);
+		processPlayerInput(key, player2);
+		res = true;
 		}
-		else // key == ESC
-			return false;
+		else
+			res = false;
+
 	}
+	return res;
 }
 void Game:: processPlayerInput(Key key, Player& player)
 {
-	//ShapeMovement movement;
-	//Board& board = player.getBoard();
+	ShapeMovement movement;
+	Board& board = player.getBoard();
 	//// the index of the key indicates it's type of movement
-	//movement = (ShapeMovement)player1.getKeyInd(key);
-	//if (movement != NOT_FOUND && board.canShapeMove(shape1, movement)) // if a valid key was pressed
-	//{
-	//	// if the player pressed the drop bottom, drop the shape down the board while it can
-	//	if (movement == ShapeMovement::DROP)
-	//		while (board.canShapeChangeDirection(shape1, Directions::DOWN))
-	//			moveShapeOnScreen(shape1, ShapeMovement::DROP, GamePace::FAST);
-	//	else // else, move the shape according to the movement selected
-	//		moveShapeOnScreen(shape1, movement, GamePace::FAST);
-	//}
+	movement = (ShapeMovement)player.getKeyInd(key);
+	if (movement != NOT_FOUND && board.canShapeMove(*(player.getCurrShape()), movement)) // if a valid key was pressed
+	{
+		// if the player pressed the drop bottom, drop the shape down the board while it can
+		if (movement == ShapeMovement::DROP)
+			while (board.canShapeChangeDirection(*(player.getCurrShape()), Directions::DOWN))
+				moveShapeOnScreen(*(player.getCurrShape()), ShapeMovement::DROP, GamePace::FAST);
+		else // else, move the shape according to the movement selected
+			moveShapeOnScreen(*(player.getCurrShape()), movement, GamePace::FAST);
+	}
+}
+
+void Game:: setCurrentShape(Player& player,Point& startPoint)
+{
+	int clearRowsForPlayerInRound = 0;
+	Board& board1 = player.getBoard();
+	if (board1.canShapeChangeDirection(*(player.getCurrShape()), Directions::DOWN))
+		moveShapeOnScreen(*(player.getCurrShape()), ShapeMovement::DROP, GamePace::NORMAL);
+	else //if you can't move anymore, insert the shape into the board
+	{
+		board1.setShapeInGameBoard(*(player.getCurrShape()));
+		board1.printGameBoard();
+		player.setCurrShape(getRandomShape(startPoint));
+		// increase the score of the player according to how many rows he cleared
+		clearRowsForPlayerInRound = board1.clearFullRows();
+		if (clearRowsForPlayerInRound != 0)
+		{
+			player1.increaseScore(GameConfig::SCORE_FOR_FULL_LINE * clearRowsForPlayerInRound);
+			board1.dropActiveShapes();
+			board1.printGameBoard();
+		}
+	}
 }
