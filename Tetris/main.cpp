@@ -52,9 +52,10 @@ int main()
 	//	switch (choice)
 	//	{
 	//	case(Choice::START):
-	//		pGame->start();
 	//		if (pGame->getStatus == GameStatus:: PAUSED)
-	//			system("cls");
+	//				system("cls");
+	//		pGame->start();
+	//		
 	//		break;
 	//	case(Choice::CONTINUE):
 	//		if (pGame != nullptr && pGame->getStatus() == GameStatus::PAUSED)
