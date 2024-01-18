@@ -19,14 +19,16 @@ private:
 	const Key keys[NUM_OF_KEYS];
 	Shape* currPlayingShape;
 public:
-	Player(const Board& board, const Key keys[], const char* name = "momo", int score = 0);
-	Player(const Player& other);
+	Player(const Board& board, const Key keys[], const char* name, int score = 0);
+	Player(const Player& other) = delete;
+	Player& operator=(const Player& other) = delete;
+	~Player();
 
 	Board& getBoard();
 	bool setName(const char* name);
-	char* getName();
+	const char* getName() const;
 	bool setScore(int score);
-	int getScore();
+	int getScore() const;
 	bool increaseScore(int increase);
 	void reset();
 	int getKeyInd(Key inputKey);

@@ -4,8 +4,15 @@ Player::Player(const Board& board, const Key keys[], const char* name, int score
 	, keys{keys[KeyInd:: LEFT_IND], keys[KeyInd::RIGHT_IND], keys[KeyInd::ROTATE_RIGHT_IND], keys[KeyInd::ROTATE_LEFT_IND], keys[KeyInd::DROP_IND] }
 {
 	setName(name);
+	this->board.clear();
 	setScore(score);
 	setCurrShape(nullptr);
+}
+
+Player:: ~Player()
+{
+	if (currPlayingShape != nullptr)
+		delete currPlayingShape;
 }
 Board& Player:: getBoard()
 {
@@ -24,7 +31,7 @@ bool Player:: setName(const char* name)
 	}
 	return res;
 }
-char* Player:: getName()
+const char* Player:: getName() const
 {
 	return name;
 }
@@ -40,7 +47,7 @@ bool Player:: setScore(int score)
 	}
 	return res;
 }
-int Player:: getScore()
+int Player:: getScore() const
 {
 	return score;
 }
@@ -54,6 +61,7 @@ void Player:: reset()
 	setScore(0);
 	if (currPlayingShape != nullptr) {
 		delete currPlayingShape;
+		currPlayingShape = nullptr;
 	}
 }
 int Player:: getKeyInd(Key inputKey)

@@ -35,7 +35,7 @@ public:
 	bool moveLeft();
 	bool moveRight();
 	bool move(Directions direction);
-	bool areCoordinatesEqual(const Point& other);
+	bool areCoordinatesEqual(const Point& other) const;
 
 	friend class Board;
 };

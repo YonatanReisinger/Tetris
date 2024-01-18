@@ -17,11 +17,9 @@ enum class GamePace { NORMAL = 700, MODERATE = 500 ,FAST = 50 };
 #define NUM_OF_SHAPES 7
 class GameConfig {
 public:
-	static constexpr char INSTRUCTIONS_STR[] = "instructions";
-	static constexpr char KEYS_STR[] = "keys";
 	static constexpr int HEIGHT = 18;
 	static constexpr int WIDTH = 12;
-	static constexpr int DISTANCE_BETWEEN_BOARDS = 6;
+	static constexpr int DISTANCE_BETWEEN_BOARDS = 10;
 	static constexpr char BORDER_SYMBOL = 'X';
 	static constexpr char SHAPE_SYMBOL = '*';
 	static constexpr unsigned char player1Keys[NUM_OF_KEYS] = {'a', 'd', 's', 'w', 'x'};
