@@ -1,10 +1,11 @@
 #include "Point.h"
 
-Point::Point(short int x, short int y, char symbol)
+Point::Point(short int x, short int y, char symbol,Color color)
 {
 	setX(x);
 	setY(y);
 	setSymbol(symbol); //dasdsa
+	setColor(color);
 }
 bool Point:: setX(short int x)
 {
@@ -88,9 +89,10 @@ void Point::gotoxy()
 void Point:: print()
 {
 	gotoxy();
-	/*HANDLE hStdOut = GetStdHandle(STD_OUTPUT_HANDLE);
-	SetConsoleTextAttribute(hStdOut, WORD(color));*/
+	HANDLE hStdOut = GetStdHandle(STD_OUTPUT_HANDLE);
+	SetConsoleTextAttribute(hStdOut, (WORD)color);
 	cout << symbol;
+	SetConsoleTextAttribute(hStdOut, (WORD)Color::WHITE);
 }
 bool Point:: move(Directions direction)
 {
@@ -134,4 +136,23 @@ bool Point::moveRight()
 bool Point:: areCoordinatesEqual(const Point& other) const
 {
 	return x == other.x && y == other.y;
+}
+
+inline Color Point:: getColor()
+{
+	return color;
+}
+bool Point:: setColor(Color color)
+{
+	bool res = false;
+	if (color == Color::WHITE || color == Color::RED || color == Color::BLUE ||
+		color == Color::ORANGE || color == Color::CYAN || color == Color::PURPLE ||
+		color == Color::BROWN || color == Color::GREEN) {
+		res = true;
+		this->color = color;
+	}
+	else {
+		res = false;
+	}
+	return res;
 }

@@ -18,7 +18,7 @@ GameStatus Game::run()
 		player1.setCurrShape(getRandomShape(startPoint1));
 		player2.setCurrShape(getRandomShape(startPoint2));
 	}
-	
+	/* 
 	Point p1(2,17), p2(6,17), p3(2,16), p4(6,16), p5(10,17);
 	Shape l1(STRAIGHT, p1), l2(STRAIGHT, p2), l3(STRAIGHT, p3), l4(STRAIGHT, p4);
 	Shape s1(SQUARE, p5);
@@ -32,6 +32,7 @@ GameStatus Game::run()
 	board1.setShapeInGameBoard(l3);
 	board1.setShapeInGameBoard(l4);
 	board1.setShapeInGameBoard(s1);
+	*/
 
 	board1.print();
 	board2.print();

@@ -73,6 +73,7 @@ void Shape::createSquare(Point* points, Point& start) {
 	points[2] = p1;
 	p1.moveRight();
 	points[3] = p1;
+	setShapeColor(Color::BLUE);
 }
 /*Creates a straight line tetronimo shape*/
 void Shape::createStraight(Point* points, Point& start) {
@@ -84,6 +85,7 @@ void Shape::createStraight(Point* points, Point& start) {
 	points[2] =p1;
 	p1.moveDown();
 	points[3] =p1;
+	setShapeColor(Color::BROWN);
 }
 /*Creates a plus tetronimo shape*/
 void Shape::createPlus(Point* points, Point& start) {
@@ -96,6 +98,7 @@ void Shape::createPlus(Point* points, Point& start) {
 	p1.moveRight();
 	p1.moveRight();
 	points[3] = p1;
+	setShapeColor(Color::CYAN);
 }
 /*Creates an 'L' shape tetronimo*/
 void Shape::createL(Point* points, Point& start) {
@@ -107,6 +110,7 @@ void Shape::createL(Point* points, Point& start) {
 	points[2] = p1;
 	p1.moveRight();
 	points[3] = p1;
+	setShapeColor(Color::GREEN);
 }
 /*Creates a mirrored 'L' shape tetronimo*/
 void Shape::createMirrorL(Point* points, Point& start) {
@@ -118,6 +122,7 @@ void Shape::createMirrorL(Point* points, Point& start) {
 	points[2] = p1;
 	p1.moveLeft();
 	points[3] = p1;
+	setShapeColor(Color::ORANGE);
 }
 /*Creates a skew tetronimo shape*/
 void Shape::createSkew(Point* points, Point& start) {
@@ -129,6 +134,7 @@ void Shape::createSkew(Point* points, Point& start) {
 	points[2] = p1;
 	p1.moveDown();
 	points[3] = p1;
+	setShapeColor(Color::PURPLE);
 }
 /*Creates a mirrored skew tetronimo shape*/
 void Shape::createMirrorSkew(Point* points, Point& start) {
@@ -140,6 +146,7 @@ void Shape::createMirrorSkew(Point* points, Point& start) {
 	points[2] = p1;
 	p1.moveDown();
 	points[3] = p1;
+	setShapeColor(Color::RED);
 }
 /*input: an enum type that represents the type of the shape we want to rotate left
  this function rotate the given shape left */
@@ -783,6 +790,15 @@ int Shape::getPointInd(const Point& p1) const{
 		}
 	}
 	return index;
+}
+
+bool Shape::setShapeColor(Color color)
+{
+	bool res = true;
+	for (int i = 0; i < NUM_OF_POINTS&&res; i++) {
+		res = points[i].setColor(color);
+	}
+	return res;
 }
 
 

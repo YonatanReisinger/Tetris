@@ -9,6 +9,7 @@ using namespace std;
 // <- Imports
 
 // Macros and enums ->
+enum class Color {WHITE = FOREGROUND_WHITE,RED = FOREGROUND_RED,BLUE = FOREGROUND_BLUE,GREEN = FOREGROUND_GREEN,BROWN = 0x964B00,PURPLE = 0x80080,CYAN = 0x00FFFF,ORANGE = 0xFFA500};
 // <- Macros and enums
 
 class Point {
@@ -16,9 +17,10 @@ private:
 	short int x;
 	short int y;
 	char symbol;
+	Color color;
 	//Color color;
 public:
-	Point(short int x = 0, short int y = 0, char symbol = EMPTY);
+	Point(short int x = 0, short int y = 0, char symbol = EMPTY,Color color = Color::WHITE);
 	bool setX(short int x);
 	short int getX();
 	bool setY(short int y);
@@ -36,7 +38,8 @@ public:
 	bool moveRight();
 	bool move(Directions direction);
 	bool areCoordinatesEqual(const Point& other) const;
-
+	inline Color getColor();
+	bool setColor(Color color);
 	friend class Board;
 };
 #endif //Point.h
