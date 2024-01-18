@@ -32,6 +32,7 @@ private:
 	bool isPointFull(const Point& point);
 	bool isRowFull(short int i);
 	void clearShapeFromGameBoard(Shape& shape);
+	void removeActiveShapeFromArr(Shape& shape, int shapeInd);
 	bool canActiveShapeDrop(const Shape& shape);
 	bool canShapeRotate(const Shape& shape, ShapeMovement movement);
 
@@ -42,7 +43,7 @@ public:
 	bool setNumOfShapes(size_t size);
 	bool setPointInGameBoardByInd(short int i, short int j, char symbol);
 	bool setPointInGameBoard(const Point& point);
-	bool setShapeInGameBoard(const Shape& shape);
+	bool setShapeInGameBoard(const Shape& shape, bool isShapeNew);
 	void print();
 	void printGameBoard();
 	void clear();

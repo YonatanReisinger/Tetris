@@ -14,7 +14,7 @@ GameStatus Game::run()
 
 	if (getStatus() != GameStatus::PAUSED) // random new shapes just if it is completely new game 
 	{
-		//player1.setCurrShape(new Shape(MIRROR_L, startPoint1, FACE_UP));
+		//player1.setCurrShape(new Shape(SKEW, startPoint1, FACE_UP));
 		player1.setCurrShape(getRandomShape(startPoint1));
 		player2.setCurrShape(getRandomShape(startPoint2));
 	}
@@ -27,11 +27,12 @@ GameStatus Game::run()
 	l3.rotateLeft(STRAIGHT);
 	l4.rotateLeft(STRAIGHT);
 	player1.setCurrShape(new Shape(SQUARE, startPoint1));
-	board1.setShapeInGameBoard(l1);
-	board1.setShapeInGameBoard(l2);
-	board1.setShapeInGameBoard(l3);
-	board1.setShapeInGameBoard(l4);
-	board1.setShapeInGameBoard(s1);
+	//player2.setCurrShape(new Shape(SKEW, startPoint2));
+	board1.setShapeInGameBoard(l1, true);
+	board1.setShapeInGameBoard(l2, true);
+	board1.setShapeInGameBoard(l3, true);
+	board1.setShapeInGameBoard(l4, true);
+	board1.setShapeInGameBoard(s1, true);
 
 	board1.print();
 	board2.print();
@@ -198,20 +199,23 @@ void Game:: setCurrentShape(Player& player,Point& startPoint)
 		moveShapeOnScreen(*(player.getCurrShape()), ShapeMovement::DROP, GamePace::NORMAL);
 	else //if you can't move anymore, insert the shape into the board
 	{
-		// put the "old" on the playing board
-		board1.setShapeInGameBoard(*(player.getCurrShape()));
+		// put the current shape as a new shape on the playing board
+		board1.setShapeInGameBoard(*(player.getCurrShape()), true);
 		board1.printGameBoard();
-		// get a new random shape and print it
-		player.setCurrShape(getRandomShape(startPoint));
-		player.getCurrShape()->print();
+		
 		// increase the score of the player according to how many rows he cleared
 		clearRowsForPlayerInRound = board1.clearFullRows();
-		if (clearRowsForPlayerInRound != 0)
+		// drop all the shapes, if after the drop more rows can be cleared, continue to do so
+		while (clearRowsForPlayerInRound != 0)
 		{
 			player1.increaseScore(GameConfig::SCORE_FOR_FULL_LINE * clearRowsForPlayerInRound);
 			board1.dropActiveShapes();
-			board1.printGameBoard();
+			board1.printGameBoard(); 
+			clearRowsForPlayerInRound = board1.clearFullRows();
 		}
+		// get a new random shape and print it
+		player.setCurrShape(getRandomShape(startPoint));
+		player.getCurrShape()->print(); // הבאג בסוף אולי פה ?????
 	}
 }
 void Game:: printScores()

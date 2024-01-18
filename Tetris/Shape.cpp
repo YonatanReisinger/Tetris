@@ -784,6 +784,17 @@ int Shape::getPointInd(const Point& p1) const{
 	}
 	return index;
 }
+bool Shape:: isShapeClear()
+{
+	bool res = true;
+	for (int i = 0; i < NUM_OF_POINTS && res; i++) {
+		if (points[i].getSymbol() != EMPTY) {
+			res = false;
+		}
+	}
+	return res;
+}
+
 
 
 

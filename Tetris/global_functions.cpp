@@ -30,8 +30,8 @@ void printWelcomeMessage()
 }
 void printChoiceError()
 {
-	cout << "Wrong choice! Please Try again" << endl;
-    Sleep(2000);
+	cout << "Wrong choice! Please Try again" << "\n\n\nPress any key to continue........";
+    while (!_kbhit());
 }
 
 void printInstructionsAndKeys()
@@ -71,9 +71,9 @@ void printWinner(Game& game)
             cout << "The game ended in a tie!";
         else // there is a winnner
             cout << "The Winner is: " << game.getPlayer(winnerNum).getName();
-        cout << "\n\n\nPress any key to continue........";
         // the game was finished and the winner was used, no more need for him after that
         game.setWinnerNum(NO_WINNER);
+        cout << "\n\n\nPress any key to continue........";
         while (!_kbhit());
         clearScreen();
     }

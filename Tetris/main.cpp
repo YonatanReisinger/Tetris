@@ -45,8 +45,8 @@ int main()
 				game.resume();
 			else
 			{
-				cout << "No paused game to continue !" << endl;
-				Sleep(500);
+				cout << "No paused game to continue !" << "\n\n\nPress any key to continue........";
+				while (!_kbhit());
 			}
 			break;
 		case(Choice::INSTRUCTIONS):

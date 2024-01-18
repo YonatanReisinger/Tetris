@@ -94,7 +94,7 @@ bool Board::setPointInGameBoard(const Point& point)
 		res = false;
 	return res;
 }
-bool Board:: setShapeInGameBoard(const Shape& shape)
+bool Board:: setShapeInGameBoard(const Shape& shape, bool isShapeNew)
 {
 	short int i;
 	bool res = true;
@@ -104,7 +104,7 @@ bool Board:: setShapeInGameBoard(const Shape& shape)
 		if (shape.points[i].symbol != EMPTY) // insert just non empty points
 			res = setPointInGameBoard(shape.points[i]);
 	}
-	if (res == true) // add the shape to the active shape array
+	if (res == true && isShapeNew) // add an new shape to the active shape array
 		activeShapes[numOfActiveShapes++] = shape;
 	return res;
 }
@@ -184,20 +184,28 @@ int Board:: clearFullRows()
 {
 	short int i, j,k,fullRowsCounter = 0,  removedPointInd;
 	for (i = 0; i < GameConfig::HEIGHT; i++)
+	{
 		if (isRowFull(i))
 		{
 			clearRow(i);
 			fullRowsCounter++;
 			// clear the removed points from all the shape
-			for (j = 0; j < GameConfig:: WIDTH; j++)
+			for (j = 0; j < GameConfig::WIDTH; j++)
+			{
 				for (k = 0; k < numOfActiveShapes; k++)
 				{
 					removedPointInd = activeShapes[k].getPointInd(gameBoard[i][j]);
 					if (removedPointInd != NOT_FOUND)
+					{
 						activeShapes[k].points[removedPointInd].setSymbol(EMPTY);
+						break; // a point is a part of only one shape
+					}
 				}
+			}
 
 		}
+	}
+	// 
 	return fullRowsCounter;
 }
 bool Board:: isRowFull(short int i)
@@ -307,9 +315,14 @@ void Board:: dropActiveShapes()
 {
 	short int i;
 	bool dropped = false;
-	for (i = 0; i < numOfActiveShapes; i++)
+	for (i = numOfActiveShapes - 1; i >= 0; i--)
 	{
 		Shape& shape = activeShapes[i];
+		if (shape.isShapeClear()) // if by clearinf the full rows a whole shape is empty 
+		{
+			removeActiveShapeFromArr(shape, i);
+			continue;
+		}
 		// if after the clearing of line a shape can drop down the board, drop while it can
 		while (canActiveShapeDrop(shape))
 		{
@@ -320,7 +333,7 @@ void Board:: dropActiveShapes()
 			dropped = true;
 		}
 		if (dropped) // set the board in it's new place on the board
-			setShapeInGameBoard(shape);
+			setShapeInGameBoard(shape, false);
 	}
 }
 void Board:: clearShapeFromGameBoard(Shape& shape)
@@ -333,6 +346,17 @@ void Board:: clearShapeFromGameBoard(Shape& shape)
 			setPointInGameBoard(shape.points[i]);
 			shape.points[i].setSymbol(GameConfig:: SHAPE_SYMBOL);
 		}
+}
+void Board:: removeActiveShapeFromArr(Shape& shape, int shapeInd)
+{
+	int i;
+	// Shift elements in the array to remove the shape at shapeInd
+	for (i = shapeInd; i < numOfActiveShapes - 1; i++)
+	{
+		activeShapes[i] = activeShapes[i + 1];
+	}
+	// Decrement the number of active shapes
+	numOfActiveShapes--;
 }
 // a shape is stuck if it can't move to any direction
 bool Board::isShapeStuck(const Shape& shape)
