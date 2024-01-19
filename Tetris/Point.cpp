@@ -90,7 +90,12 @@ void Point:: print()
 {
 	gotoxy();
 	HANDLE hStdOut = GetStdHandle(STD_OUTPUT_HANDLE);
+	if (symbol == EMPTY) {
+	SetConsoleTextAttribute(hStdOut, (WORD)Color::WHITE);
+	}
+	else {
 	SetConsoleTextAttribute(hStdOut, (WORD)color);
+	}
 	cout << symbol;
 	SetConsoleTextAttribute(hStdOut, (WORD)Color::WHITE);
 }
@@ -146,8 +151,8 @@ bool Point:: setColor(Color color)
 {
 	bool res = false;
 	if (color == Color::WHITE || color == Color::RED || color == Color::BLUE ||
-		color == Color::ORANGE || color == Color::CYAN || color == Color::PURPLE ||
-		color == Color::BROWN || color == Color::GREEN) {
+		color == Color::CYAN || color == Color::GREY || color == Color::PURPLE ||
+		color == Color::BRWON || color == Color::GREEN) {
 		res = true;
 		this->color = color;
 	}

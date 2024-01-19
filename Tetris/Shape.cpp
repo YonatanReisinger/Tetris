@@ -85,7 +85,7 @@ void Shape::createStraight(Point* points, Point& start) {
 	points[2] =p1;
 	p1.moveDown();
 	points[3] =p1;
-	setShapeColor(Color::BROWN);
+	setShapeColor(Color::BRWON);
 }
 /*Creates a plus tetronimo shape*/
 void Shape::createPlus(Point* points, Point& start) {
@@ -98,7 +98,7 @@ void Shape::createPlus(Point* points, Point& start) {
 	p1.moveRight();
 	p1.moveRight();
 	points[3] = p1;
-	setShapeColor(Color::CYAN);
+	setShapeColor(Color::GREY);
 }
 /*Creates an 'L' shape tetronimo*/
 void Shape::createL(Point* points, Point& start) {
@@ -122,7 +122,7 @@ void Shape::createMirrorL(Point* points, Point& start) {
 	points[2] = p1;
 	p1.moveLeft();
 	points[3] = p1;
-	setShapeColor(Color::ORANGE);
+	setShapeColor(Color::CYAN);
 }
 /*Creates a skew tetronimo shape*/
 void Shape::createSkew(Point* points, Point& start) {
