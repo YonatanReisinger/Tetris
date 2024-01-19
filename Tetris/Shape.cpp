@@ -10,36 +10,36 @@ Shape::Shape() {
 /*input: gets a type that represents the tetronimo type, and a point that represents
 the starting point of the tetronimo
 Creates a new shape based on the type and point*/
-Shape::Shape(Type t, Point& start,RotationDirection shapeDirection) {
+Shape::Shape(Type t, Point& start,GameColorStatus colorStatus,RotationDirection shapeDirection) {
 	shapeType = t;
 	this->shapeDirection = shapeDirection;
 	switch (t) {
 		case SQUARE: {
-			createSquare(points, start);
+			createSquare(points, start,colorStatus);
 			break;
 		}
 		case STRAIGHT: {
-			createStraight(points, start);
+			createStraight(points, start,colorStatus);
 			break;
 		}
 		case PLUS: {
-			createPlus(points, start);
+			createPlus(points, start, colorStatus);
 			break;
 		}
 		case SKEW: {
-			createSkew(points, start);
+			createSkew(points, start, colorStatus);
 			break;
 		}
 		case MIRROR_SKEW: {
-			createMirrorSkew(points, start);
+			createMirrorSkew(points, start, colorStatus);
 			break;
 		}
 		case L: {
-			createL(points, start);
+			createL(points, start, colorStatus);
 			break;
 		}
 		case MIRROR_L: {
-			createMirrorL(points, start);
+			createMirrorL(points, start, colorStatus);
 			break;
 		}
 	}
@@ -64,7 +64,7 @@ void Shape::moveRight() {
 	}
 }
 /*Creates a square shape tetronimo*/
-void Shape::createSquare(Point* points, Point& start) {
+void Shape::createSquare(Point* points, Point& start,GameColorStatus colorStatus) {
 	Point p1 = start;
 	points[0] = p1;//copies the starting point
 	p1.moveLeft();//takes the starting point and moves it left
@@ -73,10 +73,12 @@ void Shape::createSquare(Point* points, Point& start) {
 	points[2] = p1;
 	p1.moveRight();
 	points[3] = p1;
-	setShapeColor(Color::BLUE);
+	if (colorStatus == COLORIZED) {
+		setShapeColor(Color::BLUE);
+	}
 }
 /*Creates a straight line tetronimo shape*/
-void Shape::createStraight(Point* points, Point& start) {
+void Shape::createStraight(Point* points, Point& start,GameColorStatus colorStatus) {
 	Point p1 = start;
 	points[0] = p1;//copies the starting point
 	p1.moveDown();//takes the starting point and moves it left
@@ -85,10 +87,12 @@ void Shape::createStraight(Point* points, Point& start) {
 	points[2] =p1;
 	p1.moveDown();
 	points[3] =p1;
-	setShapeColor(Color::BRWON);
+	if (colorStatus == COLORIZED) {
+		setShapeColor(Color::BRWON);
+	}
 }
 /*Creates a plus tetronimo shape*/
-void Shape::createPlus(Point* points, Point& start) {
+void Shape::createPlus(Point* points, Point& start,GameColorStatus colorStatus) {
 	Point p1 = start;
 	points[0] = p1;
 	p1.moveDown();
@@ -98,10 +102,12 @@ void Shape::createPlus(Point* points, Point& start) {
 	p1.moveRight();
 	p1.moveRight();
 	points[3] = p1;
-	setShapeColor(Color::GREY);
+	if (colorStatus == COLORIZED) {
+		setShapeColor(Color::GREY);
+	}
 }
 /*Creates an 'L' shape tetronimo*/
-void Shape::createL(Point* points, Point& start) {
+void Shape::createL(Point* points, Point& start,GameColorStatus colorStatus) {
 	Point p1 = start;
 	points[0] = p1;
 	p1.moveDown();
@@ -110,10 +116,12 @@ void Shape::createL(Point* points, Point& start) {
 	points[2] = p1;
 	p1.moveRight();
 	points[3] = p1;
-	setShapeColor(Color::GREEN);
+	if (colorStatus == COLORIZED) {
+		setShapeColor(Color::GREEN);
+	}
 }
 /*Creates a mirrored 'L' shape tetronimo*/
-void Shape::createMirrorL(Point* points, Point& start) {
+void Shape::createMirrorL(Point* points, Point& start,GameColorStatus colorStatus) {
 	Point p1 = start;
 	points[0] = p1;
 	p1.moveDown();
@@ -122,10 +130,12 @@ void Shape::createMirrorL(Point* points, Point& start) {
 	points[2] = p1;
 	p1.moveLeft();
 	points[3] = p1;
-	setShapeColor(Color::CYAN);
+	if (colorStatus == COLORIZED) {
+		setShapeColor(Color::CYAN);
+	}
 }
 /*Creates a skew tetronimo shape*/
-void Shape::createSkew(Point* points, Point& start) {
+void Shape::createSkew(Point* points, Point& start,GameColorStatus colorStatus) {
 	Point p1 = start;
 	points[0] = p1;
 	p1.moveDown();
@@ -134,10 +144,12 @@ void Shape::createSkew(Point* points, Point& start) {
 	points[2] = p1;
 	p1.moveDown();
 	points[3] = p1;
-	setShapeColor(Color::PURPLE);
+	if (colorStatus == COLORIZED) {
+		setShapeColor(Color::PURPLE);
+	}
 }
 /*Creates a mirrored skew tetronimo shape*/
-void Shape::createMirrorSkew(Point* points, Point& start) {
+void Shape::createMirrorSkew(Point* points, Point& start,GameColorStatus colorStatus) {
 	Point p1 = start;
 	points[0] = p1;
 	p1.moveDown();
@@ -146,7 +158,9 @@ void Shape::createMirrorSkew(Point* points, Point& start) {
 	points[2] = p1;
 	p1.moveDown();
 	points[3] = p1;
-	setShapeColor(Color::RED);
+	if (colorStatus == COLORIZED) {
+		setShapeColor(Color::RED);
+	}
 }
 /*input: an enum type that represents the type of the shape we want to rotate left
  this function rotate the given shape left */

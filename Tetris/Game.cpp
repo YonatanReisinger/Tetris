@@ -118,7 +118,7 @@ const Player& Game:: getPlayer(int playerNum) const
 }
 inline Shape* Game:: getRandomShape(Point& startPoint)
 {
-	Shape* s = new Shape(Type(rand() % NUM_OF_SHAPES), startPoint);
+	Shape* s = new Shape(Type(rand() % NUM_OF_SHAPES), startPoint,getColorStatus());
 	return s;
 }
 void Game:: moveShapeOnScreen(Shape& shape, ShapeMovement movement, GamePace pace)
@@ -271,4 +271,19 @@ void Game:: determineWinner(GameStatus gameStatus)
 			setWinnerNum(2);
 	}
 
+}
+bool Game:: setColorStatus(GameColorStatus choice)
+{
+	bool res = true;
+	if (choice != COLORIZED && choice != UNCOLORIZED) {
+		res = false;
+	}
+	else {
+	colorStatus = choice;
+	}
+	return res;
+}
+GameColorStatus Game::getColorStatus()
+{
+	return colorStatus;
 }

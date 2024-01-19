@@ -124,3 +124,8 @@ void printKeys()
     cout << "                    |" << endl;
     cout << "                   \\/" << endl;
 }
+void printColorOption() {
+    cout << "You have decided to start a new game!\n";
+    cout << "Please select coloring option for the game :\n";
+    cout << "(1) for colorized game\n(2) for uncolorized game\n";
+}

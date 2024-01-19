@@ -5,7 +5,7 @@
 
 enum class Directions {LEFT, RIGHT, UP, DOWN};
 enum class GamePace { NORMAL = 700, MODERATE = 500 ,FAST = 50 };
-
+enum GameColorStatus { COLORIZED = 1, UNCOLORIZED = 2 };
 #define EMPTY ' '
 #define NOT_FOUND -1
 #define ESC 27
