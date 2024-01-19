@@ -17,7 +17,7 @@ enum Choice{ START = 1, CONTINUE = 2, INSTRUCTIONS = 8, EXIT = 9};
 
 int main()
 {
-	unsigned int choice;
+	unsigned int choice,colorChoice;
 	Board board1(Point(1, 1), Point(GameConfig::WIDTH, 1), Point(1, GameConfig::HEIGHT), Point(GameConfig::WIDTH, GameConfig::HEIGHT));
 	Board board2(Point(GameConfig::WIDTH + 2 + GameConfig::DISTANCE_BETWEEN_BOARDS + 1, 1)
 		, Point(GameConfig::WIDTH * 2 + 2 + GameConfig::DISTANCE_BETWEEN_BOARDS, 1)
@@ -38,6 +38,15 @@ int main()
 		switch (choice)
 		{
 		case(Choice::START):
+			printColorOption();
+			cin >> colorChoice;
+			while (colorChoice != GameColorStatus::COLORIZED && colorChoice != GameColorStatus::UNCOLORIZED) {
+				printChoiceError();
+				cin >> colorChoice;
+			}
+			clearCin();
+			clearScreen();
+			game.setColorStatus((GameColorStatus)colorChoice);
 			game.start();
 			break;
 		case(Choice::CONTINUE):

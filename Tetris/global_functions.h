@@ -23,5 +23,6 @@ void printWinner(Game& game);
 void clearCin();
 void printInstructions();
 void printKeys();
+void printColorOption();
 
 #endif // global_functions.h

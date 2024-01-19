@@ -22,6 +22,7 @@ private:
 	GameStatus status;
 	Player &player1, &player2;
 	short int winnerNum;
+	GameColorStatus colorStatus;
 
 	GameStatus run(); //game logic
 	inline Shape* getRandomShape(Point& startPoint);
@@ -42,5 +43,7 @@ public:
 	void setCurrentShape(Player& player,Point& startPoint);
 	bool setWinnerNum(short int winnerNum);
 	short int getWinnerNum();
+	bool setColorStatus(GameColorStatus choice);
+	GameColorStatus getColorStatus();
 };
 #endif //Game.h

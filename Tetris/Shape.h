@@ -21,13 +21,13 @@ private:
 	Point points[NUM_OF_POINTS];
 	Type shapeType;
 	RotationDirection shapeDirection;
-	void createSquare(Point* points,Point& start);
-	void createStraight(Point* points, Point& start);
-	void createPlus(Point* points, Point& start);
-	void createSkew(Point* points, Point& start);
-	void createMirrorSkew(Point* points, Point& start);
-	void createL(Point* points, Point& start);
-	void createMirrorL(Point* points, Point& start);
+	void createSquare(Point* points,Point& start,GameColorStatus colorStatus);
+	void createStraight(Point* points, Point& start,GameColorStatus colorStatus);
+	void createPlus(Point* points, Point& start,GameColorStatus colorStatus);
+	void createSkew(Point* points, Point& start,GameColorStatus colorStatus);
+	void createMirrorSkew(Point* points, Point& start,GameColorStatus colorStatus);
+	void createL(Point* points, Point& start,GameColorStatus colorStatus);
+	void createMirrorL(Point* points, Point& start,GameColorStatus colorStatus);
 	void rotatePlus(ShapeMovement direction);
 	void rotateMirrorL(ShapeMovement direction);
 	void rotateStraight(ShapeMovement direction);
@@ -36,7 +36,7 @@ private:
 	void rotateSkew(ShapeMovement direction);
 public:
 	Shape();
-	Shape(Type t, Point& start,RotationDirection shapeDirection = FACE_UP);
+	Shape(Type t, Point& start, GameColorStatus colorStatus, RotationDirection shapeDirection = FACE_UP);
 	//void setColor(Color color);
 	void moveDown();
 	void moveLeft();
