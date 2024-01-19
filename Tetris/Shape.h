@@ -49,6 +49,7 @@ public:
 	void move(ShapeMovement movement);
 	int getPointInd(const Point& p1) const;
 	bool isShapeClear();
+	short int getHighestY() const;
 	friend class Board;
 };
 

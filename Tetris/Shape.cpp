@@ -794,6 +794,19 @@ bool Shape:: isShapeClear()
 	}
 	return res;
 }
+short int Shape:: getHighestY() const
+{
+
+	short int highestY = points[0].getY();
+
+	for (int i = 1; i < NUM_OF_POINTS && points[i].getSymbol() != EMPTY; ++i) {
+		short int currentY = points[i].getY();
+		if (currentY > highestY) {
+			highestY = currentY;
+		}
+	}
+	return highestY;
+}
 
 
 

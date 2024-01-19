@@ -16,7 +16,7 @@ enum Borders {TOP_LEFT, TOP_RIGHT, BOTTOM_LEFT, BOTTOM_RIGHT};
 class Board{
 private:
 	Point borders[4];
-	Point gameBoard[GameConfig:: HEIGHT][GameConfig:: WIDTH];
+	Point gameBoard[GameConfig::HEIGHT][GameConfig::WIDTH];
 	Shape activeShapes[GameConfig::HEIGHT * GameConfig::WIDTH];
 	size_t numOfActiveShapes;
 
@@ -35,7 +35,8 @@ private:
 	void removeActiveShapeFromArr(Shape& shape, int shapeInd);
 	bool canActiveShapeDrop(const Shape& shape);
 	bool canShapeRotate(const Shape& shape, ShapeMovement movement);
-
+	void clearPointsFromActiveShapes(short int i);
+	void insertShapeToArr(const Shape& newShape);
 public:
 	bool setRow(short int i, char boardSymbol);
 	Board(const Point& topLeft, const Point& topRight, const Point& bottomLeft, const Point& bottomRight);
@@ -49,14 +50,13 @@ public:
 	void clear();
 	bool clearRow(short int i);
 	int clearFullRows();
-	bool isOverflowing();
 	bool canPointMove(Point point, Directions direction);
-	bool canShapeChangeDirection(const Shape& shape, Directions direction);
 	Point getStartingPoint() const;
 	bool isShapeInBoard(const Shape& shape);
 	bool canShapeMove(const Shape& shape, ShapeMovement movement);
 	void dropActiveShapes();
 	bool isShapeStuck(const Shape& shape);
+	bool canSetShapeInGameBoard(const Shape& shape);
 };
 
 #endif // Board.h
