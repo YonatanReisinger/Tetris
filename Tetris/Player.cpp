@@ -6,7 +6,7 @@ Player::Player(const Board& board, const Key keys[], const char* name, int score
 	setName(name);
 	this->board.clear();
 	setScore(score);
-	setCurrShape(nullptr);
+	setCurrShape(nullptr) ;
 }
 
 Player:: ~Player()

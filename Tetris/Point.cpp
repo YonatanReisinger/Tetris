@@ -4,7 +4,7 @@ Point::Point(short int x, short int y, char symbol,Color color)
 {
 	setX(x);
 	setY(y);
-	setSymbol(symbol); //dasdsa
+	setSymbol(symbol) ; //dasdsa
 	setColor(color);
 }
 bool Point:: setX(short int x)

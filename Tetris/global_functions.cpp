@@ -3,7 +3,7 @@
 void printMenu(GameStatus gameStatus)
 {
     printWelcomeMessage();
-	cout << "Please enter your choice:\n" << "(1) Start a new game\n";
+	cout << "Please enter your choice:\n" << "(1) Start a new game\n" ;
 	if (gameStatus == GameStatus:: PAUSED)
 	{
 		cout << "(2) Continue a paused game\n";

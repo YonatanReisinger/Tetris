@@ -4,7 +4,7 @@
 
 /*Default constructor */
 Shape::Shape() {
-	shapeDirection = FACE_UP;
+	shapeDirection = FACE_UP ;
 	shapeType = SQUARE;
 }
 /*input: gets a type that represents the tetronimo type, and a point that represents

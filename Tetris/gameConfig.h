@@ -3,7 +3,7 @@
 
 #define FOREGROUND_WHITE 0xFFFFFF
 
-enum class Directions {LEFT, RIGHT, UP, DOWN};
+enum class Directions {LEFT, RIGHT, UP, DOWN} ;
 enum class GamePace { NORMAL = 700, MODERATE = 500 ,FAST = 50 };
 enum GameColorStatus { COLORIZED = 1, UNCOLORIZED = 2 };
 #define EMPTY ' '

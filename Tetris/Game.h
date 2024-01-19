@@ -12,7 +12,7 @@ using namespace std;
 // <- Imports
 
 // Macros ans enums->
-enum class GameStatus {PAUSED, PLAYING, FINISHED};
+enum class GameStatus {PAUSED, PLAYING, FINISHED} ;
 #define NO_WINNER -1
 #define TIE 0
 // <- Macros and enums
