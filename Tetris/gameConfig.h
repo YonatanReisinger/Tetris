@@ -2,10 +2,6 @@
 #define __GAMECONFIG_H__
 
 #define FOREGROUND_WHITE 0xFFFFFF
-enum class Color {
-	RED = FOREGROUND_RED, BLUE = FOREGROUND_BLUE, GREEN = FOREGROUND_GREEN
-	, WHITE = FOREGROUND_WHITE
-};
 
 enum class Directions {LEFT, RIGHT, UP, DOWN};
 enum class GamePace { NORMAL = 700, MODERATE = 500 ,FAST = 50 };
