@@ -11,6 +11,7 @@ enum class GamePace { NORMAL = 700, MODERATE = 500 ,FAST = 50 };
 #define ESC 27
 #define NUM_OF_KEYS 5
 #define NUM_OF_SHAPES 7
+
 class GameConfig {
 public:
 	static constexpr int HEIGHT = 18;
