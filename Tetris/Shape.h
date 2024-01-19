@@ -21,6 +21,19 @@ private:
 	Point points[NUM_OF_POINTS];
 	Type shapeType;
 	RotationDirection shapeDirection;
+	void createSquare(Point* points,Point& start);
+	void createStraight(Point* points, Point& start);
+	void createPlus(Point* points, Point& start);
+	void createSkew(Point* points, Point& start);
+	void createMirrorSkew(Point* points, Point& start);
+	void createL(Point* points, Point& start);
+	void createMirrorL(Point* points, Point& start);
+	void rotatePlus(ShapeMovement direction);
+	void rotateMirrorL(ShapeMovement direction);
+	void rotateStraight(ShapeMovement direction);
+	void rotateL(ShapeMovement direction);
+	void rotateMirrorSkew(ShapeMovement direction);
+	void rotateSkew(ShapeMovement direction);
 public:
 	Shape();
 	Shape(Type t, Point& start,RotationDirection shapeDirection = FACE_UP);
@@ -30,26 +43,14 @@ public:
 	void moveRight();
 	void rotateLeft(Type t);
 	void rotateRight(Type t);
-	void createSquare(Point* points,Point& start);
-	void createStraight(Point* points, Point& start);
-	void createPlus(Point* points, Point& start);
-	void createSkew(Point* points, Point& start);
-	void createMirrorSkew(Point* points, Point& start);
-	void createL(Point* points, Point& start);
-	void createMirrorL(Point* points, Point& start);
 	void print();
-	void rotatePlus(ShapeMovement direction);
-	void rotateMirrorL(ShapeMovement direction);
-	void rotateStraight(ShapeMovement direction);
-	void rotateL(ShapeMovement direction);
-	void rotateMirrorSkew(ShapeMovement direction);
-	void rotateSkew(ShapeMovement direction);
 	void clearShape();
 	void setSymbol(char symbol);
 	void move(ShapeMovement movement);
 	int getPointInd(const Point& p1) const;
 	bool isShapeClear();
 	short int getHighestY() const;
+	bool setShapeColor(Color color);
 	friend class Board;
 };
 

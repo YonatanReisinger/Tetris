@@ -18,6 +18,7 @@ GameStatus Game::run()
 		player1.setCurrShape(getRandomShape(startPoint1));
 		player2.setCurrShape(getRandomShape(startPoint2));
 	}
+
 	board1.print();
 	board2.print();
 	
@@ -176,7 +177,7 @@ void Game:: setCurrentShape(Player& player,Point& startPoint)
 		}
 		// get a new random shape and print it
 		player.setCurrShape(getRandomShape(startPoint));
-		//player.getCurrShape()->print(); // äáàâ áñåó àåìé ôä ?????
+		//player.getCurrShape()->print(); // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ?????
 	}
 }
 void Game:: printScores()
