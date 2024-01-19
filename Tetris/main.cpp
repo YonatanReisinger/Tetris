@@ -12,7 +12,7 @@ using namespace std;
 // <- Imports 
 
 // Macros and enums ->
-enum Choice{ START = 1, CONTINUE = 2, INSTRUCTIONS = 8, EXIT = 9};
+enum Choice{ START = 1, CONTINUE = 2, INSTRUCTIONS = 8, EXIT = 9} ;
 // <- Macros and enums
 
 int main()

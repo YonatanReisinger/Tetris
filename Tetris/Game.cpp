@@ -104,7 +104,7 @@ const Player& Game:: getPlayer(int playerNum) const
 }
 inline Shape* Game:: getRandomShape(Point& startPoint)
 {
-	Shape* s = new Shape(Type(rand() % NUM_OF_SHAPES), startPoint,getColorStatus());
+	Shape* s = new Shape(Type(rand() % NUM_OF_SHAPES), startPoint,getColorStatus()) ;
 	return s;
 }
 void Game:: moveShapeOnScreen(Shape& shape, ShapeMovement movement, GamePace pace)

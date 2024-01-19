@@ -10,7 +10,7 @@ using namespace std;
 // <- Imports
 
 // Macros ans enums->
-enum Borders {TOP_LEFT, TOP_RIGHT, BOTTOM_LEFT, BOTTOM_RIGHT};
+enum Borders {TOP_LEFT, TOP_RIGHT, BOTTOM_LEFT, BOTTOM_RIGHT} ;
 // <- Macros and enums
 
 class Board{

@@ -10,6 +10,7 @@ using namespace std;
 // <- Imports
 
 // Macros and enums ->
+enum class Color {WHITE = (FOREGROUND_RED|FOREGROUND_GREEN|FOREGROUND_BLUE),RED  = BACKGROUND_RED,BLUE = BACKGROUND_BLUE,GREEN = BACKGROUND_GREEN,BRWON = RED|GREEN,PURPLE = 80,GREY = 143,CYAN = 183} ;
 // <- Macros and enums
 
 class Point {

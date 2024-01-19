@@ -14,7 +14,7 @@ using namespace std;
 #define RIGHT_ARROW 77
 // <- Macros and enums
 
-void printMenu(GameStatus gameStatus = GameStatus:: PLAYING);
+void printMenu(GameStatus gameStatus = GameStatus:: PLAYING) ;
 void printWelcomeMessage();
 void printChoiceError();
 void printInstructionsAndKeys();

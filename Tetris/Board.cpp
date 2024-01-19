@@ -9,7 +9,7 @@ Board:: Board(const Point& topLeft, const Point& topRight, const Point& bottomLe
 }
 bool Board:: setBorders(const Point& topLeft, const Point& topRight, const Point& bottomLeft, const Point& bottomRight)
 {
-	Point borders[4] = { topLeft , topRight , bottomLeft , bottomRight };
+	Point borders[4] = { topLeft , topRight , bottomLeft , bottomRight } ;
 	//check that the board has valid borders
 	if (isHeightValid(borders) && isWidthValid(borders))
 	{
