@@ -6,6 +6,7 @@
 #include "gameConfig.h"
 #include <iostream>
 using namespace std;
+
 // <- Imports
 
 // Macros and enums ->
@@ -17,17 +18,16 @@ private:
 	short int x;
 	short int y;
 	char symbol;
-	Color color;
 	//Color color;
 public:
-	Point(short int x = 0, short int y = 0, char symbol = EMPTY,Color color = Color::WHITE);
+	Point(short int x = 0, short int y = 0, char symbol = EMPTY);
 	bool setX(short int x);
-	short int getX();
+	short int getX() const;
 	bool setY(short int y);
-	short int getY();
+	short int getY() const;
 	bool setXY(short int x, short int y);
 	bool setSymbol(char symbol);
-	char getSymbol();
+	char getSymbol() const;
 	//bool setColor(Color color);
 	//Color getColor();
 	void gotoxy();
@@ -38,8 +38,7 @@ public:
 	bool moveRight();
 	bool move(Directions direction);
 	bool areCoordinatesEqual(const Point& other) const;
-	inline Color getColor();
-	bool setColor(Color color);
+
 	friend class Board;
 };
 #endif //Point.h

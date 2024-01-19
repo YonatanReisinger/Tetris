@@ -37,11 +37,11 @@ bool Point:: setXY(short int x, short int y)
 {
 	return setX(x) && setY(y);
 }
-short int Point:: getX()
+short int Point:: getX() const
 {
 	return x;
 }
-short int Point:: getY()
+short int Point:: getY() const
 {
 	return y;
 }
@@ -57,7 +57,7 @@ bool Point:: setSymbol(char symbol)
 	else
 		return false;
 }
-char Point:: getSymbol()
+char Point:: getSymbol() const
 {
 	return symbol;
 }
