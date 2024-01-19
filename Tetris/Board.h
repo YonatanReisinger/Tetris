@@ -16,9 +16,9 @@ enum Borders {TOP_LEFT, TOP_RIGHT, BOTTOM_LEFT, BOTTOM_RIGHT};
 class Board{
 private:
 	Point borders[4];
-	Point gameBoard[GameConfig:: HEIGHT][GameConfig:: WIDTH];
+	Point gameBoard[GameConfig::HEIGHT][GameConfig::WIDTH];
 	Shape activeShapes[GameConfig::HEIGHT * GameConfig::WIDTH];
-	short int numOfActiveShapes;
+	size_t numOfActiveShapes;
 
 	// Shape** activeShapes;
 	bool setBorders(const Point& topLeft, const Point& topRight, const Point& bottomLeft, const Point& bottomRight);
@@ -32,30 +32,31 @@ private:
 	bool isPointFull(const Point& point);
 	bool isRowFull(short int i);
 	void clearShapeFromGameBoard(Shape& shape);
-
+	void removeActiveShapeFromArr(Shape& shape, int shapeInd);
+	bool canActiveShapeDrop(const Shape& shape);
+	bool canShapeRotate(const Shape& shape, ShapeMovement movement);
+	void clearPointsFromActiveShapes(short int i);
+	void insertShapeToArr(const Shape& newShape);
 public:
 	bool setRow(short int i, char boardSymbol);
 	Board(const Point& topLeft, const Point& topRight, const Point& bottomLeft, const Point& bottomRight);
-	//Board(const Board* other);
 	Point* getBorders();
-	bool setNumOfShapes(short int num);
+	bool setNumOfShapes(size_t size);
 	bool setPointInGameBoardByInd(short int i, short int j, char symbol);
 	bool setPointInGameBoard(const Point& point);
-	bool setShapeInGameBoard(const Shape& shape);
+	bool setShapeInGameBoard(const Shape& shape, bool isShapeNew);
 	void print();
 	void printGameBoard();
 	void clear();
 	bool clearRow(short int i);
 	int clearFullRows();
-	bool isOverflowing();
 	bool canPointMove(Point point, Directions direction);
-	bool canShapeChangeDirection(const Shape& shape, Directions direction);
-	Point getStartingPoint();
+	Point getStartingPoint() const;
 	bool isShapeInBoard(const Shape& shape);
 	bool canShapeMove(const Shape& shape, ShapeMovement movement);
-	bool canShapeDrop(Shape& shape);
 	void dropActiveShapes();
 	bool isShapeStuck(const Shape& shape);
+	bool canSetShapeInGameBoard(const Shape& shape);
 };
 
 #endif // Board.h

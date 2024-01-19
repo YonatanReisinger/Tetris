@@ -3,147 +3,55 @@
 Game:: Game(Player &player1, Player &player2) : player1(player1), player2(player2)
 {
 	setStatus(GameStatus:: PLAYING); // new game is automatically being played
+	setWinnerNum(NO_WINNER);
 }
 GameStatus Game::run()
 {
+	GameStatus gameStatus = GameStatus::PLAYING;
 	bool isGamePlaying = true;
-	Board board1 = player1.getBoard(), board2 = player2.getBoard();
+	Board& board1 = player1.getBoard(), &board2 = player2.getBoard();
 	Point startPoint1 = board1.getStartingPoint(), startPoint2 = board2.getStartingPoint();
-	if (getStatus() != GameStatus::PAUSED)
+
+	if (getStatus() != GameStatus::PAUSED) // random new shapes just if it is completely new game 
 	{
+		//player1.setCurrShape(new Shape(SKEW, startPoint1, FACE_UP));
 		player1.setCurrShape(getRandomShape(startPoint1));
 		player2.setCurrShape(getRandomShape(startPoint2));
 	}
-	// get the place that the shapes should start falling from
-	//Shape shape1 = getRandomShape(startPoint1), shape2 = getRandomShape(startPoint2);
-	//shape1 = Shape(STRAIGHT, startPoint1);
-
-	/*Point p1(6, 15), p2(6, 11), p3(6, 7), p4(6,4), p5(6,1);
-	Shape s1(STRAIGHT, p1, FACE_UP), s2(STRAIGHT, p2, FACE_UP), s3(STRAIGHT, p3, FACE_UP);
-	Shape L1(L, p4, FACE_UP), L2(L, p5, FACE_UP);
-	board1.setShapeInGameBoard(s1);
-	board1.setShapeInGameBoard(s2);
-	board1.setShapeInGameBoard(s3);
-	board1.setShapeInGameBoard(L1);
-	board1.setShapeInGameBoard(L2);*/
-	Key key;
-	GameStatus gameStatus = GameStatus::PLAYING;
-	bool flag1 = false, flag2 = false;
-	int keyInd1, keyInd2, clearRowsForPlayer1InRound = 0, clearRowsForPlayer2InRound = 0;
 
 	board1.print();
 	board2.print();
-	player1.getCurrShape()->print();
-	player2.getCurrShape()->print();
-
+	
 	// while both boards have space
-	while (!board1.isShapeStuck(*(player1.getCurrShape())) && !board2.isShapeStuck(*(player2.getCurrShape())) && isGamePlaying)
+	while (isGamePlaying)
 	{
+		player1.getCurrShape()->print();
+		player2.getCurrShape()->print();
+		printScores();
 		isGamePlaying = checkAndProcessKeyboardInput();
-		if (!isGamePlaying)
+		if (!isGamePlaying) // if the player typed on ESC char that represents pausing the game
 		{
 			gameStatus = GameStatus::PAUSED;
 			break;
 		}
+		// the following code is repeat as it helps the reactivity of the game !!!
 		isGamePlaying = checkAndProcessKeyboardInput();
-		if (!isGamePlaying)
+		if (!isGamePlaying) // if the player typed on ESC char that represents pausing the game
 		{
 			gameStatus = GameStatus::PAUSED;
 			break;
 		}
-		/*
-
-		if (_kbhit()) {
-			key = _getch();
-			keyInd1 = player1.getKeyInd(key);
-			if (keyInd1 != NOT_FOUND && board1.canShapeMove(shape1, (ShapeMovement)keyInd1)) // if a valid key was pressed
-			{
-				// if the player pressed the drop bottom, drop the shape down the board while it can
-				if ((ShapeMovement)keyInd1 == ShapeMovement::DROP)
-					while (board1.canShapeChangeDirection(shape1, Directions:: DOWN))
-						moveShapeOnScreen(shape1, ShapeMovement::DROP, GamePace::FAST);
-				else // else, move the shape according to the movement selected
-					moveShapeOnScreen(shape1, (ShapeMovement)keyInd1, GamePace::FAST);
-			}
-			keyInd2 = player2.getKeyInd(key);
-			if (keyInd2 != NOT_FOUND && board2.canShapeMove(shape2, (ShapeMovement)keyInd2)) // if a valid key was pressed
-			{
-				// if the player pressed the drop bottom, drop the shape down the board while it can
-				if ((ShapeMovement)keyInd2 == ShapeMovement::DROP)
-					while (board2.canShapeChangeDirection(shape2, Directions::DOWN))
-						moveShapeOnScreen(shape2, ShapeMovement::DROP, GamePace::FAST);
-				else // else, move the shape according to the movement selected
-					//moving to the sides should be faster the moving down
-					moveShapeOnScreen(shape2, (ShapeMovement)keyInd2, GamePace::MODERATE);
-			}
-		}
-		if (_kbhit()) {
-			key = _getch();
-			keyInd1 = player1.getKeyInd(key);
-			if (keyInd1 != NOT_FOUND && board1.canShapeMove(shape1, (ShapeMovement)keyInd1)) // if a valid key was pressed
-			{
-				// if the player pressed the drop bottom, drop the shape down the board while it can
-				if ((ShapeMovement)keyInd1 == ShapeMovement::DROP)
-					while (board1.canShapeChangeDirection(shape1, Directions::DOWN))
-						moveShapeOnScreen(shape1, ShapeMovement::DROP ,GamePace::FAST);
-				else // else, move the shape according to the movement selected
-					//moving to the sides should be faster the moving down
-					moveShapeOnScreen(shape1, (ShapeMovement)keyInd1, GamePace::MODERATE);
-			}
-			keyInd2 = player2.getKeyInd(key);
-			if (keyInd2 != NOT_FOUND && board2.canShapeMove(shape2, (ShapeMovement)keyInd2)) // if a valid key was pressed
-			{
-				// if the player pressed the drop bottom, drop the shape down the board while it can
-				if ((ShapeMovement)keyInd2 == ShapeMovement::DROP)
-					while (board2.canShapeChangeDirection(shape2, Directions::DOWN))
-						moveShapeOnScreen(shape2, ShapeMovement::DROP ,GamePace::FAST);
-				else // else, move the shape according to the movement selected
-					//moving to the sides should be faster the moving down
-					moveShapeOnScreen(shape2, (ShapeMovement)keyInd2, GamePace::MODERATE);
-			}
-		}
-		*/
 		setCurrentShape(player1, startPoint1);
 		setCurrentShape(player2, startPoint2);
-		/*
-
-		if (board1.canShapeChangeDirection(shape1, Directions::DOWN))
-			moveShapeOnScreen(shape1, ShapeMovement:: DROP, GamePace::NORMAL);
-		else //if you can't move anymore, insert the shape into the board
-		{
-			board1.setShapeInGameBoard(shape1);
-			board1.printGameBoard();
-			shape1 = getRandomShape(startPoint1);
-			// increase the score of the player according to how many rows he cleared
-			clearRowsForPlayer1InRound = board1.clearFullRows();
-			if (clearRowsForPlayer1InRound != 0)
-			{
-				player1.increaseScore(GameConfig::SCORE_FOR_FULL_LINE * clearRowsForPlayer1InRound);
-				board1.dropActiveShapes();
-				board1.printGameBoard();
-			}
-		}
-
-		if (board2.canShapeChangeDirection(shape2, Directions::DOWN))
-			moveShapeOnScreen(shape2, ShapeMovement::DROP, GamePace::NORMAL);
-		else //if you can't move anymore, insert the shape into the board
-		{
-			board2.setShapeInGameBoard(shape2);
-			board2.printGameBoard();
-			shape2 = getRandomShape(startPoint2); // get a new shape
-			clearRowsForPlayer2InRound = board2.clearFullRows();
-			// increase the score of the player according to how many rows he cleared
-			if (clearRowsForPlayer2InRound != 0)
-			{
-				player2.increaseScore(GameConfig::SCORE_FOR_FULL_LINE * clearRowsForPlayer2InRound);
-				board2.dropActiveShapes();
-				board2.printGameBoard();
-			}
-		}
+		
+		// if one of the current shapes can't move anymore, it means that the player has lost and the game should end
+		isGamePlaying = !board1.isShapeStuck(*(player1.getCurrShape())) && !board2.isShapeStuck(*(player2.getCurrShape()));
 	}
-		*/
-	}
-		return gameStatus;
+	clearKeyboardInputBuffer();
+	// if the game reached here and was not paused, thus it finished
+	gameStatus = (gameStatus == GameStatus::PAUSED) ? GameStatus::PAUSED : GameStatus::FINISHED;
+	determineWinner(gameStatus);
+	return gameStatus;
 }
 void Game::start()
 {
@@ -162,12 +70,12 @@ bool Game::resume()
 	// set the status to continue playing and just after the function validate that the game can resume, 
 	// run the game and update to gameStatus in the end
 	if (status == GameStatus::PAUSED) // cant resume a game that was not paused before
-		return (setStatus(GameStatus::PLAYING) && setStatus(run()));
+		return setStatus(run());
 	else
 		return false;
 }
 
-GameStatus Game:: getStatus()
+GameStatus Game:: getStatus() const
 {
 	return status;
 }
@@ -190,7 +98,7 @@ bool Game:: setStatus(GameStatus status)
 		res = false;
 	return res;
 }
-Player& Game:: getPlayer(int playerNum)
+const Player& Game:: getPlayer(int playerNum) const
 {
 	return playerNum == 1 ? player1 : player2; 
 }
@@ -229,37 +137,103 @@ void Game:: processPlayerInput(Key key, Player& player)
 {
 	ShapeMovement movement;
 	Board& board = player.getBoard();
+	Shape& currShape = *(player.getCurrShape()), tempShape;
 	//// the index of the key indicates it's type of movement
 	movement = (ShapeMovement)player.getKeyInd(key);
-	if (movement != NOT_FOUND && board.canShapeMove(*(player.getCurrShape()), movement)) // if a valid key was pressed
+	// if a valid key was pressed
+	if (movement != NOT_FOUND && board.canShapeMove(*(player.getCurrShape()), movement))
 	{
 		// if the player pressed the drop bottom, drop the shape down the board while it can
 		if (movement == ShapeMovement::DROP)
-			while (board.canShapeChangeDirection(*(player.getCurrShape()), Directions::DOWN))
-				moveShapeOnScreen(*(player.getCurrShape()), ShapeMovement::DROP, GamePace::FAST);
+			while (board.canShapeMove(currShape, ShapeMovement::DROP))
+				moveShapeOnScreen(currShape, ShapeMovement::DROP, GamePace::FAST);
 		else // else, move the shape according to the movement selected
-			moveShapeOnScreen(*(player.getCurrShape()), movement, GamePace::FAST);
+			moveShapeOnScreen(currShape, movement, GamePace::FAST);
 	}
 }
 
 void Game:: setCurrentShape(Player& player,Point& startPoint)
 {
 	int clearRowsForPlayerInRound = 0;
-	Board& board1 = player.getBoard();
-	if (board1.canShapeChangeDirection(*(player.getCurrShape()), Directions::DOWN))
+	Board& board = player.getBoard();
+	if (board.canShapeMove(*(player.getCurrShape()), ShapeMovement::DROP))
 		moveShapeOnScreen(*(player.getCurrShape()), ShapeMovement::DROP, GamePace::NORMAL);
-	else //if you can't move anymore, insert the shape into the board
+	//if you can't move anymore and can insert the shape into the board
+	else
 	{
-		board1.setShapeInGameBoard(*(player.getCurrShape()));
-		board1.printGameBoard();
-		player.setCurrShape(getRandomShape(startPoint));
+		board.setShapeInGameBoard(*(player.getCurrShape()), true);
+		// print the new shape on the playing board
+		board.printGameBoard();
+		
 		// increase the score of the player according to how many rows he cleared
-		clearRowsForPlayerInRound = board1.clearFullRows();
-		if (clearRowsForPlayerInRound != 0)
+		clearRowsForPlayerInRound = board.clearFullRows();
+		// drop all the shapes, if after the drop more rows can be cleared, continue to do so
+		while (clearRowsForPlayerInRound != 0)
 		{
-			player1.increaseScore(GameConfig::SCORE_FOR_FULL_LINE * clearRowsForPlayerInRound);
-			board1.dropActiveShapes();
-			board1.printGameBoard();
+			player.increaseScore(GameConfig::SCORE_FOR_FULL_LINE * clearRowsForPlayerInRound);
+			board.dropActiveShapes();
+			board.printGameBoard();
+			clearRowsForPlayerInRound = board.clearFullRows();
 		}
+		// get a new random shape and print it
+		player.setCurrShape(getRandomShape(startPoint));
+		//player.getCurrShape()->print(); // ���� ���� ���� �� ?????
 	}
+}
+void Game:: printScores()
+{
+	// print the score at the middle of the board in the middle
+	Point p1 = player1.getBoard().getBorders()[Borders::BOTTOM_LEFT]
+		, p2 = player2.getBoard().getBorders()[Borders::BOTTOM_LEFT];
+	p1.setY(GameConfig:: HEIGHT + 2);
+	p1.moveLeft();
+	p1.gotoxy();
+	cout << "Player 1 Score: " << player1.getScore();
+	p2.setY(GameConfig::HEIGHT + 2);
+	p2.moveLeft();
+	p2.gotoxy();
+	cout << "Player 2 Score: " << player2.getScore();
+}
+void Game:: clearKeyboardInputBuffer()
+{
+	char temp;
+	while (_kbhit())
+		temp = _getch();
+}
+bool Game:: setWinnerNum(short int winnerNum)
+{
+	if (winnerNum == 1 || winnerNum == 2 || winnerNum == TIE || winnerNum == NO_WINNER)
+	{
+		this->winnerNum = winnerNum;
+		return true;
+	}
+	else
+		return false;
+}
+short int Game:: getWinnerNum()
+{
+	return winnerNum;
+}
+void Game:: determineWinner(GameStatus gameStatus)
+{
+	// if the was finished and there is a winner
+	if (gameStatus == GameStatus:: FINISHED)
+	{
+		// if both of them finished the board at the same time, determine the winner by score
+		if (player1.getBoard().isShapeStuck(*(player1.getCurrShape())) && player2.getBoard().isShapeStuck(*(player2.getCurrShape())))
+		{
+			if (player1.getScore() > player2.getScore())
+				setWinnerNum(1);
+			else if (player1.getScore() < player2.getScore())
+				setWinnerNum(2);
+			else //tie
+				setWinnerNum(TIE);
+		}
+		// if only the second player finished his board
+		else if(player2.getBoard().isShapeStuck(*(player2.getCurrShape())))
+			setWinnerNum(1);
+		else // the game was finished and thus for sure someone finished his board
+			setWinnerNum(2);
+	}
+
 }
