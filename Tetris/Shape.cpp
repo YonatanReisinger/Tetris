@@ -791,6 +791,30 @@ int Shape::getPointInd(const Point& p1) const{
 	}
 	return index;
 }
+bool Shape:: isShapeClear()
+{
+	bool res = true;
+	for (int i = 0; i < NUM_OF_POINTS && res; i++) {
+		if (points[i].getSymbol() != EMPTY) {
+			res = false;
+		}
+	}
+	return res;
+}
+short int Shape:: getHighestY() const
+{
+
+	short int highestY = points[0].getY();
+
+	for (int i = 1; i < NUM_OF_POINTS && points[i].getSymbol() != EMPTY; ++i) {
+		short int currentY = points[i].getY();
+		if (currentY > highestY) {
+			highestY = currentY;
+		}
+	}
+	return highestY;
+}
+
 
 bool Shape::setShapeColor(Color color)
 {

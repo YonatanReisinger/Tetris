@@ -22,12 +22,12 @@ private:
 public:
 	Point(short int x = 0, short int y = 0, char symbol = EMPTY,Color color = Color::WHITE);
 	bool setX(short int x);
-	short int getX();
+	short int getX() const;
 	bool setY(short int y);
-	short int getY();
+	short int getY() const;
 	bool setXY(short int x, short int y);
 	bool setSymbol(char symbol);
-	char getSymbol();
+	char getSymbol() const;
 	//bool setColor(Color color);
 	//Color getColor();
 	void gotoxy();
