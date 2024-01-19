@@ -7,15 +7,6 @@ Board:: Board(const Point& topLeft, const Point& topRight, const Point& bottomLe
 	clear(); //when board is being made it need to be empty
 	setNumOfShapes(0);
 }
-
-//Board:: Board(const Board* other)
-//{
-//	// might not need !!!!!!!!!!!! check !!!!!!!!!!!!!
-//	// default copy constructor does the same !!!!!!
-//	short int i;
-//	for (i = 0; i < 4; i++)
-//		borders[i] = other->borders[i];
-//}
 bool Board:: setBorders(const Point& topLeft, const Point& topRight, const Point& bottomLeft, const Point& bottomRight)
 {
 	Point borders[4] = { topLeft , topRight , bottomLeft , bottomRight };
@@ -34,13 +25,13 @@ Point* Board:: getBorders()
 {
 	return borders;
 }
-bool Board:: setNumOfShapes(short int num)
+bool Board:: setNumOfShapes(size_t size)
 {
-	if (num < 0 || num >(GameConfig::HEIGHT * GameConfig::WIDTH))
+	if (size < 0 || size >(GameConfig::HEIGHT * GameConfig::WIDTH))
 		return false;
 	else
 	{
-		numOfActiveShapes = num;
+		numOfActiveShapes = size;
 		return true;
 	}
 }
@@ -103,19 +94,38 @@ bool Board::setPointInGameBoard(const Point& point)
 		res = false;
 	return res;
 }
-bool Board:: setShapeInGameBoard(const Shape& shape)
+bool Board:: setShapeInGameBoard(const Shape& shape, bool isShapeNew)
 {
 	short int i;
-	bool res = true;
-	// maybe add just the points that are in the game still !!!!!!!!!!!!!!!!!!!!1
-	for (i = 0; i < NUM_OF_POINTS && res; i++) // if all the points could be set on the board thus all the shape can
+	if (canSetShapeInGameBoard(shape))
 	{
-		if (shape.points[i].symbol != EMPTY) // insert just non empty points
-			res = setPointInGameBoard(shape.points[i]);
+		for (i = 0; i < NUM_OF_POINTS; i++)
+		{
+			if (shape.points[i].symbol != EMPTY) // insert just non empty points
+				setPointInGameBoard(shape.points[i]);
+		}
+		if (isShapeNew) // add an new shape to the active shape array
+			insertShapeToArr(shape);
+		return true;
 	}
-	if (res == true) // add the shape to the active shape array
-		activeShapes[numOfActiveShapes++] = shape;
-	return res;
+	else
+		return false;
+}
+void Board:: insertShapeToArr(const Shape& newShape) {
+	// Get the y-coordinate of the new shape
+	short int newY = newShape.getHighestY(), i, insertIndex = 0;
+	// Find the correct position to insert the new shape based on y-coordinate
+	while (insertIndex < numOfActiveShapes && activeShapes[insertIndex].getHighestY() > newY) {
+		insertIndex++;
+	}
+	// Shift existing shapes to make room for the new shape
+	for (i = numOfActiveShapes; i > insertIndex; --i) {
+		activeShapes[i] = activeShapes[i - 1];
+	}
+	// Insert the new shape at the correct position
+	activeShapes[insertIndex] = newShape;
+	// Increment the count of active shapes
+	numOfActiveShapes++;
 }
 inline bool Board:: isHeightValid(Point borders[4])
 {
@@ -193,21 +203,32 @@ int Board:: clearFullRows()
 {
 	short int i, j,k,fullRowsCounter = 0,  removedPointInd;
 	for (i = 0; i < GameConfig::HEIGHT; i++)
+	{
 		if (isRowFull(i))
 		{
 			clearRow(i);
 			fullRowsCounter++;
-			// clear the removed points from all the shape
-			for (j = 0; j < GameConfig:: WIDTH; j++)
-				for (k = 0; k < numOfActiveShapes; k++)
-				{
-					removedPointInd = activeShapes[k].getPointInd(gameBoard[i][j]);
-					if (removedPointInd != NOT_FOUND)
-						activeShapes[k].points[removedPointInd].setSymbol(EMPTY);
-				}
-
+			// clear the removed points from all the shapes
+			clearPointsFromActiveShapes(i);
 		}
+	}
 	return fullRowsCounter;
+}
+void Board:: clearPointsFromActiveShapes(short int i)
+{
+	short int j, k, removedPointInd;
+	for (j = 0; j < GameConfig::WIDTH; j++)
+	{
+		for (k = 0; k < numOfActiveShapes; k++)
+		{
+			removedPointInd = activeShapes[k].getPointInd(gameBoard[i][j]);
+			if (removedPointInd != NOT_FOUND)
+			{
+				activeShapes[k].points[removedPointInd].setSymbol(EMPTY);
+				break; // a point is a part of only one shape
+			}
+		}
+	}
 }
 bool Board:: isRowFull(short int i)
 {
@@ -215,21 +236,6 @@ bool Board:: isRowFull(short int i)
 		if (!isPointFull(point)) // if one point is not full thus the whole row is not full
 			return false;
 	return true;
-}
-bool Board::isOverflowing()
-{
-	return false;
-
-	//need to check what is the definition of board over flowing in tetris !!!!!!!!!!
-	
-
-	//bool res = true;
-	//short int j;
-	//for (j = 0; j < GameConfig::WIDTH && res; j++)
-	//	// if the highest row is full it means that the whole board is full
-	//	if (gameBoard[0][j] == EMPTY) // if there is one place in the highest row which is empty then the row is not full
-	//		res = false;
-	//return res;
 }
 bool Board:: isPointFull(const Point& point)
 {
@@ -255,16 +261,7 @@ bool Board:: canPointMove(Point point, Directions direction)
 	// if the point can move to that direction and that future place is not full then the point can move 
 	return point.move(direction) && isPointInBoard(point) && !isPointFull(point);
 }
-bool Board:: canShapeChangeDirection(const Shape& shape, Directions direction)
-{
-	short int i;
-	bool res = true;
-	// a shape can move iff all of its points can move
-	for (i = 0; i < NUM_OF_POINTS && res; i++)
-		res = canPointMove(shape.points[i], direction);
-	return res;
-}
-Point Board:: getStartingPoint()
+Point Board:: getStartingPoint() const
 {
 	// the place that the shapes should start falling from is the middle point on the first row
 	return gameBoard[0][GameConfig:: WIDTH / 2];
@@ -273,22 +270,21 @@ bool Board:: isShapeInBoard(const Shape& shape)
 {
 	short int i;
 	bool res = true;
-	// a shape can move iff all of its points can move
-	for (i = 0; i < NUM_OF_POINTS && res; i++)
+	// a shape can move iff all of its active points can move
+	for (i = 0; i < NUM_OF_POINTS && shape.points[i].getSymbol() != EMPTY && res; i++)
 		res = isPointInBoard(shape.points[i]);
-	return res;
-}
+	return res;}
+
 bool Board:: canShapeMove(const Shape& shape, ShapeMovement movement)
 {
-	if (movement == ShapeMovement::LEFT || movement == ShapeMovement::RIGHT)
-		return canShapeChangeDirection(shape, (Directions)movement);
-	else if (movement == ShapeMovement:: DROP)
-		return canShapeChangeDirection(shape, Directions:: DOWN);
-	return true;
+	Shape tempShape(shape);
+	tempShape.move(movement);
+	// shapes can always rotate unless the new place will be full
+	return canSetShapeInGameBoard(tempShape);
 }
-bool Board:: canShapeDrop(Shape& shape)
+bool Board::canActiveShapeDrop(const Shape& shape)
 {
-	short int i, emptyCounter = 0;
+	short int i, emptyCounter = 0, tempPointInd;
 	bool res = true;
 	Point tempPoint;
 	// a shape can move iff all of its points that are still in the game can move
@@ -298,9 +294,10 @@ bool Board:: canShapeDrop(Shape& shape)
 		{
 			tempPoint = shape.points[i];
 			tempPoint.move(Directions::DOWN);
-			// a point can drop if either the place below is free or if the place below it is part of it's own shape
+			tempPointInd = shape.getPointInd(tempPoint);
+			// a point can drop if either the place below is free or if the place below it is part of it's own shape active points
 			res = canPointMove(shape.points[i], Directions::DOWN)
-				|| (shape.getPointInd(tempPoint) != NOT_FOUND && isPointInBoard(tempPoint));
+				|| (tempPointInd != NOT_FOUND && shape.points[tempPointInd].getSymbol() != EMPTY && isPointInBoard(tempPoint));
 		}
 		else
 			emptyCounter++;
@@ -314,11 +311,17 @@ void Board:: dropActiveShapes()
 {
 	short int i;
 	bool dropped = false;
-	for (i = 0; i < numOfActiveShapes; i++)
+	for (i = 0 ; i < numOfActiveShapes; i++)
 	{
 		Shape& shape = activeShapes[i];
+		if (shape.isShapeClear()) // if by clearinf the full rows a whole shape is empty 
+		{
+			removeActiveShapeFromArr(shape, i);
+			i--;
+			continue;
+		}
 		// if after the clearing of line a shape can drop down the board, drop while it can
-		while (canShapeDrop(shape))
+		while (canActiveShapeDrop(shape))
 		{
 			// update the place of the shape
 			clearShapeFromGameBoard(shape);
@@ -327,7 +330,7 @@ void Board:: dropActiveShapes()
 			dropped = true;
 		}
 		if (dropped) // set the board in it's new place on the board
-			setShapeInGameBoard(shape);
+			setShapeInGameBoard(shape, false);
 	}
 }
 void Board:: clearShapeFromGameBoard(Shape& shape)
@@ -341,10 +344,38 @@ void Board:: clearShapeFromGameBoard(Shape& shape)
 			shape.points[i].setSymbol(GameConfig:: SHAPE_SYMBOL);
 		}
 }
+void Board:: removeActiveShapeFromArr(Shape& shape, int shapeInd)
+{
+	int i;
+	// Shift elements in the array to remove the shape at shapeInd
+	for (i = shapeInd; i < numOfActiveShapes - 1; i++)
+	{
+		activeShapes[i] = activeShapes[i + 1];
+	}
+	// Decrement the number of active shapes
+	numOfActiveShapes--;
+}
 // a shape is stuck if it can't move to any direction
 bool Board::isShapeStuck(const Shape& shape)
 {
-	return !canShapeChangeDirection(shape, Directions::DOWN)
-		&& !canShapeChangeDirection(shape, Directions::LEFT)
-		&& !canShapeChangeDirection(shape, Directions::RIGHT);
+	return !canSetShapeInGameBoard(shape)
+		&& !canShapeMove(shape, ShapeMovement:: DROP)
+		&& !canShapeMove(shape, ShapeMovement::LEFT)
+		&& !canShapeMove(shape, ShapeMovement::RIGHT);
+}
+bool Board:: canShapeRotate(const Shape& shape, ShapeMovement movement)
+{
+	Shape tempShape(shape);
+	tempShape.move(movement);
+	// shapes can always rotate unless the new place will be full
+	return canSetShapeInGameBoard(tempShape);
+}
+bool Board:: canSetShapeInGameBoard(const Shape& shape)
+{
+	short int i;
+	bool res = true;
+	// if all the points could be set on the board thus all the shape can
+	for (i = 0; i < NUM_OF_POINTS && (shape.points[i].symbol != EMPTY) && res; i++)
+		res = !isPointFull(shape.points[i]) && isPointInBoard(shape.points[i]);
+	return res;
 }

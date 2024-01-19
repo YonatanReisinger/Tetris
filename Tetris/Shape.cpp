@@ -73,6 +73,7 @@ void Shape::createSquare(Point* points, Point& start) {
 	points[2] = p1;
 	p1.moveRight();
 	points[3] = p1;
+	setShapeColor(Color::BLUE);
 }
 /*Creates a straight line tetronimo shape*/
 void Shape::createStraight(Point* points, Point& start) {
@@ -84,6 +85,7 @@ void Shape::createStraight(Point* points, Point& start) {
 	points[2] =p1;
 	p1.moveDown();
 	points[3] =p1;
+	setShapeColor(Color::BRWON);
 }
 /*Creates a plus tetronimo shape*/
 void Shape::createPlus(Point* points, Point& start) {
@@ -96,6 +98,7 @@ void Shape::createPlus(Point* points, Point& start) {
 	p1.moveRight();
 	p1.moveRight();
 	points[3] = p1;
+	setShapeColor(Color::GREY);
 }
 /*Creates an 'L' shape tetronimo*/
 void Shape::createL(Point* points, Point& start) {
@@ -107,6 +110,7 @@ void Shape::createL(Point* points, Point& start) {
 	points[2] = p1;
 	p1.moveRight();
 	points[3] = p1;
+	setShapeColor(Color::GREEN);
 }
 /*Creates a mirrored 'L' shape tetronimo*/
 void Shape::createMirrorL(Point* points, Point& start) {
@@ -118,6 +122,7 @@ void Shape::createMirrorL(Point* points, Point& start) {
 	points[2] = p1;
 	p1.moveLeft();
 	points[3] = p1;
+	setShapeColor(Color::CYAN);
 }
 /*Creates a skew tetronimo shape*/
 void Shape::createSkew(Point* points, Point& start) {
@@ -129,6 +134,7 @@ void Shape::createSkew(Point* points, Point& start) {
 	points[2] = p1;
 	p1.moveDown();
 	points[3] = p1;
+	setShapeColor(Color::PURPLE);
 }
 /*Creates a mirrored skew tetronimo shape*/
 void Shape::createMirrorSkew(Point* points, Point& start) {
@@ -140,6 +146,7 @@ void Shape::createMirrorSkew(Point* points, Point& start) {
 	points[2] = p1;
 	p1.moveDown();
 	points[3] = p1;
+	setShapeColor(Color::RED);
 }
 /*input: an enum type that represents the type of the shape we want to rotate left
  this function rotate the given shape left */
@@ -775,7 +782,7 @@ void Shape::move(ShapeMovement movement) {
 	}
 }
 
-int Shape::getPointInd(const Point& p1) {
+int Shape::getPointInd(const Point& p1) const{
 	int index = NOT_FOUND;
 	for (int i = 0; i < NUM_OF_POINTS; i++) {
 		if (points[i].areCoordinatesEqual(p1)) {
@@ -783,6 +790,39 @@ int Shape::getPointInd(const Point& p1) {
 		}
 	}
 	return index;
+}
+bool Shape:: isShapeClear()
+{
+	bool res = true;
+	for (int i = 0; i < NUM_OF_POINTS && res; i++) {
+		if (points[i].getSymbol() != EMPTY) {
+			res = false;
+		}
+	}
+	return res;
+}
+short int Shape:: getHighestY() const
+{
+
+	short int highestY = points[0].getY();
+
+	for (int i = 1; i < NUM_OF_POINTS && points[i].getSymbol() != EMPTY; ++i) {
+		short int currentY = points[i].getY();
+		if (currentY > highestY) {
+			highestY = currentY;
+		}
+	}
+	return highestY;
+}
+
+
+bool Shape::setShapeColor(Color color)
+{
+	bool res = true;
+	for (int i = 0; i < NUM_OF_POINTS&&res; i++) {
+		res = points[i].setColor(color);
+	}
+	return res;
 }
 
 

@@ -1,10 +1,11 @@
 #include "Point.h"
 
-Point::Point(short int x, short int y, char symbol)
+Point::Point(short int x, short int y, char symbol,Color color)
 {
 	setX(x);
 	setY(y);
 	setSymbol(symbol); //dasdsa
+	setColor(color);
 }
 bool Point:: setX(short int x)
 {
@@ -36,11 +37,11 @@ bool Point:: setXY(short int x, short int y)
 {
 	return setX(x) && setY(y);
 }
-short int Point:: getX()
+short int Point:: getX() const
 {
 	return x;
 }
-short int Point:: getY()
+short int Point:: getY() const
 {
 	return y;
 }
@@ -56,7 +57,7 @@ bool Point:: setSymbol(char symbol)
 	else
 		return false;
 }
-char Point:: getSymbol()
+char Point:: getSymbol() const
 {
 	return symbol;
 }
@@ -88,9 +89,15 @@ void Point::gotoxy()
 void Point:: print()
 {
 	gotoxy();
-	/*HANDLE hStdOut = GetStdHandle(STD_OUTPUT_HANDLE);
-	SetConsoleTextAttribute(hStdOut, WORD(color));*/
+	HANDLE hStdOut = GetStdHandle(STD_OUTPUT_HANDLE);
+	if (symbol == EMPTY) {
+	SetConsoleTextAttribute(hStdOut, (WORD)Color::WHITE);
+	}
+	else {
+	SetConsoleTextAttribute(hStdOut, (WORD)color);
+	}
 	cout << symbol;
+	SetConsoleTextAttribute(hStdOut, (WORD)Color::WHITE);
 }
 bool Point:: move(Directions direction)
 {
@@ -131,7 +138,26 @@ bool Point::moveRight()
 {
 	return setX(x + 1);
 }
-bool Point:: areCoordinatesEqual(const Point& other)
+bool Point:: areCoordinatesEqual(const Point& other) const
 {
 	return x == other.x && y == other.y;
+}
+
+inline Color Point:: getColor()
+{
+	return color;
+}
+bool Point:: setColor(Color color)
+{
+	bool res = false;
+	if (color == Color::WHITE || color == Color::RED || color == Color::BLUE ||
+		color == Color::CYAN || color == Color::GREY || color == Color::PURPLE ||
+		color == Color::BRWON || color == Color::GREEN) {
+		res = true;
+		this->color = color;
+	}
+	else {
+		res = false;
+	}
+	return res;
 }

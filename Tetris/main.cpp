@@ -17,7 +17,6 @@ enum Choice{ START = 1, CONTINUE = 2, INSTRUCTIONS = 8, EXIT = 9};
 
 int main()
 {
-	Game* pGame;
 	unsigned int choice;
 	Board board1(Point(1, 1), Point(GameConfig::WIDTH, 1), Point(1, GameConfig::HEIGHT), Point(GameConfig::WIDTH, GameConfig::HEIGHT));
 	Board board2(Point(GameConfig::WIDTH + 2 + GameConfig::DISTANCE_BETWEEN_BOARDS + 1, 1)
@@ -26,52 +25,42 @@ int main()
 		, Point(GameConfig::WIDTH * 2 + 2 + GameConfig::DISTANCE_BETWEEN_BOARDS, GameConfig::HEIGHT));
 	Player player1(board1, GameConfig:: player1Keys, "Daniel")
 		, player2(board2, GameConfig::player2Keys, "Yonatan");
-		
-	/*Point p1(2, 1, '*'), p2(23, 1, '@');
-	board1.setPointInGameBoardByInd(17, 1, '*');
-	board1.setPointInGameBoardByInd(17, 0, '*');
-	board2.setPointInGameBoardByInd(17, 3, '@');
-	board2.setPointInGameBoardByInd(17, 2, '@');
-
-	char keyPlayer1 = ' ';
-	char keyPlayer2 = ' ';
-	Key key = ' ';*/
-
-	pGame = new Game(player1,player2);
-	pGame->start();
-	Point point(1, GameConfig::HEIGHT + 2);
-	point.gotoxy();
-	// print the whole board including the frame
+	Game game(player1, player2);
 	
-	//pGame = nullptr;    34        
-	//printMenu(); //the program just started and therefore for sure no paused game exists
-	//cin >> choice;
+	// print the whole board including the frame
+	printMenu(); //the program just started and therefore for sure no paused game exists
+	cin >> choice;
 
-	//while (choice != Choice::EXIT)
-	//{
-	//	switch (choice)
-	//	{
-	//	case(Choice::START):
-	//		pGame->start();
-	//		if (pGame->getStatus == GameStatus:: PAUSED)
-	//			system("cls");
-	//		break;
-	//	case(Choice::CONTINUE):
-	//		if (pGame != nullptr && pGame->getStatus() == GameStatus::PAUSED)
-	//			pGame->resume();
-	//		else
-	//			cout << "No paused game to continue !" << endl;
-	//		break;
-	//	case(Choice::INSTRUCTIONS):
-	//		printInstructionsAndKeys(GameConfig:: INSTRUCTIONS_STR, GameConfig:: KEYS_STR);
-	//		break;
-	//	default:
-	//		printChoiceError(); 
-	//		break;
-	//	}
-	//	printMenu(pGame->getStatus());
-	//	cin >> choice;
-	//}
-	//cout << "Good Game! Goodbye!" << endl;
+	while (choice != Choice::EXIT)
+	{
+		clearCin();
+		clearScreen();
+		switch (choice)
+		{
+		case(Choice::START):
+			game.start();
+			break;
+		case(Choice::CONTINUE):
+			if (game.getStatus() == GameStatus::PAUSED)
+				game.resume();
+			else
+			{
+				cout << "No paused game to continue !" << "\n\n\nPress any key to continue........";
+				while (!_kbhit());
+			}
+			break;
+		case(Choice::INSTRUCTIONS):
+			printInstructionsAndKeys();
+			break;
+		default:
+			printChoiceError(); 
+			break;
+		}
+		clearScreen();
+		printWinner(game); //entersssssss 
+		printMenu(game.getStatus());
+		cin >> choice;
+	}
+	cout << "Good Game! Goodbye!" << endl;
 	return 0;
 }
