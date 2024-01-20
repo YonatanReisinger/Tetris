@@ -1,7 +1,7 @@
 #include "Player.h"
 
-Player::Player(const Board& board, const Key keys[], const char* name, int score): board(board)
-	, keys{keys[KeyInd:: LEFT_IND], keys[KeyInd::RIGHT_IND], keys[KeyInd::ROTATE_RIGHT_IND], keys[KeyInd::ROTATE_LEFT_IND], keys[KeyInd::DROP_IND] }
+Player::Player(const Board& board, const Key keys[], const char* name, int score) : board(board)
+, keys{ keys[KeyInd::LEFT_IND], keys[KeyInd::RIGHT_IND], keys[KeyInd::ROTATE_RIGHT_IND], keys[KeyInd::ROTATE_LEFT_IND], keys[KeyInd::DROP_IND] }
 {
 	setName(name);
 	this->board.clear();
@@ -14,11 +14,11 @@ Player:: ~Player()
 	if (currPlayingShape != nullptr)
 		delete currPlayingShape;
 }
-Board& Player:: getBoard()
+Board& Player::getBoard()
 {
 	return board;
 }
-bool Player:: setName(const char* name)
+bool Player::setName(const char* name)
 {
 	bool res;
 	if (name == nullptr)
@@ -31,11 +31,11 @@ bool Player:: setName(const char* name)
 	}
 	return res;
 }
-const char* Player:: getName() const
+const char* Player::getName() const
 {
 	return name;
 }
-bool Player:: setScore(int score)
+bool Player::setScore(int score)
 {
 	bool res;
 	if (score < 0)
@@ -47,7 +47,7 @@ bool Player:: setScore(int score)
 	}
 	return res;
 }
-int Player:: getScore() const
+int Player::getScore() const
 {
 	return score;
 }
@@ -55,7 +55,7 @@ bool Player::increaseScore(int increase)
 {
 	return setScore(score += increase);
 }
-void Player:: reset()
+void Player::reset()
 {
 	board.clear();
 	setScore(0);
@@ -64,7 +64,7 @@ void Player:: reset()
 		currPlayingShape = nullptr;
 	}
 }
-int Player:: getKeyInd(Key inputKey)
+int Player::getKeyInd(Key inputKey)
 {
 	short int i;
 	int resInd = NOT_FOUND;
@@ -81,7 +81,7 @@ Shape* Player::getCurrShape()
 	return currPlayingShape;
 }
 
-void Player:: setCurrShape(Shape* currShape)
+void Player::setCurrShape(Shape* currShape)
 {
 	currPlayingShape = currShape;
 }

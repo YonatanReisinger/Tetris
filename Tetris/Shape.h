@@ -8,9 +8,9 @@
 #include <iostream>
 using namespace std;
 // Macros ans enums->
-enum Type{PLUS,SQUARE,STRAIGHT,SKEW,MIRROR_SKEW,L,MIRROR_L};
-enum RotationDirection{FACE_UP,FACE_DOWN,FACE_LEFT,FACE_RIGHT};
-enum ShapeMovement{LEFT,RIGHT,ROTATE_LEFT,ROTATE_RIGHT,DROP};
+enum Type { PLUS, SQUARE, STRAIGHT, SKEW, MIRROR_SKEW, L, MIRROR_L };
+enum RotationDirection { FACE_UP, FACE_DOWN, FACE_LEFT, FACE_RIGHT };
+enum ShapeMovement { LEFT, RIGHT, ROTATE_LEFT, ROTATE_RIGHT, DROP };
 #define NUM_OF_POINTS  4
 // <- Macros and enums
 
@@ -21,35 +21,36 @@ private:
 	Point points[NUM_OF_POINTS];
 	Type shapeType;
 	RotationDirection shapeDirection;
-public:
-	Shape();
-	Shape(Type t, Point& start,RotationDirection shapeDirection = FACE_UP);
-	//void setColor(Color color);
-	void moveDown();
-	void moveLeft();
-	void moveRight();
-	void rotateLeft(Type t);
-	void rotateRight(Type t);
-	void createSquare(Point* points,Point& start);
-	void createStraight(Point* points, Point& start);
-	void createPlus(Point* points, Point& start);
-	void createSkew(Point* points, Point& start);
-	void createMirrorSkew(Point* points, Point& start);
-	void createL(Point* points, Point& start);
-	void createMirrorL(Point* points, Point& start);
-	void print();
+	void createSquare(Point* points, Point& start, GameColorStatus colorStatus);
+	void createStraight(Point* points, Point& start, GameColorStatus colorStatus);
+	void createPlus(Point* points, Point& start, GameColorStatus colorStatus);
+	void createSkew(Point* points, Point& start, GameColorStatus colorStatus);
+	void createMirrorSkew(Point* points, Point& start, GameColorStatus colorStatus);
+	void createL(Point* points, Point& start, GameColorStatus colorStatus);
+	void createMirrorL(Point* points, Point& start, GameColorStatus colorStatus);
 	void rotatePlus(ShapeMovement direction);
 	void rotateMirrorL(ShapeMovement direction);
 	void rotateStraight(ShapeMovement direction);
 	void rotateL(ShapeMovement direction);
 	void rotateMirrorSkew(ShapeMovement direction);
 	void rotateSkew(ShapeMovement direction);
+public:
+	Shape();
+	Shape(Type t, Point& start, GameColorStatus colorStatus, RotationDirection shapeDirection = FACE_UP);
+	//void setColor(Color color);
+	void moveDown();
+	void moveLeft();
+	void moveRight();
+	void rotateLeft(Type t);
+	void rotateRight(Type t);
+	void print();
 	void clearShape();
 	void setSymbol(char symbol);
 	void move(ShapeMovement movement);
 	int getPointInd(const Point& p1) const;
 	bool isShapeClear();
 	short int getHighestY() const;
+	bool setShapeColor(Color color);
 	friend class Board;
 };
 

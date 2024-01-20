@@ -10,38 +10,38 @@ Shape::Shape() {
 /*input: gets a type that represents the tetronimo type, and a point that represents
 the starting point of the tetronimo
 Creates a new shape based on the type and point*/
-Shape::Shape(Type t, Point& start,RotationDirection shapeDirection) {
+Shape::Shape(Type t, Point& start, GameColorStatus colorStatus, RotationDirection shapeDirection) {
 	shapeType = t;
 	this->shapeDirection = shapeDirection;
 	switch (t) {
-		case SQUARE: {
-			createSquare(points, start);
-			break;
-		}
-		case STRAIGHT: {
-			createStraight(points, start);
-			break;
-		}
-		case PLUS: {
-			createPlus(points, start);
-			break;
-		}
-		case SKEW: {
-			createSkew(points, start);
-			break;
-		}
-		case MIRROR_SKEW: {
-			createMirrorSkew(points, start);
-			break;
-		}
-		case L: {
-			createL(points, start);
-			break;
-		}
-		case MIRROR_L: {
-			createMirrorL(points, start);
-			break;
-		}
+	case SQUARE: {
+		createSquare(points, start, colorStatus);
+		break;
+	}
+	case STRAIGHT: {
+		createStraight(points, start, colorStatus);
+		break;
+	}
+	case PLUS: {
+		createPlus(points, start, colorStatus);
+		break;
+	}
+	case SKEW: {
+		createSkew(points, start, colorStatus);
+		break;
+	}
+	case MIRROR_SKEW: {
+		createMirrorSkew(points, start, colorStatus);
+		break;
+	}
+	case L: {
+		createL(points, start, colorStatus);
+		break;
+	}
+	case MIRROR_L: {
+		createMirrorL(points, start, colorStatus);
+		break;
+	}
 	}
 	setSymbol(GameConfig::SHAPE_SYMBOL);
 }
@@ -64,7 +64,7 @@ void Shape::moveRight() {
 	}
 }
 /*Creates a square shape tetronimo*/
-void Shape::createSquare(Point* points, Point& start) {
+void Shape::createSquare(Point* points, Point& start, GameColorStatus colorStatus) {
 	Point p1 = start;
 	points[0] = p1;//copies the starting point
 	p1.moveLeft();//takes the starting point and moves it left
@@ -73,20 +73,26 @@ void Shape::createSquare(Point* points, Point& start) {
 	points[2] = p1;
 	p1.moveRight();
 	points[3] = p1;
+	if (colorStatus == COLORIZED) {
+		setShapeColor(Color::BLUE);
+	}
 }
 /*Creates a straight line tetronimo shape*/
-void Shape::createStraight(Point* points, Point& start) {
+void Shape::createStraight(Point* points, Point& start, GameColorStatus colorStatus) {
 	Point p1 = start;
 	points[0] = p1;//copies the starting point
 	p1.moveDown();//takes the starting point and moves it left
 	points[1] = p1;//copies the "new" starting point
 	p1.moveDown();
-	points[2] =p1;
+	points[2] = p1;
 	p1.moveDown();
-	points[3] =p1;
+	points[3] = p1;
+	if (colorStatus == COLORIZED) {
+		setShapeColor(Color::BRWON);
+	}
 }
 /*Creates a plus tetronimo shape*/
-void Shape::createPlus(Point* points, Point& start) {
+void Shape::createPlus(Point* points, Point& start, GameColorStatus colorStatus) {
 	Point p1 = start;
 	points[0] = p1;
 	p1.moveDown();
@@ -96,9 +102,12 @@ void Shape::createPlus(Point* points, Point& start) {
 	p1.moveRight();
 	p1.moveRight();
 	points[3] = p1;
+	if (colorStatus == COLORIZED) {
+		setShapeColor(Color::GREY);
+	}
 }
 /*Creates an 'L' shape tetronimo*/
-void Shape::createL(Point* points, Point& start) {
+void Shape::createL(Point* points, Point& start, GameColorStatus colorStatus) {
 	Point p1 = start;
 	points[0] = p1;
 	p1.moveDown();
@@ -107,9 +116,12 @@ void Shape::createL(Point* points, Point& start) {
 	points[2] = p1;
 	p1.moveRight();
 	points[3] = p1;
+	if (colorStatus == COLORIZED) {
+		setShapeColor(Color::GREEN);
+	}
 }
 /*Creates a mirrored 'L' shape tetronimo*/
-void Shape::createMirrorL(Point* points, Point& start) {
+void Shape::createMirrorL(Point* points, Point& start, GameColorStatus colorStatus) {
 	Point p1 = start;
 	points[0] = p1;
 	p1.moveDown();
@@ -118,9 +130,12 @@ void Shape::createMirrorL(Point* points, Point& start) {
 	points[2] = p1;
 	p1.moveLeft();
 	points[3] = p1;
+	if (colorStatus == COLORIZED) {
+		setShapeColor(Color::CYAN);
+	}
 }
 /*Creates a skew tetronimo shape*/
-void Shape::createSkew(Point* points, Point& start) {
+void Shape::createSkew(Point* points, Point& start, GameColorStatus colorStatus) {
 	Point p1 = start;
 	points[0] = p1;
 	p1.moveDown();
@@ -129,9 +144,12 @@ void Shape::createSkew(Point* points, Point& start) {
 	points[2] = p1;
 	p1.moveDown();
 	points[3] = p1;
+	if (colorStatus == COLORIZED) {
+		setShapeColor(Color::PURPLE);
+	}
 }
 /*Creates a mirrored skew tetronimo shape*/
-void Shape::createMirrorSkew(Point* points, Point& start) {
+void Shape::createMirrorSkew(Point* points, Point& start, GameColorStatus colorStatus) {
 	Point p1 = start;
 	points[0] = p1;
 	p1.moveDown();
@@ -140,38 +158,41 @@ void Shape::createMirrorSkew(Point* points, Point& start) {
 	points[2] = p1;
 	p1.moveDown();
 	points[3] = p1;
+	if (colorStatus == COLORIZED) {
+		setShapeColor(Color::RED);
+	}
 }
 /*input: an enum type that represents the type of the shape we want to rotate left
  this function rotate the given shape left */
 void Shape::rotateLeft(Type t) {
 	switch (t) {
-		case SQUARE: {
-			break;
-		}
-		case STRAIGHT: {
-			rotateStraight(ROTATE_LEFT);
-			break;
-		}
-		case PLUS: {
-			rotatePlus(ROTATE_LEFT);
-			break;
-		}
-		case SKEW: {
-			rotateSkew(ROTATE_LEFT);
-			break;
-		}
-		case MIRROR_SKEW: {
-			rotateMirrorSkew(ROTATE_LEFT);
-			break;
-		}
-		case L: {
-			rotateL(ROTATE_LEFT);
-			break;
-		}
-		case MIRROR_L: {
-			rotateMirrorL(ROTATE_LEFT);
-			break;
-		}
+	case SQUARE: {
+		break;
+	}
+	case STRAIGHT: {
+		rotateStraight(ROTATE_LEFT);
+		break;
+	}
+	case PLUS: {
+		rotatePlus(ROTATE_LEFT);
+		break;
+	}
+	case SKEW: {
+		rotateSkew(ROTATE_LEFT);
+		break;
+	}
+	case MIRROR_SKEW: {
+		rotateMirrorSkew(ROTATE_LEFT);
+		break;
+	}
+	case L: {
+		rotateL(ROTATE_LEFT);
+		break;
+	}
+	case MIRROR_L: {
+		rotateMirrorL(ROTATE_LEFT);
+		break;
+	}
 	}
 }
 /*input: an enum type that represents the type of the shape we want to rotate left
@@ -212,154 +233,154 @@ void Shape::rotatePlus(ShapeMovement direction) {
 		points[3] = points[0];
 		points[0] = points[2];
 		switch (shapeDirection) {
-			case FACE_UP: {
-				points[2].moveRight();
-				points[2].moveDown();
-				shapeDirection = FACE_LEFT;
-				break;
-			}
-			case FACE_LEFT: {
-				points[2].moveUp();
-				points[2].moveRight();
-				shapeDirection = FACE_DOWN;
-				break;
-			}
-			case FACE_DOWN: {
-				points[2].moveLeft();
-				points[2].moveUp();
-				shapeDirection = FACE_RIGHT;
-				break;
-			}
-			case FACE_RIGHT: {
-				points[2].moveLeft();
-				points[2].moveDown();
-				shapeDirection = FACE_UP;
-				break;
-			}
+		case FACE_UP: {
+			points[2].moveRight();
+			points[2].moveDown();
+			shapeDirection = FACE_LEFT;
+			break;
+		}
+		case FACE_LEFT: {
+			points[2].moveUp();
+			points[2].moveRight();
+			shapeDirection = FACE_DOWN;
+			break;
+		}
+		case FACE_DOWN: {
+			points[2].moveLeft();
+			points[2].moveUp();
+			shapeDirection = FACE_RIGHT;
+			break;
+		}
+		case FACE_RIGHT: {
+			points[2].moveLeft();
+			points[2].moveDown();
+			shapeDirection = FACE_UP;
+			break;
+		}
 		}
 	}
 	else {
 		points[2] = points[0];
 		points[0] = points[3];
 		switch (shapeDirection) {
-			case FACE_UP: {
-				points[3].moveLeft();
-				points[3].moveDown();
-				shapeDirection = FACE_RIGHT;
-				break;
-			}
-			case FACE_RIGHT: {
-				points[3].moveLeft();
-				points[3].moveUp();
-				shapeDirection = FACE_DOWN;
-				break;
-			}
-			case FACE_DOWN: {
-				points[3].moveRight();
-				points[3].moveUp();
-				shapeDirection = FACE_LEFT;
-				break;
-			}
-			case FACE_LEFT: {
-				points[3].moveRight();
-				points[3].moveDown();
-				shapeDirection = FACE_UP;
-				break;
-			}
+		case FACE_UP: {
+			points[3].moveLeft();
+			points[3].moveDown();
+			shapeDirection = FACE_RIGHT;
+			break;
+		}
+		case FACE_RIGHT: {
+			points[3].moveLeft();
+			points[3].moveUp();
+			shapeDirection = FACE_DOWN;
+			break;
+		}
+		case FACE_DOWN: {
+			points[3].moveRight();
+			points[3].moveUp();
+			shapeDirection = FACE_LEFT;
+			break;
+		}
+		case FACE_LEFT: {
+			points[3].moveRight();
+			points[3].moveDown();
+			shapeDirection = FACE_UP;
+			break;
+		}
 		}
 	}
 }
 /*input: a number that represents left/right rotation
 This function rotates the mirror 'L' shape tetronimo left/right based on the given number*/
 void Shape::rotateMirrorL(ShapeMovement direction) {
-	if (direction == ROTATE_LEFT) 
+	if (direction == ROTATE_LEFT)
 	{
 		switch (shapeDirection) {
-			case FACE_UP: {
-				points[0].moveDown();
-				points[0].moveLeft();
-				points[2].moveRight();
-				points[2].moveUp();
-				points[3].moveRight();
-				points[3].moveRight();
-				shapeDirection = FACE_LEFT;
-				break;
-			}
-			case FACE_RIGHT: {
-				points[0].moveLeft();
-				points[0].moveUp();
-				points[2].moveRight();
-				points[2].moveDown();
-				points[3].moveDown();
-				points[3].moveDown();
-				shapeDirection = FACE_UP;
-				break;
-			}
-			case FACE_DOWN: {
-				points[0].moveRight();
-				points[0].moveUp();
-				points[2].moveLeft();
-				points[2].moveDown();
-				points[3].moveLeft();
-				points[3].moveLeft();
-				shapeDirection = FACE_RIGHT;
-				break;
-			}
-			case FACE_LEFT: {
-				points[0].moveDown();
-				points[0].moveRight();
-				points[2].moveLeft();
-				points[2].moveUp();
-				points[3].moveUp();
-				points[3].moveUp();
-				shapeDirection = FACE_DOWN;
-				break;
-			}
+		case FACE_UP: {
+			points[0].moveDown();
+			points[0].moveLeft();
+			points[2].moveRight();
+			points[2].moveUp();
+			points[3].moveRight();
+			points[3].moveRight();
+			shapeDirection = FACE_LEFT;
+			break;
+		}
+		case FACE_RIGHT: {
+			points[0].moveLeft();
+			points[0].moveUp();
+			points[2].moveRight();
+			points[2].moveDown();
+			points[3].moveDown();
+			points[3].moveDown();
+			shapeDirection = FACE_UP;
+			break;
+		}
+		case FACE_DOWN: {
+			points[0].moveRight();
+			points[0].moveUp();
+			points[2].moveLeft();
+			points[2].moveDown();
+			points[3].moveLeft();
+			points[3].moveLeft();
+			shapeDirection = FACE_RIGHT;
+			break;
+		}
+		case FACE_LEFT: {
+			points[0].moveDown();
+			points[0].moveRight();
+			points[2].moveLeft();
+			points[2].moveUp();
+			points[3].moveUp();
+			points[3].moveUp();
+			shapeDirection = FACE_DOWN;
+			break;
+		}
 		}
 	}
 	else
 	{
 		switch (shapeDirection) {
-			case FACE_UP: {
-				points[0].moveDown();
-				points[0].moveRight();
-				points[2].moveLeft();
-				points[2].moveUp();
-				points[3].moveUp();
-				points[3].moveUp();
-				shapeDirection = FACE_RIGHT;
-				break;
-			}
-			case FACE_RIGHT: {
-				points[0].moveLeft();
-				points[0].moveDown();
-				points[2].moveRight();
-				points[2].moveUp();
-				points[3].moveRight();
-				points[3].moveRight();
-				shapeDirection = FACE_DOWN;
-				break;
-			}
-			case FACE_DOWN: {
-				points[0].moveLeft();
-				points[0].moveUp();
-				points[2].moveRight();
-				points[2].moveDown();
-				points[3].moveDown();
-				points[3].moveDown();
-				shapeDirection = FACE_LEFT;
-				break;
-			}
-			case FACE_LEFT: {
-				points[0].moveUp();
-				points[0].moveRight();
-				points[2].moveLeft();
-				points[2].moveDown();
-				points[3].moveLeft();
-				points[3].moveLeft();
-				shapeDirection = FACE_UP;
-				break;
-			}
+		case FACE_UP: {
+			points[0].moveDown();
+			points[0].moveRight();
+			points[2].moveLeft();
+			points[2].moveUp();
+			points[3].moveUp();
+			points[3].moveUp();
+			shapeDirection = FACE_RIGHT;
+			break;
+		}
+		case FACE_RIGHT: {
+			points[0].moveLeft();
+			points[0].moveDown();
+			points[2].moveRight();
+			points[2].moveUp();
+			points[3].moveRight();
+			points[3].moveRight();
+			shapeDirection = FACE_DOWN;
+			break;
+		}
+		case FACE_DOWN: {
+			points[0].moveLeft();
+			points[0].moveUp();
+			points[2].moveRight();
+			points[2].moveDown();
+			points[3].moveDown();
+			points[3].moveDown();
+			shapeDirection = FACE_LEFT;
+			break;
+		}
+		case FACE_LEFT: {
+			points[0].moveUp();
+			points[0].moveRight();
+			points[2].moveLeft();
+			points[2].moveDown();
+			points[3].moveLeft();
+			points[3].moveLeft();
+			shapeDirection = FACE_UP;
+			break;
+		}
 		}
 	}
 }
@@ -368,106 +389,106 @@ This function rotates the straight shape tetronimo left/right based on the given
 void Shape::rotateStraight(ShapeMovement direction) {
 	if (direction == ROTATE_LEFT) {
 		switch (shapeDirection) {
-			case FACE_UP: {
-				points[0].moveLeft();
-				points[0].moveDown();
-				points[2].moveRight();
-				points[2].moveUp();
-				for (int i = 0; i < 2; i++) {
-					points[3].moveRight();
-					points[3].moveUp();
-				}
-				shapeDirection = FACE_LEFT;
-				break;
+		case FACE_UP: {
+			points[0].moveLeft();
+			points[0].moveDown();
+			points[2].moveRight();
+			points[2].moveUp();
+			for (int i = 0; i < 2; i++) {
+				points[3].moveRight();
+				points[3].moveUp();
 			}
-			case FACE_LEFT: {
-				points[0].moveRight();
-				points[0].moveDown();
-				points[2].moveLeft();
-				points[2].moveUp();
-				for (int i = 0; i < 2; i++) {
-					points[3].moveLeft();
-					points[3].moveUp();
-				}
-				shapeDirection = FACE_DOWN;
-				break;
+			shapeDirection = FACE_LEFT;
+			break;
+		}
+		case FACE_LEFT: {
+			points[0].moveRight();
+			points[0].moveDown();
+			points[2].moveLeft();
+			points[2].moveUp();
+			for (int i = 0; i < 2; i++) {
+				points[3].moveLeft();
+				points[3].moveUp();
 			}
-			case FACE_DOWN: {
-				points[0].moveUp();
-				points[0].moveRight();
-				points[2].moveLeft();
-				points[2].moveDown();
-				for (int i = 0; i < 2; i++) {
-					points[3].moveLeft();
-					points[3].moveDown();
-				}
-				shapeDirection = FACE_RIGHT;
-				break;
+			shapeDirection = FACE_DOWN;
+			break;
+		}
+		case FACE_DOWN: {
+			points[0].moveUp();
+			points[0].moveRight();
+			points[2].moveLeft();
+			points[2].moveDown();
+			for (int i = 0; i < 2; i++) {
+				points[3].moveLeft();
+				points[3].moveDown();
 			}
-			case FACE_RIGHT: {
-				points[0].moveLeft();
-				points[0].moveUp();
-				points[2].moveRight();
-				points[2].moveDown();
-				for (int i = 0; i < 2; i++) {
-					points[3].moveRight();
-					points[3].moveDown();
-				}
-				shapeDirection = FACE_UP;
-				break;
+			shapeDirection = FACE_RIGHT;
+			break;
+		}
+		case FACE_RIGHT: {
+			points[0].moveLeft();
+			points[0].moveUp();
+			points[2].moveRight();
+			points[2].moveDown();
+			for (int i = 0; i < 2; i++) {
+				points[3].moveRight();
+				points[3].moveDown();
 			}
+			shapeDirection = FACE_UP;
+			break;
+		}
 		}
 	}
 	else {
 		switch (shapeDirection) {
-			case FACE_UP: {
-				points[0].moveRight();
-				points[0].moveDown();
-				points[2].moveLeft();
-				points[2].moveUp();
-				for (int i = 0; i < 2; i++) {
-					points[3].moveLeft();
-					points[3].moveUp();
-				}
-				shapeDirection = FACE_RIGHT;
-				break;
+		case FACE_UP: {
+			points[0].moveRight();
+			points[0].moveDown();
+			points[2].moveLeft();
+			points[2].moveUp();
+			for (int i = 0; i < 2; i++) {
+				points[3].moveLeft();
+				points[3].moveUp();
 			}
-			case FACE_RIGHT: {
-				points[0].moveLeft();
-				points[0].moveDown();
-				points[2].moveRight();
-				points[2].moveUp();
-				for (int i = 0; i < 2; i++) {
-					points[3].moveRight();
-					points[3].moveUp();
-				}
-				shapeDirection = FACE_DOWN;
-				break;
+			shapeDirection = FACE_RIGHT;
+			break;
+		}
+		case FACE_RIGHT: {
+			points[0].moveLeft();
+			points[0].moveDown();
+			points[2].moveRight();
+			points[2].moveUp();
+			for (int i = 0; i < 2; i++) {
+				points[3].moveRight();
+				points[3].moveUp();
 			}
-			case FACE_DOWN: {
-				points[0].moveUp();
-				points[0].moveLeft();
-				points[2].moveRight();
-				points[2].moveDown();
-				for (int i = 0; i < 2; i++) {
-					points[3].moveRight();
-					points[3].moveDown();
-				}
-				shapeDirection = FACE_LEFT;
-				break;
+			shapeDirection = FACE_DOWN;
+			break;
+		}
+		case FACE_DOWN: {
+			points[0].moveUp();
+			points[0].moveLeft();
+			points[2].moveRight();
+			points[2].moveDown();
+			for (int i = 0; i < 2; i++) {
+				points[3].moveRight();
+				points[3].moveDown();
 			}
-			case FACE_LEFT: {
-				points[0].moveRight();
-				points[0].moveUp();
-				points[2].moveLeft();
-				points[2].moveDown();
-				for (int i = 0; i < 2; i++) {
-					points[3].moveLeft();
-					points[3].moveDown();
-				}
-				shapeDirection = FACE_UP;
-				break;
+			shapeDirection = FACE_LEFT;
+			break;
+		}
+		case FACE_LEFT: {
+			points[0].moveRight();
+			points[0].moveUp();
+			points[2].moveLeft();
+			points[2].moveDown();
+			for (int i = 0; i < 2; i++) {
+				points[3].moveLeft();
+				points[3].moveDown();
 			}
+			shapeDirection = FACE_UP;
+			break;
+		}
 		}
 	}
 }
@@ -476,91 +497,91 @@ This function rotates the L shape tetronimo left/right based on the given number
 void Shape::rotateL(ShapeMovement direction) {
 	if (direction == ROTATE_LEFT) {
 		switch (shapeDirection) {
-			case FACE_UP: {
-				points[0].moveDown();
-				points[0].moveLeft();
-				points[2].moveRight();
-				points[2].moveUp();
-				points[3].moveUp();
-				points[3].moveUp();
-				shapeDirection = FACE_LEFT;
-				break;
-			}
-			case FACE_LEFT: {
-				points[0].moveDown();
-				points[0].moveRight();
-				points[2].moveLeft();
-				points[2].moveUp();
-				points[3].moveLeft();
-				points[3].moveLeft();
-				shapeDirection = FACE_DOWN;
-				break;
-			}
-			case FACE_DOWN: {
-				points[0].moveUp();
-				points[0].moveRight();
-				points[2].moveLeft();
-				points[2].moveDown();
-				points[3].moveDown();
-				points[3].moveDown();
-				shapeDirection = FACE_RIGHT;
-				break;
-			}
-			case FACE_RIGHT: {
-				points[0].moveLeft();
-				points[0].moveUp();
-				points[2].moveRight();
-				points[2].moveDown();
-				points[3].moveRight();
-				points[3].moveRight();
-				shapeDirection = FACE_UP;
-				break;
-			}
+		case FACE_UP: {
+			points[0].moveDown();
+			points[0].moveLeft();
+			points[2].moveRight();
+			points[2].moveUp();
+			points[3].moveUp();
+			points[3].moveUp();
+			shapeDirection = FACE_LEFT;
+			break;
+		}
+		case FACE_LEFT: {
+			points[0].moveDown();
+			points[0].moveRight();
+			points[2].moveLeft();
+			points[2].moveUp();
+			points[3].moveLeft();
+			points[3].moveLeft();
+			shapeDirection = FACE_DOWN;
+			break;
+		}
+		case FACE_DOWN: {
+			points[0].moveUp();
+			points[0].moveRight();
+			points[2].moveLeft();
+			points[2].moveDown();
+			points[3].moveDown();
+			points[3].moveDown();
+			shapeDirection = FACE_RIGHT;
+			break;
+		}
+		case FACE_RIGHT: {
+			points[0].moveLeft();
+			points[0].moveUp();
+			points[2].moveRight();
+			points[2].moveDown();
+			points[3].moveRight();
+			points[3].moveRight();
+			shapeDirection = FACE_UP;
+			break;
+		}
 		}
 	}
 	else
 	{
 		switch (shapeDirection) {
-			case FACE_UP: {
-				points[0].moveDown();
-				points[0].moveRight();
-				points[2].moveLeft();
-				points[2].moveUp();
-				points[3].moveLeft();
-				points[3].moveLeft();
-				shapeDirection = FACE_RIGHT;
-				break;
-			}
-			case FACE_RIGHT: {
-				points[0].moveLeft();
-				points[0].moveDown();
-				points[2].moveRight();
-				points[2].moveUp();
-				points[3].moveUp();
-				points[3].moveUp();
-				shapeDirection = FACE_DOWN;
-				break;
-			}
-			case FACE_DOWN: {
-				points[0].moveLeft();
-				points[0].moveUp();
-				points[2].moveRight();
-				points[2].moveDown();
-				points[3].moveRight();
-				points[3].moveRight();
-				shapeDirection = FACE_LEFT;
-				break;
-			}
-			case FACE_LEFT: {
-				points[0].moveRight();
-				points[0].moveUp();
-				points[2].moveLeft();
-				points[2].moveDown();
-				points[3].moveDown();
-				points[3].moveDown();
-				shapeDirection = FACE_UP;
-				break;
-			}
+		case FACE_UP: {
+			points[0].moveDown();
+			points[0].moveRight();
+			points[2].moveLeft();
+			points[2].moveUp();
+			points[3].moveLeft();
+			points[3].moveLeft();
+			shapeDirection = FACE_RIGHT;
+			break;
+		}
+		case FACE_RIGHT: {
+			points[0].moveLeft();
+			points[0].moveDown();
+			points[2].moveRight();
+			points[2].moveUp();
+			points[3].moveUp();
+			points[3].moveUp();
+			shapeDirection = FACE_DOWN;
+			break;
+		}
+		case FACE_DOWN: {
+			points[0].moveLeft();
+			points[0].moveUp();
+			points[2].moveRight();
+			points[2].moveDown();
+			points[3].moveRight();
+			points[3].moveRight();
+			shapeDirection = FACE_LEFT;
+			break;
+		}
+		case FACE_LEFT: {
+			points[0].moveRight();
+			points[0].moveUp();
+			points[2].moveLeft();
+			points[2].moveDown();
+			points[3].moveDown();
+			points[3].moveDown();
+			shapeDirection = FACE_UP;
+			break;
+		}
 		}
 	}
 }
@@ -569,83 +590,83 @@ This function rotates the mirror skew shape tetronimo left/right based on the gi
 void Shape::rotateMirrorSkew(ShapeMovement direction) {
 	if (direction == ROTATE_LEFT) {
 		switch (shapeDirection) {
-			case FACE_UP: {
-				points[0] = points[2];
-				points[2].moveDown();
-				points[2].moveRight();
-				points[3].moveRight();
-				points[3].moveRight();
-				shapeDirection = FACE_LEFT;
-				break;
-			}
-			case FACE_LEFT: {
-				points[0] = points[2];
-				points[2].moveUp();
-				points[2].moveRight();
-				points[3].moveUp();
-				points[3].moveUp();
-				shapeDirection = FACE_DOWN;
-				break;
-			}
-			case FACE_DOWN: {
-				points[0] = points[2];
-				points[2].moveLeft();
-				points[2].moveUp();
-				points[3].moveLeft();
-				points[3].moveLeft();
-				shapeDirection = FACE_RIGHT;
-				break;
-			}
-			case FACE_RIGHT: {
-				points[0] = points[2];
-				points[2].moveLeft();
-				points[2].moveDown();
-				points[3].moveDown();
-				points[3].moveDown();
-				shapeDirection = FACE_UP;
-				break;
-			}
+		case FACE_UP: {
+			points[0] = points[2];
+			points[2].moveDown();
+			points[2].moveRight();
+			points[3].moveRight();
+			points[3].moveRight();
+			shapeDirection = FACE_LEFT;
+			break;
+		}
+		case FACE_LEFT: {
+			points[0] = points[2];
+			points[2].moveUp();
+			points[2].moveRight();
+			points[3].moveUp();
+			points[3].moveUp();
+			shapeDirection = FACE_DOWN;
+			break;
+		}
+		case FACE_DOWN: {
+			points[0] = points[2];
+			points[2].moveLeft();
+			points[2].moveUp();
+			points[3].moveLeft();
+			points[3].moveLeft();
+			shapeDirection = FACE_RIGHT;
+			break;
+		}
+		case FACE_RIGHT: {
+			points[0] = points[2];
+			points[2].moveLeft();
+			points[2].moveDown();
+			points[3].moveDown();
+			points[3].moveDown();
+			shapeDirection = FACE_UP;
+			break;
+		}
 		}
 	}
 	else
 	{
 		switch (shapeDirection) {
-			case FACE_UP: {
-				points[2] = points[0];
-				points[0].moveDown();
-				points[0].moveRight();
-				points[3].moveUp();
-				points[3].moveUp();
-				shapeDirection = FACE_RIGHT;
-				break;
-			}
-			case FACE_LEFT: {
-				points[2] = points[0];
-				points[0].moveUp();
-				points[0].moveRight();
-				points[3].moveLeft();
-				points[3].moveLeft();
-				shapeDirection = FACE_UP;
-				break;
-			}
-			case FACE_DOWN: {
-				points[2] = points[0];
-				points[0].moveLeft();
-				points[0].moveUp();
-				points[3].moveDown();
-				points[3].moveDown();
-				shapeDirection = FACE_LEFT;
-				break;
-			}
-			case FACE_RIGHT: {
-				points[2] = points[0];
-				points[0].moveDown();
-				points[0].moveLeft();
-				points[3].moveRight();
-				points[3].moveRight();
-				shapeDirection = FACE_DOWN;
-				break;
-			}
+		case FACE_UP: {
+			points[2] = points[0];
+			points[0].moveDown();
+			points[0].moveRight();
+			points[3].moveUp();
+			points[3].moveUp();
+			shapeDirection = FACE_RIGHT;
+			break;
+		}
+		case FACE_LEFT: {
+			points[2] = points[0];
+			points[0].moveUp();
+			points[0].moveRight();
+			points[3].moveLeft();
+			points[3].moveLeft();
+			shapeDirection = FACE_UP;
+			break;
+		}
+		case FACE_DOWN: {
+			points[2] = points[0];
+			points[0].moveLeft();
+			points[0].moveUp();
+			points[3].moveDown();
+			points[3].moveDown();
+			shapeDirection = FACE_LEFT;
+			break;
+		}
+		case FACE_RIGHT: {
+			points[2] = points[0];
+			points[0].moveDown();
+			points[0].moveLeft();
+			points[3].moveRight();
+			points[3].moveRight();
+			shapeDirection = FACE_DOWN;
+			break;
+		}
 		}
 	}
 }
@@ -654,88 +675,88 @@ This function rotates the skew shape tetronimo left/right based on the given num
 void Shape::rotateSkew(ShapeMovement direction) {
 	if (direction == ROTATE_LEFT) {
 		switch (shapeDirection) {
-			case FACE_UP: {
-				points[2] = points[0];
-				points[0].moveDown();
-				points[0].moveLeft();
-				points[3].moveUp();
-				points[3].moveUp();
-				shapeDirection = FACE_LEFT;
-				break;
-			}
-			case FACE_LEFT: {
-				points[2] = points[0];
-				points[0].moveDown();
-				points[0].moveRight();
-				points[3].moveLeft();
-				points[3].moveLeft();
-				shapeDirection = FACE_DOWN;
-				break;
-			}
-			case FACE_DOWN: {
-				points[2] = points[0];
-				points[0].moveRight();
-				points[0].moveUp();
-				points[3].moveDown();
-				points[3].moveDown();
-				shapeDirection = FACE_RIGHT;
-				break;
-			}
-			case FACE_RIGHT: {
-				points[2] = points[0];
-				points[0].moveLeft();
-				points[0].moveUp();
-				points[3].moveRight();
-				points[3].moveRight();
-				shapeDirection = FACE_UP;
-				break;
-			}
+		case FACE_UP: {
+			points[2] = points[0];
+			points[0].moveDown();
+			points[0].moveLeft();
+			points[3].moveUp();
+			points[3].moveUp();
+			shapeDirection = FACE_LEFT;
+			break;
+		}
+		case FACE_LEFT: {
+			points[2] = points[0];
+			points[0].moveDown();
+			points[0].moveRight();
+			points[3].moveLeft();
+			points[3].moveLeft();
+			shapeDirection = FACE_DOWN;
+			break;
+		}
+		case FACE_DOWN: {
+			points[2] = points[0];
+			points[0].moveRight();
+			points[0].moveUp();
+			points[3].moveDown();
+			points[3].moveDown();
+			shapeDirection = FACE_RIGHT;
+			break;
+		}
+		case FACE_RIGHT: {
+			points[2] = points[0];
+			points[0].moveLeft();
+			points[0].moveUp();
+			points[3].moveRight();
+			points[3].moveRight();
+			shapeDirection = FACE_UP;
+			break;
+		}
 		}
 	}
-	else 
+	else
 	{
 		switch (shapeDirection) {
-			case FACE_UP: {
-				points[0] = points[2];
-				points[2].moveDown();
-				points[2].moveLeft();
-				points[3].moveLeft();
-				points[3].moveLeft();
-				shapeDirection = FACE_RIGHT;
-				break;
-			}
-			case FACE_RIGHT: {
-				points[0] = points[2];
-				points[2].moveLeft();
-				points[2].moveUp();
-				points[3].moveUp();
-				points[3].moveUp();
-				shapeDirection = FACE_DOWN;
-				break;
-			}
-			case FACE_DOWN: {
-				points[0] = points[2];
-				points[2].moveRight();
-				points[2].moveUp();
-				points[3].moveRight();
-				points[3].moveRight();
-				shapeDirection = FACE_LEFT;
-				break;
-			}
-			case FACE_LEFT: {
-				points[0] = points[2];
-				points[2].moveDown();
-				points[2].moveRight();
-				points[3].moveDown();
-				points[3].moveDown();
-				shapeDirection = FACE_UP;
-				break;
-			}
+		case FACE_UP: {
+			points[0] = points[2];
+			points[2].moveDown();
+			points[2].moveLeft();
+			points[3].moveLeft();
+			points[3].moveLeft();
+			shapeDirection = FACE_RIGHT;
+			break;
+		}
+		case FACE_RIGHT: {
+			points[0] = points[2];
+			points[2].moveLeft();
+			points[2].moveUp();
+			points[3].moveUp();
+			points[3].moveUp();
+			shapeDirection = FACE_DOWN;
+			break;
+		}
+		case FACE_DOWN: {
+			points[0] = points[2];
+			points[2].moveRight();
+			points[2].moveUp();
+			points[3].moveRight();
+			points[3].moveRight();
+			shapeDirection = FACE_LEFT;
+			break;
+		}
+		case FACE_LEFT: {
+			points[0] = points[2];
+			points[2].moveDown();
+			points[2].moveRight();
+			points[3].moveDown();
+			points[3].moveDown();
+			shapeDirection = FACE_UP;
+			break;
+		}
 		}
 	}
 }
 
-void Shape:: clearShape() {
+void Shape::clearShape() {
 	setSymbol(EMPTY);
 }
 
@@ -769,13 +790,13 @@ void Shape::move(ShapeMovement movement) {
 		moveRight();
 		break;
 	}
-	case DROP :
+	case DROP:
 		moveDown();
 		break;
 	}
 }
 
-int Shape::getPointInd(const Point& p1) const{
+int Shape::getPointInd(const Point& p1) const {
 	int index = NOT_FOUND;
 	for (int i = 0; i < NUM_OF_POINTS; i++) {
 		if (points[i].areCoordinatesEqual(p1)) {
@@ -784,7 +805,7 @@ int Shape::getPointInd(const Point& p1) const{
 	}
 	return index;
 }
-bool Shape:: isShapeClear()
+bool Shape::isShapeClear()
 {
 	bool res = true;
 	for (int i = 0; i < NUM_OF_POINTS && res; i++) {
@@ -794,7 +815,7 @@ bool Shape:: isShapeClear()
 	}
 	return res;
 }
-short int Shape:: getHighestY() const
+short int Shape::getHighestY() const
 {
 
 	short int highestY = points[0].getY();
@@ -809,5 +830,11 @@ short int Shape:: getHighestY() const
 }
 
 
-
-
+bool Shape::setShapeColor(Color color)
+{
+	bool res = true;
+	for (int i = 0; i < NUM_OF_POINTS && res; i++) {
+		res = points[i].setColor(color);
+	}
+	return res;
+}

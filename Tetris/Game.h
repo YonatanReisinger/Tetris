@@ -12,7 +12,7 @@ using namespace std;
 // <- Imports
 
 // Macros ans enums->
-enum class GameStatus {PAUSED, PLAYING, FINISHED};
+enum class GameStatus { PAUSED, PLAYING, FINISHED };
 #define NO_WINNER -1
 #define TIE 0
 // <- Macros and enums
@@ -20,8 +20,9 @@ enum class GameStatus {PAUSED, PLAYING, FINISHED};
 class Game {
 private:
 	GameStatus status;
-	Player &player1, &player2;
+	Player& player1, & player2;
 	short int winnerNum;
+	GameColorStatus colorStatus;
 
 	GameStatus run(); //game logic
 	inline Shape* getRandomShape(Point& startPoint);
@@ -39,8 +40,10 @@ public:
 	GameStatus getStatus() const;
 	bool setStatus(GameStatus status);
 	const Player& getPlayer(int playerNum) const;
-	void setCurrentShape(Player& player,Point& startPoint);
+	void setCurrentShape(Player& player, Point& startPoint);
 	bool setWinnerNum(short int winnerNum);
 	short int getWinnerNum();
+	bool setColorStatus(GameColorStatus choice);
+	GameColorStatus getColorStatus();
 };
 #endif //Game.h

@@ -1,15 +1,15 @@
 #include "Game.h"
 
-Game:: Game(Player &player1, Player &player2) : player1(player1), player2(player2)
+Game::Game(Player& player1, Player& player2) : player1(player1), player2(player2)
 {
-	setStatus(GameStatus:: PLAYING); // new game is automatically being played
+	setStatus(GameStatus::PLAYING); // new game is automatically being played
 	setWinnerNum(NO_WINNER);
 }
 GameStatus Game::run()
 {
 	GameStatus gameStatus = GameStatus::PLAYING;
 	bool isGamePlaying = true;
-	Board& board1 = player1.getBoard(), &board2 = player2.getBoard();
+	Board& board1 = player1.getBoard(), & board2 = player2.getBoard();
 	Point startPoint1 = board1.getStartingPoint(), startPoint2 = board2.getStartingPoint();
 
 	if (getStatus() != GameStatus::PAUSED) // random new shapes just if it is completely new game 
@@ -18,9 +18,33 @@ GameStatus Game::run()
 		player1.setCurrShape(getRandomShape(startPoint1));
 		player2.setCurrShape(getRandomShape(startPoint2));
 	}
+	Point p1(26, 17), p2(30, 17), p3(33, 15), p4(34, 14), p5(35, 16), p6(34, 17), p7(35, 16), p8(30, 16), p9(28, 16);
+	Shape l1(STRAIGHT, p1, this->colorStatus), l2(STRAIGHT, p2, this->colorStatus), l3(STRAIGHT, p3, this->colorStatus), l4(STRAIGHT, p4, this->colorStatus);
+	Shape s1(SKEW, p5, this->colorStatus), s2(MIRROR_L, p6, this->colorStatus), s3(L, p7, this->colorStatus), s4(SQUARE, p8, this->colorStatus), s5(SQUARE, p9, this->colorStatus);
+	s2.rotateRight(MIRROR_L);
+	s3.rotateLeft(L);
+	l1.rotateLeft(STRAIGHT);
+	l2.rotateLeft(STRAIGHT);
+	s1.rotateRight(SKEW);
+	//l3.rotateLeft(STRAIGHT);
+	//l4.rotateLeft(STRAIGHT);
+	player2.setCurrShape(new Shape(SQUARE, startPoint2, this->colorStatus));
+	//player2.setCurrShape(new Shape(SKEW, startPoint2));
+	board2.setShapeInGameBoard(l1, true);
+	board2.setShapeInGameBoard(l2, true);
+	board2.setShapeInGameBoard(l3, true);
+	board2.setShapeInGameBoard(l4, true);
+	board2.setShapeInGameBoard(s1, true);
+
+	board2.setShapeInGameBoard(s5, true);
+	//board2.setShapeInGameBoard(s2, true);
+	//board2.setShapeInGameBoard(s3, true);
+	board2.setShapeInGameBoard(s4, true);
+	//board2.setShapeInGameBoard(s1, true);
+	
 	board1.print();
 	board2.print();
-	
+
 	// while both boards have space
 	while (isGamePlaying)
 	{
@@ -42,7 +66,7 @@ GameStatus Game::run()
 		}
 		setCurrentShape(player1, startPoint1);
 		setCurrentShape(player2, startPoint2);
-		
+
 		// if one of the current shapes can't move anymore, it means that the player has lost and the game should end
 		isGamePlaying = !board1.isShapeStuck(*(player1.getCurrShape())) && !board2.isShapeStuck(*(player2.getCurrShape()));
 	}
@@ -60,7 +84,7 @@ void Game::start()
 	setStatus(run()); //run the game and update the game status afterwards
 }
 
-bool Game:: pause()
+bool Game::pause()
 {
 	return setStatus(GameStatus::PAUSED);
 }
@@ -74,11 +98,11 @@ bool Game::resume()
 		return false;
 }
 
-GameStatus Game:: getStatus() const
+GameStatus Game::getStatus() const
 {
 	return status;
 }
-bool Game:: setStatus(GameStatus status)
+bool Game::setStatus(GameStatus status)
 {
 	bool res;
 	// the status has to be one of the supported types
@@ -97,16 +121,16 @@ bool Game:: setStatus(GameStatus status)
 		res = false;
 	return res;
 }
-const Player& Game:: getPlayer(int playerNum) const
+const Player& Game::getPlayer(int playerNum) const
 {
-	return playerNum == 1 ? player1 : player2; 
+	return playerNum == 1 ? player1 : player2;
 }
-inline Shape* Game:: getRandomShape(Point& startPoint)
+inline Shape* Game::getRandomShape(Point& startPoint)
 {
-	Shape* s = new Shape(Type(rand() % NUM_OF_SHAPES), startPoint);
+	Shape* s = new Shape(Type(rand() % NUM_OF_SHAPES), startPoint, getColorStatus());
 	return s;
 }
-void Game:: moveShapeOnScreen(Shape& shape, ShapeMovement movement, GamePace pace)
+void Game::moveShapeOnScreen(Shape& shape, ShapeMovement movement, GamePace pace)
 {
 	Sleep((DWORD)pace);
 	shape.clearShape(); // clear the shape from the screen to make it look like it's moving
@@ -115,16 +139,16 @@ void Game:: moveShapeOnScreen(Shape& shape, ShapeMovement movement, GamePace pac
 	shape.setSymbol(GameConfig::SHAPE_SYMBOL); // after it moved down, print it again in it's new place
 	shape.print();
 }
-bool Game:: checkAndProcessKeyboardInput()
+bool Game::checkAndProcessKeyboardInput()
 {
 	bool res = true;
 	Key key;
 	if (_kbhit()) {
 		key = _getch();
 		if (key != ESC) {
-		processPlayerInput(key, player1);
-		processPlayerInput(key, player2);
-		res = true;
+			processPlayerInput(key, player1);
+			processPlayerInput(key, player2);
+			res = true;
 		}
 		else
 			res = false;
@@ -132,7 +156,7 @@ bool Game:: checkAndProcessKeyboardInput()
 	}
 	return res;
 }
-void Game:: processPlayerInput(Key key, Player& player)
+void Game::processPlayerInput(Key key, Player& player)
 {
 	ShapeMovement movement;
 	Board& board = player.getBoard();
@@ -151,7 +175,7 @@ void Game:: processPlayerInput(Key key, Player& player)
 	}
 }
 
-void Game:: setCurrentShape(Player& player,Point& startPoint)
+void Game::setCurrentShape(Player& player, Point& startPoint)
 {
 	int clearRowsForPlayerInRound = 0;
 	Board& board = player.getBoard();
@@ -163,7 +187,7 @@ void Game:: setCurrentShape(Player& player,Point& startPoint)
 		board.setShapeInGameBoard(*(player.getCurrShape()), true);
 		// print the new shape on the playing board
 		board.printGameBoard();
-		
+
 		// increase the score of the player according to how many rows he cleared
 		clearRowsForPlayerInRound = board.clearFullRows();
 		// drop all the shapes, if after the drop more rows can be cleared, continue to do so
@@ -176,15 +200,15 @@ void Game:: setCurrentShape(Player& player,Point& startPoint)
 		}
 		// get a new random shape and print it
 		player.setCurrShape(getRandomShape(startPoint));
-		//player.getCurrShape()->print(); // הבאג בסוף אולי פה ?????
+		//player.getCurrShape()->print();
 	}
 }
-void Game:: printScores()
+void Game::printScores()
 {
 	// print the score at the middle of the board in the middle
 	Point p1 = player1.getBoard().getBorders()[Borders::BOTTOM_LEFT]
 		, p2 = player2.getBoard().getBorders()[Borders::BOTTOM_LEFT];
-	p1.setY(GameConfig:: HEIGHT + 2);
+	p1.setY(GameConfig::HEIGHT + 2);
 	p1.moveLeft();
 	p1.gotoxy();
 	cout << "Player 1 Score: " << player1.getScore();
@@ -193,13 +217,13 @@ void Game:: printScores()
 	p2.gotoxy();
 	cout << "Player 2 Score: " << player2.getScore();
 }
-void Game:: clearKeyboardInputBuffer()
+void Game::clearKeyboardInputBuffer()
 {
 	char temp;
 	while (_kbhit())
 		temp = _getch();
 }
-bool Game:: setWinnerNum(short int winnerNum)
+bool Game::setWinnerNum(short int winnerNum)
 {
 	if (winnerNum == 1 || winnerNum == 2 || winnerNum == TIE || winnerNum == NO_WINNER)
 	{
@@ -209,14 +233,14 @@ bool Game:: setWinnerNum(short int winnerNum)
 	else
 		return false;
 }
-short int Game:: getWinnerNum()
+short int Game::getWinnerNum()
 {
 	return winnerNum;
 }
-void Game:: determineWinner(GameStatus gameStatus)
+void Game::determineWinner(GameStatus gameStatus)
 {
 	// if the was finished and there is a winner
-	if (gameStatus == GameStatus:: FINISHED)
+	if (gameStatus == GameStatus::FINISHED)
 	{
 		// if both of them finished the board at the same time, determine the winner by score
 		if (player1.getBoard().isShapeStuck(*(player1.getCurrShape())) && player2.getBoard().isShapeStuck(*(player2.getCurrShape())))
@@ -229,10 +253,25 @@ void Game:: determineWinner(GameStatus gameStatus)
 				setWinnerNum(TIE);
 		}
 		// if only the second player finished his board
-		else if(player2.getBoard().isShapeStuck(*(player2.getCurrShape())))
+		else if (player2.getBoard().isShapeStuck(*(player2.getCurrShape())))
 			setWinnerNum(1);
 		else // the game was finished and thus for sure someone finished his board
 			setWinnerNum(2);
 	}
 
+}
+bool Game::setColorStatus(GameColorStatus choice)
+{
+	bool res = true;
+	if (choice != COLORIZED && choice != UNCOLORIZED) {
+		res = false;
+	}
+	else {
+		colorStatus = choice;
+	}
+	return res;
+}
+GameColorStatus Game::getColorStatus()
+{
+	return colorStatus;
 }
