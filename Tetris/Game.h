@@ -35,7 +35,7 @@ private:
 public:
 	Game(Player& player1, Player& player2);
 	void start();
-	bool pause();
+	inline bool pause() { return setStatus(GameStatus::PAUSED); };
 	bool resume();
 	GameStatus getStatus() const { return status; };
 	bool setStatus(GameStatus status);

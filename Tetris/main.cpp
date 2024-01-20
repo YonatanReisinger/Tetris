@@ -27,6 +27,7 @@ int main()
 		, player2(board2, GameConfig::player2Keys, "Yonatan");
 	Game game(player1, player2);
 	
+	srand(time(0)); // for getting new random shapes every time the program runs
 	// print the whole board including the frame
 	printMenu(); //the program just started and therefore for sure no paused game exists
 	cin >> choice;
@@ -40,12 +41,13 @@ int main()
 		case(Choice::START):
 			printColorOption();
 			cin >> colorChoice;
-			while (colorChoice != GameColorStatus::COLORIZED && colorChoice != GameColorStatus::UNCOLORIZED) {
-				printChoiceError();
-				cin >> colorChoice;
-			}
 			clearCin();
 			clearScreen();
+			if (colorChoice != GameColorStatus::COLORIZED && colorChoice != GameColorStatus::UNCOLORIZED)
+			{
+				printChoiceError();
+				break;
+			}
 			game.setColorStatus((GameColorStatus)colorChoice);
 			game.start();
 			break;

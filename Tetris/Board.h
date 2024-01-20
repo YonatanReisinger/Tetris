@@ -34,7 +34,6 @@ private:
 	void clearShapeFromGameBoard(Shape& shape);
 	void removeActiveShapeFromArr(Shape& shape, int shapeInd);
 	bool canActiveShapeDrop(const Shape& shape) const;
-	bool canShapeRotate(const Shape& shape, ShapeMovement movement);
 	void clearPointsFromActiveShapes(short int i);
 	void insertShapeToArr(const Shape& newShape);
 public:
