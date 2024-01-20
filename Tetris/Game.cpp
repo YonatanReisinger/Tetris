@@ -74,11 +74,6 @@ bool Game::resume()
 	else
 		return false;
 }
-
-GameStatus Game:: getStatus() const
-{
-	return status;
-}
 bool Game:: setStatus(GameStatus status)
 {
 	bool res;
@@ -98,16 +93,12 @@ bool Game:: setStatus(GameStatus status)
 		res = false;
 	return res;
 }
-const Player& Game:: getPlayer(int playerNum) const
-{
-	return playerNum == 1 ? player1 : player2; 
-}
-inline Shape* Game:: getRandomShape(Point& startPoint)
+inline Shape* Game:: getRandomShape(Point& startPoint) const
 {
 	Shape* s = new Shape(Type(rand() % NUM_OF_SHAPES), startPoint,getColorStatus()) ;
 	return s;
 }
-void Game:: moveShapeOnScreen(Shape& shape, ShapeMovement movement, GamePace pace)
+void Game:: moveShapeOnScreen(Shape& shape, ShapeMovement movement, GamePace pace) const
 {
 	Sleep((DWORD)pace);
 	shape.clearShape(); // clear the shape from the screen to make it look like it's moving
@@ -180,7 +171,7 @@ void Game:: setCurrentShape(Player& player,Point& startPoint)
 		//player.getCurrShape()->print(); // ���� ���� ���� �� ?????
 	}
 }
-void Game:: printScores()
+void Game:: printScores() const
 {
 	// print the score at the middle of the board in the middle
 	Point p1 = player1.getBoard().getBorders()[Borders::BOTTOM_LEFT]
@@ -194,7 +185,7 @@ void Game:: printScores()
 	p2.gotoxy();
 	cout << "Player 2 Score: " << player2.getScore();
 }
-void Game:: clearKeyboardInputBuffer()
+void Game:: clearKeyboardInputBuffer() const
 {
 	char temp;
 	while (_kbhit())
@@ -209,10 +200,6 @@ bool Game:: setWinnerNum(short int winnerNum)
 	}
 	else
 		return false;
-}
-short int Game:: getWinnerNum()
-{
-	return winnerNum;
 }
 void Game:: determineWinner(GameStatus gameStatus)
 {
@@ -247,8 +234,4 @@ bool Game:: setColorStatus(GameColorStatus choice)
 	colorStatus = choice;
 	}
 	return res;
-}
-GameColorStatus Game::getColorStatus()
-{
-	return colorStatus;
 }

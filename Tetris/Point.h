@@ -37,6 +37,5 @@ public:
 	inline bool areCoordinatesEqual(const Point& other) const { return x == other.x && y == other.y; };
 	inline Color getColor() const { return color; };
 	bool setColor(Color color);
-	friend class Board;
 };
 #endif //Point.h

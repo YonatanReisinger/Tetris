@@ -25,25 +25,25 @@ private:
 	GameColorStatus colorStatus;
 
 	GameStatus run(); //game logic
-	inline Shape* getRandomShape(Point& startPoint);
-	void moveShapeOnScreen(Shape& shape, ShapeMovement movement, GamePace pace);
+	inline Shape* getRandomShape(Point& startPoint) const;
+	void moveShapeOnScreen(Shape& shape, ShapeMovement movement, GamePace pace) const;
 	bool checkAndProcessKeyboardInput();
 	void processPlayerInput(Key key, Player& player);
-	void printScores();
-	void clearKeyboardInputBuffer();
+	void printScores() const;
+	void clearKeyboardInputBuffer() const;
 	void determineWinner(GameStatus gameStatus);
 public:
 	Game(Player& player1, Player& player2);
 	void start();
 	bool pause();
 	bool resume();
-	GameStatus getStatus() const;
+	GameStatus getStatus() const { return status; };
 	bool setStatus(GameStatus status);
-	const Player& getPlayer(int playerNum) const;
-	void setCurrentShape(Player& player,Point& startPoint);
+	inline const Player& getPlayer(int playerNum) const { return playerNum == 1 ? player1 : player2; };
+	void setCurrentShape(Player& player, Point& startPoint);
 	bool setWinnerNum(short int winnerNum);
-	short int getWinnerNum();
+	inline short int getWinnerNum() const { return winnerNum; };
 	bool setColorStatus(GameColorStatus choice);
-	GameColorStatus getColorStatus();
+	inline GameColorStatus getColorStatus() const { return colorStatus; };
 };
 #endif //Game.h

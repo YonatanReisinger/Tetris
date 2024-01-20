@@ -69,10 +69,10 @@ bool Board::setPointInGameBoard(const Point& point)
 	if (isPointInBoard(point)) // check that the point is inside the board ranges
 	{
 		//get relative place of the point
-		j = point.x - leftBorderXVal;
-		i = point.y - upperBorderYVal;
+		j = point.getX() - leftBorderXVal;
+		i = point.getY() - upperBorderYVal;
 		// can set a place in the board just if the place is empty or you want to clear it
-		if (gameBoard[i][j].getSymbol() == EMPTY || (gameBoard[i][j].getSymbol() != EMPTY && point.symbol == EMPTY))
+		if (gameBoard[i][j].getSymbol() == EMPTY || (gameBoard[i][j].getSymbol() != EMPTY && point.getSymbol() == EMPTY))
 		{
 			gameBoard[i][j] = point;
 			res = true;
@@ -91,7 +91,7 @@ bool Board:: setShapeInGameBoard(const Shape& shape, bool isShapeNew)
 	{
 		for (i = 0; i < NUM_OF_POINTS; i++)
 		{
-			if (shape.points[i].symbol != EMPTY) // insert just non empty points
+			if (shape.points[i].getSymbol() != EMPTY) // insert just non empty points
 				setPointInGameBoard(shape.points[i]);
 		}
 		if (isShapeNew) // add an new shape to the active shape array
@@ -228,8 +228,8 @@ bool Board:: isPointFull(const Point& point) const
 	short int i,j, leftBorderXVal = borders[Borders::BOTTOM_LEFT].getX()
 		, upperBorderYVal = borders[Borders::TOP_LEFT].getY();
 	//get relative place of the point
-	j = point.x - leftBorderXVal;
-	i = point.y - upperBorderYVal;
+	j = point.getX() - leftBorderXVal;
+	i = point.getY() - upperBorderYVal;
 	// if the point is on the board and it is not empty
 	return isPointInBoard(point) && gameBoard[i][j].getSymbol() != EMPTY;
 }
@@ -239,8 +239,8 @@ bool Board:: isPointInBoard(const Point& point) const
 		, rightBorderXVal = borders[Borders::BOTTOM_RIGHT].getX()
 		, upperBorderYVal = borders[Borders::TOP_LEFT].getY()
 		, lowerBorderYVal = borders[Borders::BOTTOM_LEFT].getY();
-	return point.x >= leftBorderXVal && point.x <= rightBorderXVal
-		&& point.y >= upperBorderYVal && point.y <= lowerBorderYVal;
+	return point.getX() >= leftBorderXVal && point.getX() <= rightBorderXVal
+		&& point.getY() >= upperBorderYVal && point.getY() <= lowerBorderYVal;
 }
 bool Board:: canPointMove(Point point, Directions direction) const
 {
@@ -272,7 +272,7 @@ bool Board::canActiveShapeDrop(const Shape& shape) const
 	// a shape can move iff all of its points that are still in the game can move
 	for (i = 0; i < NUM_OF_POINTS && res; i++)
 	{
-		if (shape.points[i].symbol != EMPTY)
+		if (shape.points[i].getSymbol() != EMPTY)
 		{
 			tempPoint = shape.points[i];
 			tempPoint.move(Directions::DOWN);
@@ -319,7 +319,7 @@ void Board:: clearShapeFromGameBoard(Shape& shape)
 {
 	short int i;
 	for (i = 0; i < NUM_OF_POINTS; i++)
-		if (shape.points[i].symbol != EMPTY) // clear just the points that are part of the game
+		if (shape.points[i].getSymbol() != EMPTY) // clear just the points that are part of the game
 		{
 			shape.points[i].setSymbol(EMPTY);
 			setPointInGameBoard(shape.points[i]);
@@ -357,7 +357,7 @@ bool Board:: canSetShapeInGameBoard(const Shape& shape) const
 	short int i;
 	bool res = true;
 	// if all the points could be set on the board thus all the shape can
-	for (i = 0; i < NUM_OF_POINTS && (shape.points[i].symbol != EMPTY) && res; i++)
+	for (i = 0; i < NUM_OF_POINTS && (shape.points[i].getSymbol() != EMPTY) && res; i++)
 		res = !isPointFull(shape.points[i]) && isPointInBoard(shape.points[i]);
 	return res;
 }
