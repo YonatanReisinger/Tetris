@@ -21,10 +21,6 @@ bool Board:: setBorders(const Point& topLeft, const Point& topRight, const Point
 	else
 		return false;
 }
-Point* Board:: getBorders()
-{
-	return borders;
-}
 bool Board:: setNumOfShapes(size_t size)
 {
 	if (size < 0 || size >(GameConfig::HEIGHT * GameConfig::WIDTH))
@@ -63,12 +59,6 @@ bool Board:: setRow(short int i, char boardSymbol)
 		res = true;
 	}
 	return res;
-}
-bool Board:: setPointInGameBoardByInd(short int i, short int j, char symbol)
-{
-	short int leftBorderXVal = borders[Borders::BOTTOM_LEFT].getX(), upperBorderYVal = borders[Borders::TOP_LEFT].getY();
-	Point tempPoint(leftBorderXVal + j, upperBorderYVal + i,symbol);
-	return setPointInGameBoard(tempPoint);
 }
 bool Board::setPointInGameBoard(const Point& point)
 {
@@ -127,31 +117,30 @@ void Board:: insertShapeToArr(const Shape& newShape) {
 	// Increment the count of active shapes
 	numOfActiveShapes++;
 }
-inline bool Board:: isHeightValid(Point borders[4])
+inline bool Board:: isHeightValid(Point borders[4]) const
 {
 	//one end - other end + 1 = length of the line between the two types (including them)
 	return ((borders[BOTTOM_LEFT].getY() - borders[TOP_LEFT].getY() + 1) == GameConfig::HEIGHT) && ((borders[BOTTOM_RIGHT].getY() - borders[TOP_RIGHT].getY() + 1) == GameConfig::HEIGHT);
 }
-inline bool Board:: isWidthValid(Point borders[4])
+inline bool Board:: isWidthValid(Point borders[4]) const
 {
 	// one end - other end + 1 = length of the line between the two types (including them)
 	return (borders[TOP_RIGHT].getX() - borders[TOP_LEFT].getX() + 1 == GameConfig::WIDTH) && (borders[BOTTOM_RIGHT].getX() - borders[BOTTOM_LEFT].getX() + 1== GameConfig::WIDTH);
 }
-void Board:: print()
+void Board:: print() const
 {
 	// print both parts of the board
 	printGameBoard();
 	printFrame();
 }
-void Board:: printGameBoard()
+void Board:: printGameBoard() const
 {
 	short int i, j;
-	//add color after !!!!!!!!
 	for (i = 0; i < GameConfig::HEIGHT; i++)
 		for (j = 0; j < GameConfig::WIDTH; j++)
 			gameBoard[i][j].print();
 }
-void Board:: printFrame()
+void Board:: printFrame() const
 {
 	//the frame should be outside the borders of the board
 	Point topLeftBorderFrame(borders[TOP_LEFT].getX() - 1, borders[TOP_LEFT].getY() - 1)
@@ -163,26 +152,28 @@ void Board:: printFrame()
 	printVerticalLine(topLeftBorderFrame, bottomLeftBorderFrame);
 	printVerticalLine(topRightBorderFrame, bottomRightBorderFrame);
 }
-void Board:: printHorizontalLine(Point& leftEnd, Point& rightEnd, char symbol)
+void Board:: printHorizontalLine(Point& leftEnd, Point& rightEnd, char symbol) const
 {
 	//can't draw a straight line between two points that are not on in same "height"
 	if (leftEnd.getY() != rightEnd.getY())
 		return;
 	short int x, startX = leftEnd.getX(), endX = rightEnd.getX();
-	Point p(leftEnd.getX(), leftEnd.getY(), symbol);  // change to copy ctor after !!!!!!!!!
+	Point p(leftEnd);
+	p.setSymbol(symbol);
 	for (x = startX; x <= endX; x++)
 	{
 		p.setX(x);
 		p.print();
 	}
 }
-void Board:: printVerticalLine(Point& topEnd, Point& bottomEnd, char symbol)
+void Board:: printVerticalLine(Point& topEnd, Point& bottomEnd, char symbol) const
 {
 	//can't draw a straight line between two points that are not on in same "width"
 	if (topEnd.getX() != bottomEnd.getX())
 		return;
 	short int y, startY = topEnd.getY(), endY = bottomEnd.getY();
-	Point p(topEnd.getX(), topEnd.getY(), symbol);  // change to copy ctor after !!!!!!!!!
+	Point p(topEnd);
+	p.setSymbol(symbol);
 	for (y = startY; y <= endY; y++)
 	{
 		p.setY(y);
@@ -193,11 +184,6 @@ void Board:: clear()
 {
 	setGameBoard(EMPTY);
 	setNumOfShapes(0);
-}
-
-bool Board:: clearRow(short int i)
-{
-	return setRow(i, EMPTY);
 }
 int Board:: clearFullRows()
 {
@@ -230,14 +216,14 @@ void Board:: clearPointsFromActiveShapes(short int i)
 		}
 	}
 }
-bool Board:: isRowFull(short int i)
+bool Board:: isRowFull(short int i) const
 {
-	for (Point& point : gameBoard[i])
+	for (const Point& point : gameBoard[i])
 		if (!isPointFull(point)) // if one point is not full thus the whole row is not full
 			return false;
 	return true;
 }
-bool Board:: isPointFull(const Point& point)
+bool Board:: isPointFull(const Point& point) const
 {
 	short int i,j, leftBorderXVal = borders[Borders::BOTTOM_LEFT].getX()
 		, upperBorderYVal = borders[Borders::TOP_LEFT].getY();
@@ -247,7 +233,7 @@ bool Board:: isPointFull(const Point& point)
 	// if the point is on the board and it is not empty
 	return isPointInBoard(point) && gameBoard[i][j].getSymbol() != EMPTY;
 }
-bool Board:: isPointInBoard(const Point& point)
+bool Board:: isPointInBoard(const Point& point) const
 {
 	short int leftBorderXVal = borders[Borders::BOTTOM_LEFT].getX()
 		, rightBorderXVal = borders[Borders::BOTTOM_RIGHT].getX()
@@ -256,33 +242,29 @@ bool Board:: isPointInBoard(const Point& point)
 	return point.x >= leftBorderXVal && point.x <= rightBorderXVal
 		&& point.y >= upperBorderYVal && point.y <= lowerBorderYVal;
 }
-bool Board:: canPointMove(Point point, Directions direction)
+bool Board:: canPointMove(Point point, Directions direction) const
 {
 	// if the point can move to that direction and that future place is not full then the point can move 
 	return point.move(direction) && isPointInBoard(point) && !isPointFull(point);
 }
-Point Board:: getStartingPoint() const
-{
-	// the place that the shapes should start falling from is the middle point on the first row
-	return gameBoard[0][GameConfig:: WIDTH / 2];
-}
-bool Board:: isShapeInBoard(const Shape& shape)
+bool Board:: isShapeInBoard(const Shape& shape) const
 {
 	short int i;
 	bool res = true;
 	// a shape can move iff all of its active points can move
 	for (i = 0; i < NUM_OF_POINTS && shape.points[i].getSymbol() != EMPTY && res; i++)
 		res = isPointInBoard(shape.points[i]);
-	return res;}
+	return res;
+}
 
-bool Board:: canShapeMove(const Shape& shape, ShapeMovement movement)
+bool Board:: canShapeMove(const Shape& shape, ShapeMovement movement) const
 {
 	Shape tempShape(shape);
 	tempShape.move(movement);
 	// shapes can always rotate unless the new place will be full
 	return canSetShapeInGameBoard(tempShape);
 }
-bool Board::canActiveShapeDrop(const Shape& shape)
+bool Board::canActiveShapeDrop(const Shape& shape) const
 {
 	short int i, emptyCounter = 0, tempPointInd;
 	bool res = true;
@@ -356,7 +338,7 @@ void Board:: removeActiveShapeFromArr(Shape& shape, int shapeInd)
 	numOfActiveShapes--;
 }
 // a shape is stuck if it can't move to any direction
-bool Board::isShapeStuck(const Shape& shape)
+bool Board::isShapeStuck(const Shape& shape) const
 {
 	return !canSetShapeInGameBoard(shape)
 		&& !canShapeMove(shape, ShapeMovement:: DROP)
@@ -370,7 +352,7 @@ bool Board:: canShapeRotate(const Shape& shape, ShapeMovement movement)
 	// shapes can always rotate unless the new place will be full
 	return canSetShapeInGameBoard(tempShape);
 }
-bool Board:: canSetShapeInGameBoard(const Shape& shape)
+bool Board:: canSetShapeInGameBoard(const Shape& shape) const
 {
 	short int i;
 	bool res = true;
