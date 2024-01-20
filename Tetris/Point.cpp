@@ -37,14 +37,6 @@ bool Point:: setXY(short int x, short int y)
 {
 	return setX(x) && setY(y);
 }
-short int Point:: getX() const
-{
-	return x;
-}
-short int Point:: getY() const
-{
-	return y;
-}
 bool Point:: setSymbol(char symbol)
 {
 	// we allow symbols that are chars in the ascii table
@@ -57,26 +49,7 @@ bool Point:: setSymbol(char symbol)
 	else
 		return false;
 }
-char Point:: getSymbol() const
-{
-	return symbol;
-}
-//bool Point:: setColor(Color color)
-//{
-//	// check that the input color is one of the supported colors
-//	if (color == Color::RED || color == Color::BLUE || color == Color::GREEN || color == Color::WHITE)
-//	{
-//		this->color = color;
-//		return true;
-//	}
-//	else
-//		return false;
-//}
-//Color Point:: getColor()
-//{
-//	return color;
-//}
-void Point::gotoxy()
+void Point::gotoxy() const
 {
 	HANDLE hConsoleOutput;
 	COORD dwCursorPosition;
@@ -86,7 +59,7 @@ void Point::gotoxy()
 	hConsoleOutput = GetStdHandle(STD_OUTPUT_HANDLE);
 	SetConsoleCursorPosition(hConsoleOutput, dwCursorPosition);
 }
-void Point:: print()
+void Point:: print() const
 {
 	gotoxy();
 	HANDLE hStdOut = GetStdHandle(STD_OUTPUT_HANDLE);
@@ -137,15 +110,6 @@ bool Point::moveLeft()
 bool Point::moveRight()
 {
 	return setX(x + 1);
-}
-bool Point:: areCoordinatesEqual(const Point& other) const
-{
-	return x == other.x && y == other.y;
-}
-
-inline Color Point:: getColor()
-{
-	return color;
 }
 bool Point:: setColor(Color color)
 {
