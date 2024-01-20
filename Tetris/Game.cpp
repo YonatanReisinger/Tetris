@@ -67,7 +67,7 @@ GameStatus Game::run()
 		setCurrentShape(player1, startPoint1);
 		setCurrentShape(player2, startPoint2);
 
-		// if one of the current shapes can't move anymore, it means that the player has lost and the game should end
+		// if one of the current shapes can't move anymore, it means that the player has lost and the game should end 
 		isGamePlaying = !board1.isShapeStuck(*(player1.getCurrShape())) && !board2.isShapeStuck(*(player2.getCurrShape()));
 	}
 	clearKeyboardInputBuffer();
