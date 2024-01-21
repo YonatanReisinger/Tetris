@@ -1,5 +1,12 @@
 #include "global_functions.h"
 
+/************************
+* Name: printMenu
+* Input: GameStatus gameStatus (The current status of the game)
+* Output: None
+* Description: Prints the game menu based on the provided game status.
+  Displays options for starting a new game, continuing a paused game, presenting instructions, and exiting.
+************************/
 void printMenu(GameStatus gameStatus)
 {
     printWelcomeMessage();
@@ -10,6 +17,12 @@ void printMenu(GameStatus gameStatus)
 	}
 	cout << "(8) Present instructions and keys\n" << "(9) exit\n";
 }
+/************************
+* Name: printWelcomeMessage
+* Input: None
+* Output: None
+* Description: Prints a welcome message for the Tetris game.
+************************/
 
 void printWelcomeMessage()
 {
@@ -28,12 +41,23 @@ void printWelcomeMessage()
     }
     cout << endl << endl;
 }
+/************************
+* Name: printChoiceError
+* Input: None
+* Output: None
+* Description: Prints an error message for an incorrect menu choice.
+************************/
 void printChoiceError()
 {
 	cout << "Wrong choice! Please Try again" << "\n\n\nPress any key to continue........";
     while (!_kbhit());
 }
-
+/************************
+* Name: printInstructionsAndKeys
+* Input: None
+* Output: None
+* Description: Prints game instructions and keys. Allows navigation between instructions and keys using arrow keys.
+************************/
 void printInstructionsAndKeys()
 {
     Key key;
@@ -58,10 +82,22 @@ void printInstructionsAndKeys()
 
     } while (key != ESC);  // Continue the loop until the user presses Esc
 }
+/************************
+* Name: clearScreen
+* Input: None
+* Output: None
+* Description: Clears the console screen.
+************************/
 void clearScreen()
 {
     system("cls");
 }
+/************************
+* Name: printWinner
+* Input: Game& game (Reference to the game object)
+* Output: None
+* Description: Prints the winner of the game, if there is one. Clears the console screen afterward.
+************************/
 void printWinner(Game& game)
 {
     short int winnerNum = game.getWinnerNum();
@@ -78,13 +114,19 @@ void printWinner(Game& game)
         clearScreen();
     }
 }
-
+/************************
+* Name: clearCin
+* Description: Clears the cin function buffer.
+************************/
 void clearCin()
 {
     cin.clear();
     while (cin.get() != '\n');
 }
-
+/************************
+* Name: printInstructions
+* Description: Prints Tetris game instructions.
+************************/
 void printInstructions()
 {
     // Display Tetris game instructions
@@ -94,6 +136,10 @@ void printInstructions()
     cout << "2. Fill complete rows to clear them and score points." << endl;
     cout << "3. The game ends when the blocks reach the top of the screen." << endl;
 }
+/************************
+* Name: printKeys
+* Description: Prints the keys for Player 1 and Player 2, including movement, rotation, and dropping.
+************************/
 void printKeys()
 {
     // Display keys for Player 1
@@ -124,7 +170,14 @@ void printKeys()
     cout << "                    |" << endl;
     cout << "                   \\/" << endl;
 }
-void printColorOption() {
+/************************
+* Name: printColorOption
+* Input: None
+* Output: None
+* Description: Prompts the player to select a coloring option for the game (colorized or uncolorized).
+************************/
+void printColorOption()
+{
     cout << "You have decided to start a new game!\n";
     cout << "Please select coloring option for the game :\n";
     cout << "(1) for colorized game\n(2) for uncolorized game\n";

@@ -136,7 +136,7 @@ bool Board:: setShapeInGameBoard(const Shape& shape, bool isShapeNew)
 			if (shape.points[i].getSymbol() != EMPTY) // insert just non empty points
 				setPointInGameBoard(shape.points[i]);
 		}
-		if (isShapeNew) // add an new shape to the active shape array
+		if (isShapeNew) // add an new shape to the active shape array in its correct place
 			insertShapeToArr(shape);
 		return true;
 	}
@@ -376,6 +376,14 @@ int Board::clearFullRows()
 	}
 	return fullRowsCounter;
 }
+/************************
+* Name: Board::updateActiveShapes
+* Input: short int clearedRowInd (The index of the row that has been cleared)
+* Output: None
+* Description: Updates the positions of points in all active shapes after a row has been cleared.
+  Points above the cleared row are dropped, points in the cleared row are cleared, and the rest are reset to their original symbol.
+  If clearing rows results in a whole shape becoming empty, it is removed from the array of active shapes.
+************************/
 void Board:: updateActiveShapes(short int clearedRowInd)
 {
 	short int i, j;
@@ -408,28 +416,6 @@ void Board:: updateActiveShapes(short int clearedRowInd)
 	// return all the active shapes to the board in their new place
 	for (i = 0; i < numOfActiveShapes; i++)
 		setShapeInGameBoard(activeShapes[i], false);
-}
-/************************
-* Name: Board::clearPointsFromActiveShapes
-* Input: short int i (Row index to clear points from)
-* Output: None
-* Description: Clears the points in the specified row from all active shapes on the board.
-************************/
-void Board::clearPointsFromActiveShapes(short int clearedRowInd)
-{
-	short int j, k, removedPointInd;
-	for (j = 0; j < GameConfig::WIDTH; j++)
-	{
-		for (k = 0; k < numOfActiveShapes; k++)
-		{
-			removedPointInd = activeShapes[k].getPointInd(gameBoard[clearedRowInd][j]);
-			if (removedPointInd != NOT_FOUND)
-			{
-				activeShapes[k].points[removedPointInd].setSymbol(EMPTY);
-				break; // a point is a part of only one shape
-			}
-		}
-	}
 }
 /************************
 * Name: Board::dropActiveShapes
