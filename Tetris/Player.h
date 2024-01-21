@@ -24,15 +24,15 @@ public:
 	Player& operator=(const Player& other) = delete;
 	~Player();
 
-	Board& getBoard();
+	inline Board& getBoard() { return board; };
 	bool setName(const char* name);
-	const char* getName() const;
+	inline const char* getName() const { return name; };
 	bool setScore(int score);
-	int getScore() const;
+	inline int getScore() const { return score; };
 	bool increaseScore(int increase);
 	void reset();
 	int getKeyInd(Key inputKey);
-	Shape* getCurrShape();
+	inline Shape* getCurrShape() { return currPlayingShape; };
 	void setCurrShape(Shape* currShape);
 };
 #endif // PLAYER.h

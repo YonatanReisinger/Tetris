@@ -43,12 +43,12 @@ public:
 	void moveRight();
 	void rotateLeft(Type t);
 	void rotateRight(Type t);
-	void print();
+	void print() const;
 	void clearShape();
 	void setSymbol(char symbol);
 	void move(ShapeMovement movement);
 	int getPointInd(const Point& p1) const;
-	bool isShapeClear();
+	bool isShapeClear() const;
 	short int getHighestY() const;
 	bool setShapeColor(Color color);
 	friend class Board;

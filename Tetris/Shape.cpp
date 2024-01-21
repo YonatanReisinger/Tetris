@@ -2,14 +2,25 @@
 
 
 
-/*Default constructor */
+/*************************
+* Name: Shape
+* Input: none
+* Output: none
+* Description: Default constructor for the Shape class.
+
+*************************/
 Shape::Shape() {
 	shapeDirection = FACE_UP ;
 	shapeType = SQUARE;
 }
-/*input: gets a type that represents the tetronimo type, and a point that represents
-the starting point of the tetronimo
-Creates a new shape based on the type and point*/
+/*************************
+* Name: Shape
+* Input: Type t, Point& start, GameColorStatus colorStatus, RotationDirection shapeDirection = FACE_UP
+* Output: none
+* Description: Parametrized constructor for the Shape class, creating a shape of the specified type, starting from the provided point,
+   with the specified color status and rotation direction.
+
+*************************/
 Shape::Shape(Type t, Point& start,GameColorStatus colorStatus,RotationDirection shapeDirection) {
 	shapeType = t;
 	this->shapeDirection = shapeDirection;
@@ -45,25 +56,36 @@ Shape::Shape(Type t, Point& start,GameColorStatus colorStatus,RotationDirection 
 	}
 	setSymbol(GameConfig::SHAPE_SYMBOL);
 }
-/*this function make the shape move down on the board*/
+/*************************
+* Name: moveDown, moveLeft, moveRight
+* Input: none
+* Output: none
+* Description: Moves the shape down, left, or right, respectively.
+
+*************************/
 void Shape::moveDown() {
 	for (int i = 0; i < NUM_OF_POINTS; i++) {
 		points[i].moveDown();
 	}
 }
-/*this function make the shape move left on the board*/
 void Shape::moveLeft() {
 	for (int i = 0; i < NUM_OF_POINTS; i++) {
 		points[i].moveLeft();
 	}
 }
-/*this function make the shape move right on the board*/
 void Shape::moveRight() {
 	for (int i = 0; i < NUM_OF_POINTS; i++) {
 		points[i].moveRight();
 	}
 }
-/*Creates a square shape tetronimo*/
+/*************************
+* Name: createSquare
+* Input: Point* points, Point& start, GameColorStatus colorStatus
+* Output: none
+* Description: Creates a square shape using the specified points, starting from the provided starting point,
+  with the specified color status.
+
+*************************/
 void Shape::createSquare(Point* points, Point& start,GameColorStatus colorStatus) {
 	Point p1 = start;
 	points[0] = p1;//copies the starting point
@@ -77,7 +99,14 @@ void Shape::createSquare(Point* points, Point& start,GameColorStatus colorStatus
 		setShapeColor(Color::BLUE);
 	}
 }
-/*Creates a straight line tetronimo shape*/
+/*************************
+* Name: createStraight
+* Input: Point* points, Point& start, GameColorStatus colorStatus
+* Output: none
+* Description: Creates a straight shape using the specified points, starting from the provided starting point,
+   with the specified color status.
+
+*************************/
 void Shape::createStraight(Point* points, Point& start,GameColorStatus colorStatus) {
 	Point p1 = start;
 	points[0] = p1;//copies the starting point
@@ -91,7 +120,13 @@ void Shape::createStraight(Point* points, Point& start,GameColorStatus colorStat
 		setShapeColor(Color::BRWON);
 	}
 }
-/*Creates a plus tetronimo shape*/
+/*************************
+* Name: createPlus
+* Input: Point* points, Point& start, GameColorStatus colorStatus
+* Output: none
+* Description: Creates a plus shape using the specified points, starting from the provided starting point, with the specified color status.
+
+*************************/
 void Shape::createPlus(Point* points, Point& start,GameColorStatus colorStatus) {
 	Point p1 = start;
 	points[0] = p1;
@@ -106,7 +141,13 @@ void Shape::createPlus(Point* points, Point& start,GameColorStatus colorStatus) 
 		setShapeColor(Color::GREY);
 	}
 }
-/*Creates an 'L' shape tetronimo*/
+/*************************
+* Name: createL
+* Input: Point* points, Point& start, GameColorStatus colorStatus
+* Output: none
+* Description: Creates an L-shaped figure using the specified points, starting from the provided starting point, with the specified color status.
+
+*************************/
 void Shape::createL(Point* points, Point& start,GameColorStatus colorStatus) {
 	Point p1 = start;
 	points[0] = p1;
@@ -120,7 +161,13 @@ void Shape::createL(Point* points, Point& start,GameColorStatus colorStatus) {
 		setShapeColor(Color::GREEN);
 	}
 }
-/*Creates a mirrored 'L' shape tetronimo*/
+/*************************
+* Name: createMirrorL
+* Input: Point* points, Point& start, GameColorStatus colorStatus
+* Output: none
+* Description: Creates a mirror L-shaped figure using the specified points, starting from the provided starting point, with the specified color status.
+
+*************************/
 void Shape::createMirrorL(Point* points, Point& start,GameColorStatus colorStatus) {
 	Point p1 = start;
 	points[0] = p1;
@@ -134,7 +181,13 @@ void Shape::createMirrorL(Point* points, Point& start,GameColorStatus colorStatu
 		setShapeColor(Color::CYAN);
 	}
 }
-/*Creates a skew tetronimo shape*/
+/*************************
+* Name: createSkew
+* Input: Point* points, Point& start, GameColorStatus colorStatus
+* Output: none
+* Description: Creates a skew shape using the specified points, starting from the provided starting point, with the specified color status.
+
+*************************/
 void Shape::createSkew(Point* points, Point& start,GameColorStatus colorStatus) {
 	Point p1 = start;
 	points[0] = p1;
@@ -148,7 +201,14 @@ void Shape::createSkew(Point* points, Point& start,GameColorStatus colorStatus) 
 		setShapeColor(Color::PURPLE);
 	}
 }
-/*Creates a mirrored skew tetronimo shape*/
+/*************************
+* Name: createMirrorSkew
+* Input: Point* points, Point& start, GameColorStatus colorStatus
+* Output: none
+* Description: Creates a mirror skew shape using the specified points, starting from the provided starting point,
+  with the specified color status.
+
+*************************/
 void Shape::createMirrorSkew(Point* points, Point& start,GameColorStatus colorStatus) {
 	Point p1 = start;
 	points[0] = p1;
@@ -162,8 +222,13 @@ void Shape::createMirrorSkew(Point* points, Point& start,GameColorStatus colorSt
 		setShapeColor(Color::RED);
 	}
 }
-/*input: an enum type that represents the type of the shape we want to rotate left
- this function rotate the given shape left */
+/*************************
+* Name: rotateLeft
+* Input: Type t
+* Output: none
+* Description: Rotates the shape left or right, respectively.
+
+*************************/
 void Shape::rotateLeft(Type t) {
 	switch (t) {
 		case SQUARE: {
@@ -195,8 +260,13 @@ void Shape::rotateLeft(Type t) {
 		}
 	}
 }
-/*input: an enum type that represents the type of the shape we want to rotate left
- this function rotate the given shape right */
+/*************************
+* Name: rotateRight
+* Input: Type t
+* Output: none
+* Description: Rotates the shape right or right, respectively.
+
+*************************/
 void Shape::rotateRight(Type t) {
 	switch (t) {
 	case SQUARE: {
@@ -228,6 +298,13 @@ void Shape::rotateRight(Type t) {
 	}
 	}
 }
+/*************************
+* Name: rotatePlus, rotateMirrorL, rotateStraight, rotateL, rotateMirrorSkew, rotateSkew
+* Input: ShapeMovement direction
+* Output: none
+* Description: Rotates the shape in the specified direction.
+
+*************************/
 void Shape::rotatePlus(ShapeMovement direction) {
 	if (direction == ROTATE_LEFT) {
 		points[3] = points[0];
@@ -290,8 +367,6 @@ void Shape::rotatePlus(ShapeMovement direction) {
 		}
 	}
 }
-/*input: a number that represents left/right rotation
-This function rotates the mirror 'L' shape tetronimo left/right based on the given number*/
 void Shape::rotateMirrorL(ShapeMovement direction) {
 	if (direction == ROTATE_LEFT) 
 	{
@@ -384,8 +459,6 @@ void Shape::rotateMirrorL(ShapeMovement direction) {
 		}
 	}
 }
-/*input: a number that represents left/right rotation
-This function rotates the straight shape tetronimo left/right based on the given number*/
 void Shape::rotateStraight(ShapeMovement direction) {
 	if (direction == ROTATE_LEFT) {
 		switch (shapeDirection) {
@@ -492,8 +565,6 @@ void Shape::rotateStraight(ShapeMovement direction) {
 		}
 	}
 }
-/*input: a number that represents left/right rotation
-This function rotates the L shape tetronimo left/right based on the given number*/
 void Shape::rotateL(ShapeMovement direction) {
 	if (direction == ROTATE_LEFT) {
 		switch (shapeDirection) {
@@ -585,8 +656,6 @@ void Shape::rotateL(ShapeMovement direction) {
 		}
 	}
 }
-/*input: a number that represents left/right rotation
-This function rotates the mirror skew shape tetronimo left/right based on the given number*/
 void Shape::rotateMirrorSkew(ShapeMovement direction) {
 	if (direction == ROTATE_LEFT) {
 		switch (shapeDirection) {
@@ -670,8 +739,6 @@ void Shape::rotateMirrorSkew(ShapeMovement direction) {
 		}
 	}
 }
-/*input: a number that represents left/right rotation
-This function rotates the skew shape tetronimo left/right based on the given number*/
 void Shape::rotateSkew(ShapeMovement direction) {
 	if (direction == ROTATE_LEFT) {
 		switch (shapeDirection) {
@@ -755,23 +822,47 @@ void Shape::rotateSkew(ShapeMovement direction) {
 		}
 	}
 }
+/*************************
+* Name: clearShape
+* Input: none
+* Output: none
+* Description: Clears the shape from the console by making hre symbol a " ".
 
+*************************/
 void Shape:: clearShape() {
 	setSymbol(EMPTY);
 }
+/*************************
+* Name: setSymbol
+* Input: char symbol
+* Output: none
+* Description: Sets the symbol of the shape.
 
+*************************/
 void Shape::setSymbol(char symbol) {
 	for (int i = 0; i < 4; i++) {
 		points[i].setSymbol(symbol);
 	}
 }
+/*************************
+* Name: print
+* Input: none
+* Output: none
+* Description: Prints the shape on the console.
 
-void Shape::print() {
+*************************/
+void Shape::print() const {
 	for (int i = 0; i < 4; i++) {
 		points[i].print();
 	}
 }
+/*************************
+* Name: move
+* Input: ShapeMovement movement
+* Output: none
+* Description: Moves the shape in the specified direction.
 
+*************************/
 void Shape::move(ShapeMovement movement) {
 	switch (movement) {
 	case ROTATE_LEFT: {
@@ -795,7 +886,13 @@ void Shape::move(ShapeMovement movement) {
 		break;
 	}
 }
+/*************************
+* Name: getPointInd
+* Input: const Point& p1
+* Output: int
+* Description: Returns the index of a specified point in the shape, if the point isnt in the shape returns -1.
 
+*************************/
 int Shape::getPointInd(const Point& p1) const{
 	int index = NOT_FOUND;
 	for (int i = 0; i < NUM_OF_POINTS; i++) {
@@ -805,7 +902,14 @@ int Shape::getPointInd(const Point& p1) const{
 	}
 	return index;
 }
-bool Shape:: isShapeClear()
+/*************************
+* Name: isShapeClear
+* Input: none
+* Output: bool
+* Description: Checks if the shape is clear on the game board.
+
+*************************/
+bool Shape:: isShapeClear() const
 {
 	bool res = true;
 	for (int i = 0; i < NUM_OF_POINTS && res; i++) {
@@ -815,6 +919,13 @@ bool Shape:: isShapeClear()
 	}
 	return res;
 }
+/*************************
+* Name: getHighestY
+* Input: none
+* Output: short int
+* Description: Returns the highest y-coordinate of the shape.
+
+*************************/
 short int Shape:: getHighestY() const
 {
 
@@ -828,8 +939,12 @@ short int Shape:: getHighestY() const
 	}
 	return highestY;
 }
-
-
+/*************************
+* Name: setShapeColor
+* Input: Color color
+* Output: bool
+* Description: Sets the color of the shape and returns true on success, false otherwise.
+*************************/
 bool Shape::setShapeColor(Color color)
 {
 	bool res = true;

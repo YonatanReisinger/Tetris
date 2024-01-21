@@ -1,5 +1,11 @@
 #include "Point.h"
+/*************************
+* Name: Point
+* Input: short int x = 0, short int y = 0, char symbol = EMPTY, Color color = Color::WHITE
+* Output: none
+* Description: Constructs a Point with specified coordinates, symbol, and color.
 
+*************************/
 Point::Point(short int x, short int y, char symbol,Color color)
 {
 	setX(x);
@@ -7,6 +13,13 @@ Point::Point(short int x, short int y, char symbol,Color color)
 	setSymbol(symbol) ; //dasdsa
 	setColor(color);
 }
+/*************************
+* Name: setX
+* Input: short int x
+* Output: bool
+* Description: Sets the x-coordinate of the Point and returns true on success, false otherwise.
+
+*************************/
 bool Point:: setX(short int x)
 {
 	bool res;
@@ -20,6 +33,13 @@ bool Point:: setX(short int x)
 	}
 	return res;
 }
+/*************************
+* Name: setY
+* Input: short int y
+* Output: bool
+* Description: Sets the y-coordinate of the Point and returns true on success, false otherwise.
+
+*************************/
 bool Point:: setY(short int y)
 {
 	bool res;
@@ -33,10 +53,24 @@ bool Point:: setY(short int y)
 	}
 	return res;
 }
+/*************************
+* Name: setXY
+* Input: short int x, short int y
+* Output: bool
+* Description: Sets both x and y coordinates of the Point and returns true on success, false otherwise.
+
+*************************/
 bool Point:: setXY(short int x, short int y)
 {
 	return setX(x) && setY(y);
 }
+/*************************
+* Name: setSymbol
+* Input: char symbol
+* Output: bool
+* Description: Sets the symbol of the Point and returns true on success, false otherwise.
+
+*************************/
 bool Point:: setSymbol(char symbol)
 {
 	// we allow symbols that are chars in the ascii table
@@ -49,6 +83,13 @@ bool Point:: setSymbol(char symbol)
 	else
 		return false;
 }
+/*************************
+* Name: gotoxy
+* Input: none
+* Output: none
+* Description: Moves the console cursor to the Point's coordinates.
+
+*************************/
 void Point::gotoxy() const
 {
 	HANDLE hConsoleOutput;
@@ -59,6 +100,13 @@ void Point::gotoxy() const
 	hConsoleOutput = GetStdHandle(STD_OUTPUT_HANDLE);
 	SetConsoleCursorPosition(hConsoleOutput, dwCursorPosition);
 }
+/*************************
+* Name: print
+* Input: none
+* Output: none
+* Description: Prints the Point's symbol at its coordinates on the console.
+
+*************************/
 void Point:: print() const
 {
 	gotoxy();
@@ -72,6 +120,13 @@ void Point:: print() const
 	cout << symbol;
 	SetConsoleTextAttribute(hStdOut, (WORD)Color::WHITE);
 }
+/*************************
+* Name: move
+* Input: Directions direction
+* Output: bool
+* Description: Moves the Point in the specified direction and returns true on success, false otherwise.
+
+*************************/
 bool Point:: move(Directions direction)
 {
 	bool res = true;
@@ -95,22 +150,56 @@ bool Point:: move(Directions direction)
 	}
 	return res;
 }
+/*************************
+* Name: moveUp
+* Input: none
+* Output: bool
+* Description: Moves the Point upwards and returns true on success, false otherwise.
+
+*************************/
 bool Point:: moveUp()
 {
 	return setY(y - 1);
 }
+/*************************
+* Name: moveDown
+* Input: none
+* Output: bool
+* Description: Moves the Point downwards and returns true on success, false otherwise.
+
+*************************/
 bool Point::moveDown()
 {
 	return setY(y + 1);
 }
+/*************************
+* Name: moveUp
+* Input: none
+* Output: bool
+* Description: Moves the Point left and returns true on success, false otherwise.
+
+*************************/
 bool Point::moveLeft()
 {
 	return setX(x - 1);
 }
+/*************************
+* Name: moveUp
+* Input: none
+* Output: bool
+* Description: Moves the Point right and returns true on success, false otherwise.
+
+*************************/
 bool Point::moveRight()
 {
 	return setX(x + 1);
 }
+/*************************
+* Name: setColor
+* Input: Color color
+* Output: bool
+* Description: Sets the color of the Point and returns true on success, false otherwise.
+*************************/
 bool Point:: setColor(Color color)
 {
 	bool res = false;
