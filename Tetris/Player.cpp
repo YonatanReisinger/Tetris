@@ -1,5 +1,11 @@
 #include "Player.h"
+/*************************
+* Name: Player
+* Input: const Board& board, const Key keys[], const char* name, int score = 0
+* Output: none
+* Description: Constructs a player with a game board, keys, name, and an optional score.
 
+*************************/
 Player::Player(const Board& board, const Key keys[], const char* name, int score): board(board)
 	, keys{keys[KeyInd:: LEFT_IND], keys[KeyInd::RIGHT_IND], keys[KeyInd::ROTATE_RIGHT_IND], keys[KeyInd::ROTATE_LEFT_IND], keys[KeyInd::DROP_IND] }
 {
@@ -8,16 +14,19 @@ Player::Player(const Board& board, const Key keys[], const char* name, int score
 	setScore(score);
 	setCurrShape(nullptr) ;
 }
-
+/*Player destructor*/
 Player:: ~Player()
 {
 	if (currPlayingShape != nullptr)
 		delete currPlayingShape;
 }
-Board& Player:: getBoard()
-{
-	return board;
-}
+/*************************
+* Name: setName
+* Input: const char* name
+* Output: bool
+* Description: Sets the player's name and returns true on success, false otherwise.
+
+*************************/
 bool Player:: setName(const char* name)
 {
 	bool res;
@@ -31,10 +40,13 @@ bool Player:: setName(const char* name)
 	}
 	return res;
 }
-const char* Player:: getName() const
-{
-	return name;
-}
+/*************************
+* Name: setScore
+* Input: int score
+* Output: bool
+* Description: Sets the player's score and returns true on success, false otherwise.
+
+*************************/
 bool Player:: setScore(int score)
 {
 	bool res;
@@ -47,14 +59,24 @@ bool Player:: setScore(int score)
 	}
 	return res;
 }
-int Player:: getScore() const
-{
-	return score;
-}
+/*************************
+* Name: increaseScore
+* Input: int increase
+* Output: bool
+* Description: Increases the player's score by a specified amount and returns true on success, false otherwise.
+
+*************************/
 bool Player::increaseScore(int increase)
 {
 	return setScore(score += increase);
 }
+/*************************
+* Name: reset
+* Input: none
+* Output: none
+* Description: Resets the player's state, including the score.
+
+*************************/
 void Player:: reset()
 {
 	board.clear();
@@ -64,6 +86,14 @@ void Player:: reset()
 		currPlayingShape = nullptr;
 	}
 }
+/*************************
+* Name: getKeyInd
+* Input: Key inputKey
+* Output: int
+* Description: Returns the index of the provided key in the player's key array.
+
+************************
+*/
 int Player:: getKeyInd(Key inputKey)
 {
 	short int i;
@@ -75,12 +105,12 @@ int Player:: getKeyInd(Key inputKey)
 			resInd = i;
 	return resInd;
 }
-
-Shape* Player::getCurrShape()
-{
-	return currPlayingShape;
-}
-
+/*************************
+* Name: setCurrShape
+* Input: Shape* currShape
+* Output: none
+* Description: Sets the player's current playing shape to the provided shape.
+************************ */
 void Player:: setCurrShape(Shape* currShape)
 {
 	currPlayingShape = currShape;
