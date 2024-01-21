@@ -29,7 +29,7 @@ GameStatus Game::run()
 		player1.setCurrShape(getRandomShape(startPoint1));
 		player2.setCurrShape(getRandomShape(startPoint2));
 	}
-
+	
 	board1.print();
 	board2.print();
 	
@@ -177,7 +177,7 @@ void Game:: processPlayerInput(Key key, Player& player)
 	ShapeMovement movement;
 	Board& board = player.getBoard();
 	Shape& currShape = *(player.getCurrShape()), tempShape;
-	//// the index of the key indicates it's type of movement
+	// the index of the key indicates it's type of movement
 	movement = (ShapeMovement)player.getKeyInd(key);
 	// if a valid key was pressed
 	if (movement != NOT_FOUND && board.canShapeMove(*(player.getCurrShape()), movement))
