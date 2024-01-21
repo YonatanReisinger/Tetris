@@ -23,8 +23,8 @@ int main()
 		, Point(GameConfig::WIDTH * 2 + 2 + GameConfig::DISTANCE_BETWEEN_BOARDS, 1)
 		, Point(GameConfig::WIDTH + 2 + GameConfig::DISTANCE_BETWEEN_BOARDS + 1, GameConfig::HEIGHT)
 		, Point(GameConfig::WIDTH * 2 + 2 + GameConfig::DISTANCE_BETWEEN_BOARDS, GameConfig::HEIGHT));
-	Player player1(board1, GameConfig:: player1Keys, "Daniel")
-		, player2(board2, GameConfig::player2Keys, "Yonatan");
+	Player player1(board1, GameConfig:: player1Keys, "Player 1")
+		, player2(board2, GameConfig::player2Keys, "Player 2");
 	Game game(player1, player2);
 	
 	srand(time(0)); // for getting new random shapes every time the program runs
@@ -68,7 +68,7 @@ int main()
 			break;
 		}
 		clearScreen();
-		printWinner(game); //entersssssss 
+		printWinner(game);
 		printMenu(game.getStatus());
 		cin >> choice;
 	}

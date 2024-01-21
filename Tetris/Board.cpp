@@ -274,49 +274,6 @@ void Board:: clear()
 	setNumOfShapes(0);
 }
 /************************
-* Name: Board::clearFullRows
-* Input: None
-* Output: int representing the number of cleared rows
-* Description: Clears any full rows on the game board and returns the count of cleared rows.
-************************/
-int Board:: clearFullRows()
-{
-	short int i, j,k,fullRowsCounter = 0,  removedPointInd;
-	for (i = 0; i < GameConfig::HEIGHT; i++)
-	{
-		if (isRowFull(i))
-		{
-			clearRow(i);
-			fullRowsCounter++;
-			// clear the removed points from all the shapes
-			clearPointsFromActiveShapes(i);
-		}
-	}
-	return fullRowsCounter;
-}
-/************************
-* Name: Board::clearPointsFromActiveShapes
-* Input: short int i (Row index to clear points from)
-* Output: None
-* Description: Clears the points in the specified row from all active shapes on the board.
-************************/
-void Board:: clearPointsFromActiveShapes(short int i)
-{
-	short int j, k, removedPointInd;
-	for (j = 0; j < GameConfig::WIDTH; j++)
-	{
-		for (k = 0; k < numOfActiveShapes; k++)
-		{
-			removedPointInd = activeShapes[k].getPointInd(gameBoard[i][j]);
-			if (removedPointInd != NOT_FOUND)
-			{
-				activeShapes[k].points[removedPointInd].setSymbol(EMPTY);
-				break; // a point is a part of only one shape
-			}
-		}
-	}
-}
-/************************
 * Name: Board::isRowFull
 * Input: short int i (Row index to check)
 * Output: bool representing whether the row is full (true) or not (false)
@@ -396,39 +353,83 @@ bool Board:: canShapeMove(const Shape& shape, ShapeMovement movement) const
 {
 	Shape tempShape(shape);
 	tempShape.move(movement);
-	// shapes can always rotate unless the new place will be full
 	return canSetShapeInGameBoard(tempShape);
 }
 /************************
-* Name: Board::canActiveShapeDrop
-* Input: const Shape& shape (Active shape to check)
-* Output: bool representing whether the active shape can drop down (true) or not (false)
-* Description: Checks if the active shape can drop down on the board.
+* Name: Board::clearFullRows
+* Input: None
+* Output: int representing the number of cleared rows
+* Description: Clears any full rows on the game board and returns the count of cleared rows.
 ************************/
-bool Board::canActiveShapeDrop(const Shape& shape) const
+int Board::clearFullRows()
 {
-	short int i, emptyCounter = 0, tempPointInd;
-	bool res = true;
-	Point tempPoint;
-	// a shape can move iff all of its points that are still in the game can move
-	for (i = 0; i < NUM_OF_POINTS && res; i++)
+	short int i, j, k, fullRowsCounter = 0, removedPointInd;
+	for (i = GameConfig::HEIGHT - 1; i >= 0; i--)
 	{
-		if (shape.points[i].getSymbol() != EMPTY)
+		if (isRowFull(i))
 		{
-			tempPoint = shape.points[i];
-			tempPoint.move(Directions::DOWN);
-			tempPointInd = shape.getPointInd(tempPoint);
-			// a point can drop if either the place below is free or if the place below it is part of it's own shape active points
-			res = canPointMove(shape.points[i], Directions::DOWN)
-				|| (tempPointInd != NOT_FOUND && shape.points[tempPointInd].getSymbol() != EMPTY && isPointInBoard(tempPoint));
+			clearRow(i);
+			// clear the removed points from all the shapes and move down the points that are above the line of clearence
+			updateActiveShapes(i);
+			fullRowsCounter++;
 		}
-		else
-			emptyCounter++;
 	}
-	// an empty shape can't drop
-	if (emptyCounter == NUM_OF_POINTS)
-		return false;
-	return res;
+	return fullRowsCounter;
+}
+void Board:: updateActiveShapes(short int clearedRowInd)
+{
+	short int i, j;
+	for (i = 0; i < numOfActiveShapes; i++)
+	{
+		// temporarly remove the active shape from the board
+		clearShapeFromGameBoard(activeShapes[i]);
+		for (j = 0; j < NUM_OF_POINTS; j++)
+		{
+			// adjust the places of points of the shape according to the line cleared
+			if (activeShapes[i].points[j].getSymbol() != EMPTY)
+			{
+				// if above the line, drop it's points
+				if (activeShapes[i].points[j].getY() <= clearedRowInd)
+					activeShapes[i].points[j].moveDown();
+				//if the point is in the row of clearence, clear it
+				else if (activeShapes[i].points[j].getY() == (clearedRowInd + 1))
+					activeShapes[i].points[j].setSymbol(EMPTY);
+				// if it is a point that didnt change, get it back to its original point on the board
+				else
+					activeShapes[i].points[j].setSymbol(GameConfig:: SHAPE_SYMBOL);
+			}
+		}
+		if (activeShapes[i].isShapeClear()) // if by clearinf the full rows a whole shape is empty 
+		{
+			removeActiveShapeFromArr(activeShapes[i], i);
+			i--;
+		}
+	}
+	// return all the active shapes to the board in their new place
+	for (i = 0; i < numOfActiveShapes; i++)
+		setShapeInGameBoard(activeShapes[i], false);
+}
+/************************
+* Name: Board::clearPointsFromActiveShapes
+* Input: short int i (Row index to clear points from)
+* Output: None
+* Description: Clears the points in the specified row from all active shapes on the board.
+************************/
+void Board::clearPointsFromActiveShapes(short int clearedRowInd)
+{
+	short int j, k, removedPointInd;
+	for (j = 0; j < GameConfig::WIDTH; j++)
+	{
+		for (k = 0; k < numOfActiveShapes; k++)
+		{
+			removedPointInd = activeShapes[k].getPointInd(gameBoard[clearedRowInd][j]);
+			if (removedPointInd != NOT_FOUND)
+			{
+				activeShapes[k].points[removedPointInd].setSymbol(EMPTY);
+				break; // a point is a part of only one shape
+			}
+		}
+	}
 }
 /************************
 * Name: Board::dropActiveShapes
@@ -441,24 +442,49 @@ void Board:: dropActiveShapes()
 	for (i = 0 ; i < numOfActiveShapes; i++)
 	{
 		Shape& shape = activeShapes[i];
-		if (shape.isShapeClear()) // if by clearinf the full rows a whole shape is empty 
-		{
-			removeActiveShapeFromArr(shape, i);
-			i--;
-			continue;
-		}
 		// if after the clearing of line a shape can drop down the board, drop while it can
 		while (canActiveShapeDrop(shape))
 		{
 			// update the place of the shape
 			clearShapeFromGameBoard(shape);
-			// moveShapeDownTheScreen()
 			shape.moveDown();
 			dropped = true;
 		}
 		if (dropped) // set the board in it's new place on the board
 			setShapeInGameBoard(shape, false);
 	}
+}
+/************************
+* Name: Board::canActiveShapeDrop
+* Input: const Shape& shape (Active shape to check)
+* Output: bool representing whether the active shape can drop down (true) or not (false)
+* Description: Checks if the active shape can drop down on the board.
+************************/
+bool Board::canActiveShapeDrop(const Shape& shape) const
+{
+	short int i, emptyCounter = 0,tempPointInd;
+	bool res = true;
+	Point tempPoint;
+	// a shape can move iff all of its points that are still in the game can move
+	for (i = 0; i < NUM_OF_POINTS && res; i++)
+	{
+		// check just the non empry points that can drop which are above the line of clearance
+		if (shape.points[i].getSymbol() != EMPTY)
+		{
+			tempPoint = shape.points[i];
+			tempPoint.move(Directions::DOWN);
+			tempPointInd = shape.getPointInd(tempPoint);
+			// a point can drop if either the place below is free or if the place below it is part of it's own shape active points
+			res = canPointMove(shape.points[i], Directions::DOWN)
+				|| (tempPointInd != NOT_FOUND && shape.points[tempPointInd].getSymbol() != EMPTY && isPointInBoard(tempPoint));
+		}
+		else if (shape.points[i].getSymbol() == EMPTY)
+			emptyCounter++;
+	}
+	// an empty shape can't drop and also a shape that does not have one point that can drop 
+	if (emptyCounter == NUM_OF_POINTS)
+		return false;
+	return res;
 }
 /************************
 * Name: Board::clearShapeFromGameBoard
@@ -470,12 +496,14 @@ void Board:: clearShapeFromGameBoard(Shape& shape)
 {
 	short int i;
 	for (i = 0; i < NUM_OF_POINTS; i++)
+	{
 		if (shape.points[i].getSymbol() != EMPTY) // clear just the points that are part of the game
 		{
 			shape.points[i].setSymbol(EMPTY);
 			setPointInGameBoard(shape.points[i]);
-			shape.points[i].setSymbol(GameConfig:: SHAPE_SYMBOL);
+			shape.points[i].setSymbol(GameConfig::SHAPE_SYMBOL);
 		}
+	}
 }
 /************************
 * Name: Board::removeActiveShapeFromArr

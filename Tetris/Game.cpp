@@ -26,7 +26,6 @@ GameStatus Game::run()
 
 	if (getStatus() != GameStatus::PAUSED) // random new shapes just if it is completely new game 
 	{
-		//player1.setCurrShape(new Shape(SKEW, startPoint1, FACE_UP));
 		player1.setCurrShape(getRandomShape(startPoint1));
 		player2.setCurrShape(getRandomShape(startPoint2));
 	}
@@ -222,7 +221,6 @@ void Game:: setCurrentShape(Player& player,Point& startPoint)
 		}
 		// get a new random shape and print it
 		player.setCurrShape(getRandomShape(startPoint));
-		//player.getCurrShape()->print(); // ���� ���� ���� �� ?????
 	}
 }
 /************************
