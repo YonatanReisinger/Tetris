@@ -1,10 +1,22 @@
 #include "Game.h"
 
+/************************
+* Name: Game::Game
+* Input: Player& player1 (Reference to the first player), Player& player2 (Reference to the second player)
+* Output: None
+* Description: Constructor for the Game class. Initializes the game with the provided players, sets the initial game status to PLAYING, and the winner number to NO_WINNER.
+************************/
 Game:: Game(Player &player1, Player &player2) : player1(player1), player2(player2)
 {
 	setStatus(GameStatus:: PLAYING); // new game is automatically being played
 	setWinnerNum(NO_WINNER);
 }
+/************************
+* Name: Game::run
+* Input: None
+* Output: GameStatus representing the final status of the game
+* Description: Runs the main game loop, handling player input, moving shapes, updating scores, and determining the winner.
+************************/
 GameStatus Game::run()
 {
 	GameStatus gameStatus = GameStatus::PLAYING;
@@ -14,7 +26,6 @@ GameStatus Game::run()
 
 	if (getStatus() != GameStatus::PAUSED) // random new shapes just if it is completely new game 
 	{
-		//player1.setCurrShape(new Shape(SKEW, startPoint1, FACE_UP));
 		player1.setCurrShape(getRandomShape(startPoint1));
 		player2.setCurrShape(getRandomShape(startPoint2));
 	}
@@ -53,6 +64,12 @@ GameStatus Game::run()
 	determineWinner(gameStatus);
 	return gameStatus;
 }
+/************************
+* Name: Game::start
+* Input: None
+* Output: None
+* Description: Starts a new game by resetting players and running the game loop.
+************************/
 void Game::start()
 {
 	setStatus(GameStatus::PLAYING); // no need to check the return value because you can always start a new game
@@ -60,11 +77,12 @@ void Game::start()
 	player2.reset();
 	setStatus(run()); //run the game and update the game status afterwards
 }
-
-bool Game:: pause()
-{
-	return setStatus(GameStatus::PAUSED);
-}
+/************************
+* Name: Game::resume
+* Input: None
+* Output: bool representing whether the resume operation was successful (true) or not (false)
+* Description: Resumes the game if it was previously paused, setting the game status to PLAYING.
+************************/
 bool Game::resume()
 {
 	// set the status to continue playing and just after the function validate that the game can resume, 
@@ -74,11 +92,12 @@ bool Game::resume()
 	else
 		return false;
 }
-
-GameStatus Game:: getStatus() const
-{
-	return status;
-}
+/************************
+* Name: Game::setStatus
+* Input: GameStatus status (The desired game status)
+* Output: bool representing whether the status was set successfully (true) or not (false)
+* Description: Sets the game status to the provided status if it's a valid status. Checks if the game can transition to the new status.
+************************/
 bool Game:: setStatus(GameStatus status)
 {
 	bool res;
@@ -98,16 +117,24 @@ bool Game:: setStatus(GameStatus status)
 		res = false;
 	return res;
 }
-const Player& Game:: getPlayer(int playerNum) const
-{
-	return playerNum == 1 ? player1 : player2; 
-}
-inline Shape* Game:: getRandomShape(Point& startPoint)
+/************************
+* Name: Game::getRandomShape
+* Input: Point& startPoint (The starting point for the new shape)
+* Output: Shape* representing a randomly generated shape
+* Description: Generates a new shape with a random type, starting point, and color status.
+************************/
+inline Shape* Game:: getRandomShape(Point& startPoint) const
 {
 	Shape* s = new Shape(Type(rand() % NUM_OF_SHAPES), startPoint,getColorStatus()) ;
 	return s;
 }
-void Game:: moveShapeOnScreen(Shape& shape, ShapeMovement movement, GamePace pace)
+/************************
+* Name: Game::moveShapeOnScreen
+* Input: Shape& shape (Reference to the shape to be moved), ShapeMovement movement (The direction of movement), GamePace pace (The speed of movement)
+* Output: None
+* Description: Moves a shape on the screen, clearing it from the old position, printing it in the new position, and applying a delay based on the game pace.
+************************/
+void Game:: moveShapeOnScreen(Shape& shape, ShapeMovement movement, GamePace pace) const
 {
 	Sleep((DWORD)pace);
 	shape.clearShape(); // clear the shape from the screen to make it look like it's moving
@@ -116,6 +143,12 @@ void Game:: moveShapeOnScreen(Shape& shape, ShapeMovement movement, GamePace pac
 	shape.setSymbol(GameConfig::SHAPE_SYMBOL); // after it moved down, print it again in it's new place
 	shape.print();
 }
+/************************
+* Name: Game::checkAndProcessKeyboardInput
+* Input: None
+* Output: bool representing whether the game is still being played (true) or not (false)
+* Description: Checks for keyboard input and processes player movements. Returns false if the ESC key is pressed, indicating a pause request.
+************************/
 bool Game:: checkAndProcessKeyboardInput()
 {
 	bool res = true;
@@ -133,6 +166,12 @@ bool Game:: checkAndProcessKeyboardInput()
 	}
 	return res;
 }
+/************************
+* Name: Game::processPlayerInput
+* Input: Key key (The key pressed by the player), Player& player (Reference to the player whose input is being processed)
+* Output: None
+* Description: Processes player input, interpreting the key and applying the corresponding movement to the player's current shape on the board.
+************************/
 void Game:: processPlayerInput(Key key, Player& player)
 {
 	ShapeMovement movement;
@@ -151,7 +190,12 @@ void Game:: processPlayerInput(Key key, Player& player)
 			moveShapeOnScreen(currShape, movement, GamePace::FAST);
 	}
 }
-
+/************************
+* Name: Game::setCurrentShape
+* Input: Player& player (Reference to the player whose current shape is being set), Point& startPoint (The starting point for the new shape)
+* Output: None
+* Description: Sets the current shape for the player, either generating a new shape or moving the existing one down the board. Handles clearing full rows, updating scores, and printing the new shape.
+************************/
 void Game:: setCurrentShape(Player& player,Point& startPoint)
 {
 	int clearRowsForPlayerInRound = 0;
@@ -177,10 +221,15 @@ void Game:: setCurrentShape(Player& player,Point& startPoint)
 		}
 		// get a new random shape and print it
 		player.setCurrShape(getRandomShape(startPoint));
-		//player.getCurrShape()->print(); // ���� ���� ���� �� ?????
 	}
 }
-void Game:: printScores()
+/************************
+* Name: Game::printScores
+* Input: None
+* Output: None
+* Description: Prints the scores of both players at the bottom of the game board.
+************************/
+void Game:: printScores() const
 {
 	// print the score at the middle of the board in the middle
 	Point p1 = player1.getBoard().getBorders()[Borders::BOTTOM_LEFT]
@@ -194,12 +243,24 @@ void Game:: printScores()
 	p2.gotoxy();
 	cout << "Player 2 Score: " << player2.getScore();
 }
-void Game:: clearKeyboardInputBuffer()
+/************************
+* Name: Game::clearKeyboardInputBuffer
+* Input: None
+* Output: None
+* Description: Clears the keyboard input buffer, ensuring no residual input is processed.
+************************/
+void Game:: clearKeyboardInputBuffer() const
 {
 	char temp;
 	while (_kbhit())
 		temp = _getch();
 }
+/************************
+* Name: Game::setWinnerNum
+* Input: short int winnerNum (The winner number to be set)
+* Output: bool representing whether the winner number was set successfully (true) or not (false)
+* Description: Sets the winner number if it is a valid value (1, 2, TIE, or NO_WINNER).
+************************/
 bool Game:: setWinnerNum(short int winnerNum)
 {
 	if (winnerNum == 1 || winnerNum == 2 || winnerNum == TIE || winnerNum == NO_WINNER)
@@ -210,10 +271,12 @@ bool Game:: setWinnerNum(short int winnerNum)
 	else
 		return false;
 }
-short int Game:: getWinnerNum()
-{
-	return winnerNum;
-}
+/************************
+* Name: Game::determineWinner
+* Input: GameStatus gameStatus (The final status of the game)
+* Output: None
+* Description: Determines the winner based on the final status of the game. Handles tie scenarios by comparing scores.
+************************/
 void Game:: determineWinner(GameStatus gameStatus)
 {
 	// if the was finished and there is a winner
@@ -237,6 +300,12 @@ void Game:: determineWinner(GameStatus gameStatus)
 	}
 
 }
+/************************
+* Name: Game::setColorStatus
+* Input: GameColorStatus choice (The desired color status)
+* Output: bool representing whether the color status was set successfully (true) or not (false)
+* Description: Sets the color status for the game if it is a valid choice (COLORIZED or UNCOLORIZED).
+************************/
 bool Game:: setColorStatus(GameColorStatus choice)
 {
 	bool res = true;
@@ -247,8 +316,4 @@ bool Game:: setColorStatus(GameColorStatus choice)
 	colorStatus = choice;
 	}
 	return res;
-}
-GameColorStatus Game::getColorStatus()
-{
-	return colorStatus;
 }

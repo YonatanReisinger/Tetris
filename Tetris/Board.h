@@ -20,7 +20,6 @@ private:
 	Shape activeShapes[GameConfig::HEIGHT * GameConfig::WIDTH];
 	size_t numOfActiveShapes;
 
-	// Shape** activeShapes;
 	bool setBorders(const Point& topLeft, const Point& topRight, const Point& bottomLeft, const Point& bottomRight);
 	bool setGameBoard(char boardSymbol);
 	inline bool isHeightValid(Point borders[4]) const;
@@ -34,8 +33,8 @@ private:
 	void clearShapeFromGameBoard(Shape& shape);
 	void removeActiveShapeFromArr(Shape& shape, int shapeInd);
 	bool canActiveShapeDrop(const Shape& shape) const;
-	bool canShapeRotate(const Shape& shape, ShapeMovement movement);
-	void clearPointsFromActiveShapes(short int i);
+	void clearPointsFromActiveShapes(short int clearedRowInd);
+	void updateActiveShapes(short int clearedRowInd);
 	void insertShapeToArr(const Shape& newShape);
 public:
 	bool setRow(short int i, char boardSymbol);

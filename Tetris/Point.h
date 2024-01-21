@@ -26,7 +26,7 @@ public:
 	inline short int getY() const { return y; };
 	bool setXY(short int x, short int y);
 	bool setSymbol(char symbol);
-	inline char getSymbol() const {return symbol;};
+	inline char getSymbol() const { return symbol; };
 	void gotoxy() const;
 	void print() const;
 	bool moveUp();
@@ -37,6 +37,5 @@ public:
 	inline bool areCoordinatesEqual(const Point& other) const { return x == other.x && y == other.y; };
 	inline Color getColor() const { return color; };
 	bool setColor(Color color);
-	friend class Board;
 };
 #endif //Point.h

@@ -22,6 +22,5 @@ public:
 	static constexpr unsigned char player1Keys[NUM_OF_KEYS] = {'a', 'd', 's', 'w', 'x'};
 	static constexpr unsigned char player2Keys[NUM_OF_KEYS] = { 'j', 'l', 'k', 'i', 'm' };
 	static constexpr int SCORE_FOR_FULL_LINE = 100;
-	//static constexpr Color BORDER_COLOR = Color::WHITE;
 };
 #endif //GameConfig.h
