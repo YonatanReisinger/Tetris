@@ -55,6 +55,7 @@ public:
 	void dropActiveShapes();
 	bool isShapeStuck(const Shape& shape) const;
 	bool canSetShapeInGameBoard(const Shape& shape) const;
+	void explodeBomb(Shape& shape);
 };
 
 #endif // Board.h

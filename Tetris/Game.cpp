@@ -125,7 +125,13 @@ bool Game:: setStatus(GameStatus status)
 ************************/
 inline Shape* Game:: getRandomShape(Point& startPoint) const
 {
-	Shape* s = new Shape(Type(rand() % NUM_OF_SHAPES), startPoint,getColorStatus()) ;
+	Shape* s;
+	unsigned int randomNum;
+	randomNum = (rand() % 100) + 1; // Generate a random number between 1 and 100
+	if (randomNum < GameConfig::CHANCE_FOR_BOMB * 100)
+		s = new Shape(Type:: BOMB, startPoint, getColorStatus());
+	else
+		s = new Shape(Type(rand() % NUM_OF_SHAPES), startPoint,getColorStatus()) ;
 	return s;
 }
 /************************
@@ -140,7 +146,11 @@ void Game:: moveShapeOnScreen(Shape& shape, ShapeMovement movement, GamePace pac
 	shape.clearShape(); // clear the shape from the screen to make it look like it's moving
 	shape.print();
 	shape.move(movement);
-	shape.setSymbol(GameConfig::SHAPE_SYMBOL); // after it moved down, print it again in it's new place
+	// after it moved down, print it again in it's new place according to the shape type
+	if (shape.getType() == Type::BOMB)
+		shape.getPoints()[0].setSymbol(GameConfig::BOMB_SYMBOL);
+	else
+		shape.setSymbol(GameConfig::SHAPE_SYMBOL);
 	shape.print();
 }
 /************************
@@ -200,15 +210,27 @@ void Game:: setCurrentShape(Player& player,Point& startPoint)
 {
 	int clearRowsForPlayerInRound = 0;
 	Board& board = player.getBoard();
-	if (board.canShapeMove(*(player.getCurrShape()), ShapeMovement::DROP))
-		moveShapeOnScreen(*(player.getCurrShape()), ShapeMovement::DROP, GamePace::NORMAL);
-	//if you can't move anymore and can insert the shape into the board
+	Shape& currShape = *(player.getCurrShape());
+	if (board.canShapeMove(currShape, ShapeMovement::DROP))
+		moveShapeOnScreen(currShape, ShapeMovement::DROP, GamePace::NORMAL);
+	//if the shape can't move anymore
 	else
 	{
-		board.setShapeInGameBoard(*(player.getCurrShape()), true);
-		// print the new shape on the playing board
-		board.printGameBoard();
-		
+		// if the shape that can't move anymore is a bomb
+		if (currShape.getType() == Type::BOMB)
+		{
+			board.explodeBomb(currShape);
+			board.dropActiveShapes();
+			board.printGameBoard();
+		}
+		// If it is a normal shape that can be set to the board
+		else if (board.canSetShapeInGameBoard(currShape))
+		{
+			board.setShapeInGameBoard(currShape, true);
+			player.increaseScore(GameConfig::SCORE_FOR_PLACING_SHAPE);
+			// print the new shape on the playing board
+			board.printGameBoard();
+		}
 		// increase the score of the player according to how many rows he cleared
 		clearRowsForPlayerInRound = board.clearFullRows();
 		// drop all the shapes, if after the drop more rows can be cleared, continue to do so

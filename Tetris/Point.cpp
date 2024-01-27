@@ -214,3 +214,25 @@ bool Point:: setColor(Color color)
 	}
 	return res;
 }
+int Point:: getHorizontalDistance(const Point & other)
+{
+	return abs(this->x - other.x);
+}
+int Point:: getVerticalDistance(const Point& other)
+{
+	return abs(this->y - other.y);
+}
+const double Point::distance(const Point& other) const
+{
+	return sqrt(pow(this->x - other.x, 2) + pow(this->y - other.y, 2));
+}
+void Point:: blink()
+{
+	char symbol = this->symbol;
+	setSymbol(EMPTY);
+	print();
+	Sleep((DWORD)GamePace:: BLINKING_PACE);
+	setSymbol(symbol);
+	print();
+	Sleep((DWORD)GamePace::BLINKING_PACE);
+}

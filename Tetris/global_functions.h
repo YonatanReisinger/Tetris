@@ -24,5 +24,6 @@ void clearCin();
 void printInstructions();
 void printKeys();
 void printColorOption();
+void showConsoleCursor(bool showFlag);
 
 #endif // global_functions.h

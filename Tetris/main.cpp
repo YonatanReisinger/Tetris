@@ -11,10 +11,6 @@
 using namespace std;
 // <- Imports 
 
-// Macros and enums ->
-enum Choice{ START = 1, CONTINUE = 2, INSTRUCTIONS = 8, EXIT = 9} ;
-// <- Macros and enums
-
 int main()
 {
 	unsigned int choice,colorChoice;
@@ -26,8 +22,10 @@ int main()
 	Player player1(board1, GameConfig:: player1Keys, "Player 1")
 		, player2(board2, GameConfig::player2Keys, "Player 2");
 	Game game(player1, player2);
-	
-	srand(time(0)); // for getting new random shapes every time the program runs
+	Game* pGame;
+
+	showConsoleCursor(false); // Get rid of the cursor
+	//srand(time(0)); // for getting new random shapes every time the program runs
 	// print the whole board including the frame
 	printMenu(); //the program just started and therefore for sure no paused game exists
 	cin >> choice;
@@ -38,7 +36,7 @@ int main()
 		clearScreen();
 		switch (choice)
 		{
-		case(Choice::START):
+		case(Choice::START_HUMAN_VS_HUMAN):
 			printColorOption();
 			cin >> colorChoice;
 			clearCin();
@@ -50,6 +48,10 @@ int main()
 			}
 			game.setColorStatus((GameColorStatus)colorChoice);
 			game.start();
+			break;
+		case(Choice::START_HUMAN_VS_CPU):
+			break;
+		case(Choice::START_CPU_VS_CPU):
 			break;
 		case(Choice::CONTINUE):
 			if (game.getStatus() == GameStatus::PAUSED)

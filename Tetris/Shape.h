@@ -8,7 +8,7 @@
 #include <iostream>
 using namespace std;
 // Macros ans enums->
-enum Type{PLUS,SQUARE,STRAIGHT,SKEW,MIRROR_SKEW,L,MIRROR_L} ;
+enum Type{PLUS,SQUARE,STRAIGHT,SKEW,MIRROR_SKEW,L,MIRROR_L, BOMB} ;
 enum RotationDirection{FACE_UP,FACE_DOWN,FACE_LEFT,FACE_RIGHT};
 enum ShapeMovement{LEFT,RIGHT,ROTATE_LEFT,ROTATE_RIGHT,DROP};
 #define NUM_OF_POINTS  4
@@ -28,6 +28,7 @@ private:
 	void createMirrorSkew(Point* points, Point& start,GameColorStatus colorStatus);
 	void createL(Point* points, Point& start,GameColorStatus colorStatus);
 	void createMirrorL(Point* points, Point& start,GameColorStatus colorStatus);
+	void createBomb(Point& start, GameColorStatus colorStatus);
 	void rotatePlus(ShapeMovement direction);
 	void rotateMirrorL(ShapeMovement direction);
 	void rotateStraight(ShapeMovement direction);
@@ -51,6 +52,8 @@ public:
 	bool isShapeClear() const;
 	short int getHighestY() const;
 	bool setShapeColor(Color color);
+	Type getType() const;
+	Point* const getPoints();
 	friend class Board;
 };
 

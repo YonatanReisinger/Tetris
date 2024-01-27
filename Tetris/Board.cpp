@@ -368,7 +368,7 @@ int Board::clearFullRows()
 	{
 		if (isRowFull(i))
 		{
-			clearRow(i);
+			//clearRow(i);
 			// clear the removed points from all the shapes and move down the points that are above the line of clearence
 			updateActiveShapes(i);
 			fullRowsCounter++;
@@ -536,4 +536,33 @@ bool Board:: canSetShapeInGameBoard(const Shape& shape) const
 	for (i = 0; i < NUM_OF_POINTS && (shape.points[i].getSymbol() != EMPTY) && res; i++)
 		res = !isPointFull(shape.points[i]) && isPointInBoard(shape.points[i]);
 	return res;
+}
+void Board::explodeBomb(Shape& bomb)
+{
+	short int i, j;
+	Point& bombPoint = bomb.points[0];
+	for (i = 0; i < 3; i++) // Make the bomb "explode" by making it blink 3 times 
+		bombPoint.blink();
+	// update all the active shapes in the board according to the exploding of the bomb
+	for (i = 0; i < numOfActiveShapes; i++)
+	{
+		// temporarly remove the active shape from the board
+		clearShapeFromGameBoard(activeShapes[i]);
+		// adjust the places of points of the shape according to the line cleared
+		for (j = 0; j < NUM_OF_POINTS && activeShapes[i].points[j].getSymbol() != EMPTY; j++)
+		{
+			if (activeShapes[i].points[j].distance(bombPoint) <= GameConfig::BOMB_EXPLOSION_RANGE)
+				activeShapes[i].points[j].setSymbol(EMPTY);
+			else
+				activeShapes[i].points[j].setSymbol(GameConfig:: SHAPE_SYMBOL);
+		}
+		if (activeShapes[i].isShapeClear()) // if by bombing a whole shape is empty 
+		{
+			removeActiveShapeFromArr(activeShapes[i], i);
+			i--;
+		}
+	}
+	// return all the active shapes to the board in their new place
+	for (i = 0; i < numOfActiveShapes; i++)
+		setShapeInGameBoard(activeShapes[i], false);
 }
