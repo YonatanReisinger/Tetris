@@ -15,3 +15,12 @@ Point p1(2, 17), p2(6, 17), p3(9, 15), p4(11,16), p5(8,16), p6(6,16), p7(4,16), 
 	board1.setShapeInGameBoard(s6, true);
 	board1.setShapeInGameBoard(L1, true);
 	board1.setShapeInGameBoard(L2, true);
+
+
+
+
+// print the score at the middle of the board in the middle
+	Point:: gotoxy(player1.getBoard().getBorders()[Borders::BOTTOM_LEFT].getX() + 15, GameConfig::HEIGHT + 2);
+	cout << "<- Score: " << player1.getScore();
+	Point:: gotoxy(player2.getBoard().getBorders()[Borders::BOTTOM_LEFT].getX() - 15, GameConfig::HEIGHT + 2);
+	cout << "Score: " << player2.getScore() << " ->";

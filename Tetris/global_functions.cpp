@@ -7,14 +7,15 @@
 * Description: Prints the game menu based on the provided game status.
   Displays options for starting a new game, continuing a paused game, presenting instructions, and exiting.
 ************************/
-void printMenu(GameStatus gameStatus)
+void printMenu(Game* pGame)
 {
     printWelcomeMessage();
 	cout << "Please enter your choice:" << endl
         << "(" << Choice::START_HUMAN_VS_HUMAN << ") Start a new game - Human vs Human" << endl
         << "(" << Choice::START_HUMAN_VS_CPU << ") Start a new game - Human vs Computer" << endl
         << "(" << Choice::START_CPU_VS_CPU << ") Start a new game - Computer vs Computer" << endl;
-	if (gameStatus == GameStatus:: PAUSED)
+    // if there is a game and it is paused
+	if (pGame != nullptr && pGame->getStatus() == GameStatus::PAUSED)
 	{
 		cout << "(" << Choice:: CONTINUE <<") Continue a paused game" << endl;
 	}
@@ -95,28 +96,6 @@ void printInstructionsAndKeys()
 void clearScreen()
 {
     system("cls");
-}
-/************************
-* Name: printWinner
-* Input: Game& game (Reference to the game object)
-* Output: None
-* Description: Prints the winner of the game, if there is one. Clears the console screen afterward.
-************************/
-void printWinner(Game& game)
-{
-    short int winnerNum = game.getWinnerNum();
-    if (game.getStatus() == GameStatus::FINISHED && winnerNum != NO_WINNER)
-    {
-        if (winnerNum == TIE)
-            cout << "The game ended in a tie!";
-        else // there is a winnner
-            cout << "The Winner is: " << game.getPlayer(winnerNum).getName();
-        // the game was finished and the winner was used, no more need for him after that
-        game.setWinnerNum(NO_WINNER);
-        cout << "\n\n\nPress any key to continue........";
-        while (!_kbhit());
-        clearScreen();
-    }
 }
 /************************
 * Name: clearCin

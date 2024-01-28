@@ -219,7 +219,6 @@ void Board:: printFrame() const
 		, topRightBorderFrame(borders[TOP_RIGHT].getX() + 1, borders[TOP_RIGHT].getY() - 1)
 		, bottomLeftBorderFrame(borders[BOTTOM_LEFT].getX() - 1, borders[BOTTOM_LEFT].getY() + 1)
 		, bottomRightBorderFrame(borders[BOTTOM_RIGHT].getX() + 1, borders[BOTTOM_RIGHT].getY() + 1);
-	printHorizontalLine(topLeftBorderFrame, topRightBorderFrame);
 	printHorizontalLine(bottomLeftBorderFrame, bottomRightBorderFrame);
 	printVerticalLine(topLeftBorderFrame, bottomLeftBorderFrame);
 	printVerticalLine(topRightBorderFrame, bottomRightBorderFrame);
@@ -342,18 +341,6 @@ bool Board:: isShapeInBoard(const Shape& shape) const
 	for (i = 0; i < NUM_OF_POINTS && shape.points[i].getSymbol() != EMPTY && res; i++)
 		res = isPointInBoard(shape.points[i]);
 	return res;
-}
-/************************
-* Name: Board::canShapeMove
-* Input: const Shape& shape (Shape to check), ShapeMovement movement (Type of movement to check)
-* Output: bool representing whether the shape can move in the specified direction (true) or not (false)
-* Description: Checks if the entire shape can move in the specified direction.
-************************/
-bool Board:: canShapeMove(const Shape& shape, ShapeMovement movement) const
-{
-	Shape tempShape(shape);
-	tempShape.move(movement);
-	return canSetShapeInGameBoard(tempShape);
 }
 /************************
 * Name: Board::clearFullRows
@@ -507,20 +494,6 @@ void Board:: removeActiveShapeFromArr(Shape& shape, int shapeInd)
 	}
 	// Decrement the number of active shapes
 	numOfActiveShapes--;
-}
-/************************
-* Name: Board::isShapeStuck
-* Input: const Shape& shape (Shape to check)
-* Output: bool representing whether the shape is stuck (true) or not (false)
-* Description: Checks if the shape is stuck and cannot make any further moves.
-************************/
-bool Board::isShapeStuck(const Shape& shape) const
-{
-	// a shape is stuck if it can't move to any direction
-	return !canSetShapeInGameBoard(shape)
-		&& !canShapeMove(shape, ShapeMovement:: DROP)
-		&& !canShapeMove(shape, ShapeMovement::LEFT)
-		&& !canShapeMove(shape, ShapeMovement::RIGHT);
 }
 /************************
 * Name: Board::canSetShapeInGameBoard

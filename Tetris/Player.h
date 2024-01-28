@@ -13,20 +13,20 @@ typedef unsigned char Key;
 
 class Player {
 private:
-	char* name;
+	string const name;
 	Board board;
 	int score;
-	const Key keys[NUM_OF_KEYS];
+	Key const keys[NUM_OF_KEYS];
 	Shape* currPlayingShape;
+	bool const isHuman;
 public:
-	Player(const Board& board, const Key keys[], const char* name, int score = 0);
+	Player(const Board& board, const Key keys[], const string name, bool isHuman ,int score = 0);
 	Player(const Player& other) = delete;
 	Player& operator=(const Player& other) = delete;
 	~Player();
 
 	inline Board& getBoard() { return board; };
-	bool setName(const char* name);
-	inline const char* getName() const { return name; };
+	inline const string getName() const { return name; };
 	bool setScore(int score);
 	inline int getScore() const { return score; };
 	bool increaseScore(int increase);
@@ -34,5 +34,8 @@ public:
 	int getKeyInd(Key inputKey);
 	inline Shape* getCurrShape() { return currPlayingShape; };
 	void setCurrShape(Shape* currShape);
+	inline bool isHumanPlayer() const { return isHuman; };
+	bool isStuck() const;
+	bool canCurrShapeMove(ShapeMovement movement) const;
 };
 #endif // PLAYER.h

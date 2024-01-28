@@ -27,7 +27,8 @@ public:
 	bool setXY(short int x, short int y);
 	bool setSymbol(char symbol);
 	inline char getSymbol() const { return symbol; };
-	void gotoxy() const;
+	static void gotoxy (short int x, short int y); // Going to xy using coordinates
+	inline void gotoxy() const { gotoxy(x, y); }; // Going to xy using a Point instance
 	void print() const;
 	bool moveUp();
 	bool moveDown();

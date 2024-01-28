@@ -51,9 +51,7 @@ public:
 	bool canPointMove(Point point, Directions direction) const;
 	inline Point getStartingPoint() const { return gameBoard[0][GameConfig::WIDTH / 2]; };
 	bool isShapeInBoard(const Shape& shape) const;
-	bool canShapeMove(const Shape& shape, ShapeMovement movement) const;
 	void dropActiveShapes();
-	bool isShapeStuck(const Shape& shape) const;
 	bool canSetShapeInGameBoard(const Shape& shape) const;
 	void explodeBomb(Shape& shape);
 };
