@@ -19,12 +19,12 @@ int main()
 		, Point(GameConfig::WIDTH * 2 + 2 + GameConfig::DISTANCE_BETWEEN_BOARDS, 1 + 4)
 		, Point(GameConfig::WIDTH + 2 + GameConfig::DISTANCE_BETWEEN_BOARDS + 1, GameConfig::HEIGHT + 4)
 		, Point(GameConfig::WIDTH * 2 + 2 + GameConfig::DISTANCE_BETWEEN_BOARDS, GameConfig::HEIGHT + 4));
-	Player player1(board1, GameConfig:: player1Keys, "Player 1", true)
-		, player2(board2, GameConfig::player2Keys, "Player 2", true)
-		, computerPlayer1(board1, GameConfig::player1Keys, "CPU 1", false)
-	    , computerPlayer2(board2, GameConfig::player2Keys, "CPU 2", false);
+	Player player1(board1, GameConfig::player1Keys, "Player 1", true, Level::HUMAN)
+		, player2(board2, GameConfig::player2Keys, "Player 2", true, Level:: HUMAN)
+		, computerPlayer1(board1, GameConfig::player1Keys, "CPU 1", false, Level::BEST)
+		, computerPlayer2(board1, GameConfig::player2Keys, "CPU 1", false, Level::BEST);
 	GameColorStatus colorChoice;
-	Level levelChoice;
+	Level levelChoice1, levelChoice2;
 	Game* pGame = nullptr;
 
 	showConsoleCursor(false); // Get rid of the cursor
@@ -41,18 +41,23 @@ int main()
 		{
 		case(Choice::START_HUMAN_VS_HUMAN):
 			colorChoice = Game:: getUserColorChoiceFromKeyboard();
-			pGame = new Game(player1, player2, colorChoice, Level:: BEST);
+			pGame = new Game(player1, player2, colorChoice);
 			pGame->start();
 			break;
 		case(Choice::START_HUMAN_VS_CPU):
 			colorChoice = Game::getUserColorChoiceFromKeyboard();
-			levelChoice = Game::getLevelFromKeyboard();
-			pGame = Game:: getSideChoiceFromKeyboard() == RIGHT_ARROW ? new Game(computerPlayer1, player2, colorChoice, levelChoice) : new Game(player1, computerPlayer2, colorChoice, levelChoice);
+			levelChoice1 = Player::getLevelFromKeyboard();
+			computerPlayer1.setLevel(levelChoice1);
+			pGame = Game:: getSideChoiceFromKeyboard() == RIGHT_ARROW ? new Game(computerPlayer1, player2, colorChoice) : new Game(player1, computerPlayer1, colorChoice);
 			pGame->start();
 			break;
 		case(Choice::START_CPU_VS_CPU):
 			colorChoice = Game::getUserColorChoiceFromKeyboard();
-			pGame = new Game(computerPlayer1, computerPlayer2, colorChoice, Level::BEST);
+			levelChoice1 = Player::getLevelFromKeyboard();
+			levelChoice2 = Player::getLevelFromKeyboard();
+			computerPlayer1.setLevel(levelChoice1);
+			computerPlayer2.setLevel(levelChoice2);
+			pGame = new Game(computerPlayer1, computerPlayer2, colorChoice);
 			pGame->start();
 			break;
 		case(Choice::CONTINUE):

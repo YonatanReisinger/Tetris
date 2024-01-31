@@ -6,7 +6,7 @@
 * Output: None
 * Description: Constructor for the Game class. Initializes the game with the provided players, sets the initial game status to PLAYING, and the winner number to NO_WINNER.
 ************************/
-Game:: Game(Player &player1, Player &player2, GameColorStatus colorStatus, Level level) : player1(player1), player2(player2), colorStatus(colorStatus), level(level)
+Game:: Game(Player &player1, Player &player2, GameColorStatus colorStatus) : player1(player1), player2(player2), colorStatus(colorStatus)
 {
 	setStatus(GameStatus:: PLAYING); // new game is automatically being played
 	setWinnerNum(NO_WINNER);
@@ -125,7 +125,7 @@ bool Game:: setStatus(GameStatus status)
 * Output: Shape* representing a randomly generated shape
 * Description: Generates a new shape with a random type, starting point, and color status.
 ************************/
-inline Shape* Game:: getRandomShape(Point& startPoint) const
+inline Shape* Game:: getRandomShape(Point startPoint) const
 {
 	Shape* s;
 	unsigned int randomNum;
@@ -169,15 +169,12 @@ bool Game:: checkAndProcessKeyboardInput()
 		key = _getch();
 		if (key != ESC)
 		{
-			if (player1.isHumanPlayer())
-				processPlayerInput(key, player1);
-			if (player2.isHumanPlayer())
-				processPlayerInput(key, player2);
+			processPlayerInput(key, player1);
+			processPlayerInput(key, player2);
 			res = true;
 		}
 		else
 			res = false;
-
 	}
 	return res;
 }
@@ -351,15 +348,4 @@ Key Game:: getSideChoiceFromKeyboard()
 	} while (sideChoice != LEFT_ARROW && sideChoice != RIGHT_ARROW);
 	clearScreen();
 	return sideChoice;
-}
-Level Game:: getLevelFromKeyboard()
-{
-	Level levelChoice;
-	cout << "Choose level: (a) BEST (b) GOOD and (c) NOVICE" << endl;
-	do
-	{
-		levelChoice = (Level)_getch();
-	} while (levelChoice != Level:: BEST && levelChoice != Level::GOOD && levelChoice != Level::NOVICE
-		&& tolower(levelChoice) != Level::BEST && tolower(levelChoice) != Level::GOOD && tolower(levelChoice) != Level::NOVICE);
-	return ('a' <= levelChoice <= 'z') ? levelChoice : (Level)tolower(levelChoice);
 }

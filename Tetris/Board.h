@@ -30,10 +30,8 @@ private:
 	bool isPointInBoard(const Point& point) const;
 	bool isPointFull(const Point& point) const;
 	bool isRowFull(short int i) const;
-	void clearShapeFromGameBoard(Shape& shape);
 	void removeActiveShapeFromArr(Shape& shape, int shapeInd);
 	bool canActiveShapeDrop(const Shape& shape) const;
-	void clearPointsFromActiveShapes(short int clearedRowInd);
 	void updateActiveShapes(short int clearedRowInd);
 	void insertShapeToArr(const Shape& newShape);
 public:
@@ -54,6 +52,7 @@ public:
 	void dropActiveShapes();
 	bool canSetShapeInGameBoard(const Shape& shape) const;
 	void explodeBomb(Shape& shape);
+	void clearShapeFromGameBoard(Shape& shape);
 };
 
 #endif // Board.h
