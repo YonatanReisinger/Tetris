@@ -31,8 +31,6 @@ void Game::run()
 	
 	board1.print();
 	board2.print();
-	
-	player1.findBestMove();
 	// while both boards have space
 	while (isGamePlaying)
 	{
@@ -164,14 +162,15 @@ void Game:: moveShapeOnScreen(Shape& shape, ShapeMovement movement, GamePace pac
 ************************/
 bool Game:: checkAndProcessKeyboardInput()
 {
+	Computer* cpu1, * cpu2;
 	bool res = true;
-	Key key;
+	Key key1, key2;
 	if (_kbhit()) {
-		key = _getch();
-		if (key != ESC)
+		getKeys(player1, player2, key1, key2);
+		if (key1 != ESC && key2 != ESC)
 		{
-			processPlayerInput(key, player1);
-			processPlayerInput(key, player2);
+			processPlayerInput(key1, player1);
+			processPlayerInput(key2, player2);
 			res = true;
 		}
 		else
@@ -246,8 +245,12 @@ void Game:: setCurrentShape(Player& player,Point& startPoint)
 			board.printGameBoard();
 			clearRowsForPlayerInRound = board.clearFullRows();
 		}
-		// get a new random shape and print it
 		player.setCurrShape(getRandomShape(startPoint));
+		// get a new random shape
+		/*
+		if(ani == CPU)
+			currShapeFinalDestination = player.findBestMove;
+		*/
 	}
 }
 /************************
@@ -349,4 +352,32 @@ Key Game:: getSideChoiceFromKeyboard()
 	} while (sideChoice != LEFT_ARROW && sideChoice != RIGHT_ARROW);
 	clearScreen();
 	return sideChoice;
+}
+
+void Game::getKeys(Player& player1, Player& player2, Key& key1, Key& key2)
+{
+	Computer* cpu1, *cpu2;
+	Key keyboardKey = _getch();
+	//Human vs Human
+	if (typeid(player1) == typeid(Player) && typeid(player2) == typeid(Player)) {
+		key1 = keyboardKey;
+		key2 = keyboardKey;
+	}
+	//CPU vs CPU
+	else if (typeid(player1) != typeid(Player) && typeid(player2) != typeid(Player)) {
+		cpu1 = dynamic_cast<Computer*>(&player1);
+		cpu2 = dynamic_cast<Computer*>(&player2);
+		key1 = cpu1->getKey();
+		key2 = cpu2->getKey();
+	}
+	//player vs CPU
+	else if (typeid(player1) == typeid(Player)) {
+		key1 = keyboardKey;
+		key2 = cpu2->getKey();
+	}
+	//CPU vs player
+	else {
+		key1 = cpu1->getKey();
+		key2 = keyboardKey;
+	}
 }

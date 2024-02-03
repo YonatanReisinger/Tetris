@@ -126,7 +126,7 @@ Shape Player:: findBestMove()
 			if (curMoveScore > bestMoveScore)
 			{
 				bestMoveScore = curMoveScore;
-				*pResShape = tmpShape;
+				pResShape = &tmpShape;
 			}
 			
 			if (board.canShapeMove(tmpShape, currentRotation))
@@ -138,8 +138,7 @@ Shape Player:: findBestMove()
 
 
 
-	*currPlayingShape = originalShape;
-	return resShape;
+	return *pResShape;
 }
 int Player::dropShapeAndRatePlacement(Shape tmpShape)
 {
