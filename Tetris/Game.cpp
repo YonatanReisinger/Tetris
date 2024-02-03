@@ -32,6 +32,7 @@ void Game::run()
 	board1.print();
 	board2.print();
 	
+	player1.findBestMove();
 	// while both boards have space
 	while (isGamePlaying)
 	{

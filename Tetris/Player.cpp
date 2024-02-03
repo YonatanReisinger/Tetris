@@ -126,7 +126,7 @@ Shape Player:: findBestMove()
 			if (curMoveScore > bestMoveScore)
 			{
 				bestMoveScore = curMoveScore;
-				pResShape = &tmpShape;
+				*pResShape = tmpShape;
 			}
 			
 			if (board.canShapeMove(tmpShape, currentRotation))
@@ -138,7 +138,8 @@ Shape Player:: findBestMove()
 
 
 
-	return *pResShape;
+	*currPlayingShape = originalShape;
+	return resShape;
 }
 int Player::dropShapeAndRatePlacement(Shape tmpShape)
 {
@@ -156,7 +157,6 @@ int Player::dropShapeAndRatePlacement(Shape tmpShape)
 	}
 	return moveScore;
 }
-
 //void Player:: updateCurShapeInGame(const Game& game)
 //{
 //	int clearRowsForPlayerInRound = 0;
