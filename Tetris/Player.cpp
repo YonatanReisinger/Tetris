@@ -6,10 +6,9 @@
 * Description: Constructs a player with a game board, keys, name, and an optional score.
 
 *************************/
-Player::Player(const Board& board, const Key keys[], const char* name, int score): board(board)
+Player::Player(const Board& board, const Key keys[], const string name, int score) : board(board), name(name)
 	, keys{keys[KeyInd:: LEFT_IND], keys[KeyInd::RIGHT_IND], keys[KeyInd::ROTATE_RIGHT_IND], keys[KeyInd::ROTATE_LEFT_IND], keys[KeyInd::DROP_IND] }
 {
-	setName(name);
 	this->board.clear();
 	setScore(score);
 	setCurrShape(nullptr) ;
@@ -19,26 +18,6 @@ Player:: ~Player()
 {
 	if (currPlayingShape != nullptr)
 		delete currPlayingShape;
-}
-/*************************
-* Name: setName
-* Input: const char* name
-* Output: bool
-* Description: Sets the player's name and returns true on success, false otherwise.
-
-*************************/
-bool Player:: setName(const char* name)
-{
-	bool res;
-	if (name == nullptr)
-		res = false;
-	else
-	{
-		this->name = new char[strlen(name) + 1];
-		strcpy(this->name, name);
-		res = true;
-	}
-	return res;
 }
 /*************************
 * Name: setScore
@@ -98,6 +77,7 @@ int Player:: getKeyInd(Key inputKey)
 {
 	short int i;
 	int resInd = NOT_FOUND;
+	
 	// search if the input key is part of the players keys
 	for (i = 0; i < NUM_OF_KEYS && resInd == NOT_FOUND; i++)
 		// the input key can be either small letters or capital letters
@@ -115,3 +95,105 @@ void Player:: setCurrShape(Shape* currShape)
 {
 	currPlayingShape = currShape;
 }
+bool Player:: isStuck() const
+{
+	// a player current shape is stuck if it can't be set at all on the board or if it cant move to any direction
+	return !board.canSetShapeInGameBoard(*currPlayingShape) ||
+		(!canCurrShapeMove(ShapeMovement::DROP)
+			&& !canCurrShapeMove(ShapeMovement::LEFT)
+			&& !canCurrShapeMove(ShapeMovement::RIGHT));
+}
+bool Player:: canCurrShapeMove(ShapeMovement movement) const
+{
+	return board.canShapeMove(*currPlayingShape, movement);
+}
+
+Shape Player:: findBestMove()
+{
+	short int i, numOfRotationsPossible = 4;
+	Shape *pResShape, originalShape(*currPlayingShape), tmpShape(*currPlayingShape);
+	ShapeMovement currentDirection = RIGHT, currentRotation = ShapeMovement::ROTATE_RIGHT;
+	int bestMoveScore = 0, curMoveScore = 0;
+
+	// Go through all the possible lanes on the board the shape can drop from
+	while (board.canShapeMove(tmpShape, currentDirection))
+	{
+		tmpShape.move(currentDirection);
+		// Check all rotations possibilites
+		for (i = 0; i < numOfRotationsPossible; i++)
+		{
+			curMoveScore = dropShapeAndRatePlacement(tmpShape);
+			if (curMoveScore > bestMoveScore)
+			{
+				bestMoveScore = curMoveScore;
+				*pResShape = tmpShape;
+			}
+			
+			if (board.canShapeMove(tmpShape, currentRotation))
+				tmpShape.move(currentRotation);
+			else
+				numOfRotationsPossible--;
+		}
+	}
+
+
+
+	*currPlayingShape = originalShape;
+	return resShape;
+}
+int Player::dropShapeAndRatePlacement(Shape tmpShape)
+{
+	int moveScore;
+	// Drop the point from this specific place till it reaches the ground
+	while (board.canShapeMove(tmpShape, ShapeMovement::DROP))
+		tmpShape.move(ShapeMovement::DROP);
+	// Set the shape in the board in that place and check the result
+	if (board.canSetShapeInGameBoard(tmpShape))
+	{
+		board.setShapeInGameBoard(tmpShape, false);
+		// based on the current state of the board return an int for the score of the move
+		moveScore = board.evaluate();
+		board.clearShapeFromGameBoard(tmpShape);
+	}
+	return moveScore;
+}
+//void Player:: updateCurShapeInGame(const Game& game)
+//{
+//	int clearRowsForPlayerInRound = 0;
+//	if (canCurrShapeMove(ShapeMovement::DROP))
+//		game.moveShapeOnScreen(*currPlayingShape, ShapeMovement::DROP, GamePace::NORMAL);
+//	//if the shape can't move anymore
+//	else
+//	{
+//		// if the shape that can't move anymore is a bomb
+//		if (currPlayingShape->getType() == Type::BOMB)
+//		{
+//			board.explodeBomb(*currPlayingShape);
+//			board.dropActiveShapes();
+//			board.printGameBoard();
+//		}
+//		// If it is a normal shape that can be set to the board
+//		else if (board.canSetShapeInGameBoard(*currPlayingShape))
+//		{
+//			board.setShapeInGameBoard(*currPlayingShape, true);
+//			increaseScore(GameConfig::SCORE_FOR_PLACING_SHAPE);
+//			// print the new shape on the playing board
+//			board.printGameBoard();
+//		}
+//		// increase the score of the player according to how many rows he cleared
+//		clearRowsForPlayerInRound = board.clearFullRows();
+//		// drop all the shapes, if after the drop more rows can be cleared, continue to do so
+//		while (clearRowsForPlayerInRound != 0)
+//		{
+//			if (clearRowsForPlayerInRound == 4) // If the player scored a tetris
+//				increaseScore(800);
+//			else
+//				increaseScore(GameConfig::SCORE_FOR_FULL_LINE * clearRowsForPlayerInRound);
+//			board.dropActiveShapes();
+//			board.printGameBoard();
+//			clearRowsForPlayerInRound = board.clearFullRows();
+//		}
+//		// get a new random shape
+//		setCurrShape(game.getRandomShape(board.getStartingPoint()));
+//	}
+//}

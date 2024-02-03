@@ -23,8 +23,8 @@ Point::Point(short int x, short int y, char symbol,Color color)
 bool Point:: setX(short int x)
 {
 	bool res;
-	//if the x coordiante is after the end of the frame of the second board
-	if ((x > ((GameConfig::WIDTH + 2) * 2 + GameConfig::DISTANCE_BETWEEN_BOARDS)) || x < 0)
+	//if the x coordiante is outside of the screen width
+	if (x > GameConfig::SCREEN_WIDTH || x < 0)
 		res = false;
 	else
 	{
@@ -44,7 +44,7 @@ bool Point:: setY(short int y)
 {
 	bool res;
 	//if the y coordiante is larger the fixed height of the board and its frame
-	if ((y > (GameConfig::HEIGHT + 2)) || y < 0)
+	if (y > GameConfig:: SCREEN_HEIGHT|| y < 0)
 		res = false;
 	else
 	{
@@ -90,7 +90,7 @@ bool Point:: setSymbol(char symbol)
 * Description: Moves the console cursor to the Point's coordinates.
 
 *************************/
-void Point::gotoxy() const
+void Point:: gotoxy(short int x, short int y)
 {
 	HANDLE hConsoleOutput;
 	COORD dwCursorPosition;
@@ -213,4 +213,26 @@ bool Point:: setColor(Color color)
 		res = false;
 	}
 	return res;
+}
+int Point:: getHorizontalDistance(const Point & other)
+{
+	return abs(this->x - other.x);
+}
+int Point:: getVerticalDistance(const Point& other)
+{
+	return abs(this->y - other.y);
+}
+const double Point::distance(const Point& other) const
+{
+	return sqrt(pow(this->x - other.x, 2) + pow(this->y - other.y, 2));
+}
+void Point:: blink()
+{
+	char symbol = this->symbol;
+	setSymbol(EMPTY);
+	print();
+	Sleep((DWORD)GamePace:: BLINKING_PACE);
+	setSymbol(symbol);
+	print();
+	Sleep((DWORD)GamePace::BLINKING_PACE);
 }

@@ -219,7 +219,6 @@ void Board:: printFrame() const
 		, topRightBorderFrame(borders[TOP_RIGHT].getX() + 1, borders[TOP_RIGHT].getY() - 1)
 		, bottomLeftBorderFrame(borders[BOTTOM_LEFT].getX() - 1, borders[BOTTOM_LEFT].getY() + 1)
 		, bottomRightBorderFrame(borders[BOTTOM_RIGHT].getX() + 1, borders[BOTTOM_RIGHT].getY() + 1);
-	printHorizontalLine(topLeftBorderFrame, topRightBorderFrame);
 	printHorizontalLine(bottomLeftBorderFrame, bottomRightBorderFrame);
 	printVerticalLine(topLeftBorderFrame, bottomLeftBorderFrame);
 	printVerticalLine(topRightBorderFrame, bottomRightBorderFrame);
@@ -344,18 +343,6 @@ bool Board:: isShapeInBoard(const Shape& shape) const
 	return res;
 }
 /************************
-* Name: Board::canShapeMove
-* Input: const Shape& shape (Shape to check), ShapeMovement movement (Type of movement to check)
-* Output: bool representing whether the shape can move in the specified direction (true) or not (false)
-* Description: Checks if the entire shape can move in the specified direction.
-************************/
-bool Board:: canShapeMove(const Shape& shape, ShapeMovement movement) const
-{
-	Shape tempShape(shape);
-	tempShape.move(movement);
-	return canSetShapeInGameBoard(tempShape);
-}
-/************************
 * Name: Board::clearFullRows
 * Input: None
 * Output: int representing the number of cleared rows
@@ -368,7 +355,7 @@ int Board::clearFullRows()
 	{
 		if (isRowFull(i))
 		{
-			clearRow(i);
+			//clearRow(i);
 			// clear the removed points from all the shapes and move down the points that are above the line of clearence
 			updateActiveShapes(i);
 			fullRowsCounter++;
@@ -509,20 +496,6 @@ void Board:: removeActiveShapeFromArr(Shape& shape, int shapeInd)
 	numOfActiveShapes--;
 }
 /************************
-* Name: Board::isShapeStuck
-* Input: const Shape& shape (Shape to check)
-* Output: bool representing whether the shape is stuck (true) or not (false)
-* Description: Checks if the shape is stuck and cannot make any further moves.
-************************/
-bool Board::isShapeStuck(const Shape& shape) const
-{
-	// a shape is stuck if it can't move to any direction
-	return !canSetShapeInGameBoard(shape)
-		&& !canShapeMove(shape, ShapeMovement:: DROP)
-		&& !canShapeMove(shape, ShapeMovement::LEFT)
-		&& !canShapeMove(shape, ShapeMovement::RIGHT);
-}
-/************************
 * Name: Board::canSetShapeInGameBoard
 * Input: const Shape& shape (Shape to check)
 * Output: bool representing whether the entire shape can be set on the game board (true) or not (false)
@@ -536,4 +509,43 @@ bool Board:: canSetShapeInGameBoard(const Shape& shape) const
 	for (i = 0; i < NUM_OF_POINTS && (shape.points[i].getSymbol() != EMPTY) && res; i++)
 		res = !isPointFull(shape.points[i]) && isPointInBoard(shape.points[i]);
 	return res;
+}
+void Board::explodeBomb(Shape& bomb)
+{
+	short int i, j;
+	Point& bombPoint = bomb.points[0];
+	for (i = 0; i < 3; i++) // Make the bomb "explode" by making it blink 3 times 
+		bombPoint.blink();
+	// update all the active shapes in the board according to the exploding of the bomb
+	for (i = 0; i < numOfActiveShapes; i++)
+	{
+		// temporarly remove the active shape from the board
+		clearShapeFromGameBoard(activeShapes[i]);
+		// adjust the places of points of the shape according to the line cleared
+		for (j = 0; j < NUM_OF_POINTS && activeShapes[i].points[j].getSymbol() != EMPTY; j++)
+		{
+			if (activeShapes[i].points[j].distance(bombPoint) <= GameConfig::BOMB_EXPLOSION_RANGE)
+				activeShapes[i].points[j].setSymbol(EMPTY);
+			else
+				activeShapes[i].points[j].setSymbol(GameConfig:: SHAPE_SYMBOL);
+		}
+		if (activeShapes[i].isShapeClear()) // if by bombing a whole shape is empty 
+		{
+			removeActiveShapeFromArr(activeShapes[i], i);
+			i--;
+		}
+	}
+	// return all the active shapes to the board in their new place
+	for (i = 0; i < numOfActiveShapes; i++)
+		setShapeInGameBoard(activeShapes[i], false);
+}
+bool Board::canShapeMove(const Shape& shape, ShapeMovement movement) const
+{
+	Shape tempShape = shape;
+	tempShape.move(movement);
+	return canSetShapeInGameBoard(tempShape);
+}
+int Board:: evaluate() 
+{
+	return 1;
 }

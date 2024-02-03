@@ -30,10 +30,8 @@ private:
 	bool isPointInBoard(const Point& point) const;
 	bool isPointFull(const Point& point) const;
 	bool isRowFull(short int i) const;
-	void clearShapeFromGameBoard(Shape& shape);
 	void removeActiveShapeFromArr(Shape& shape, int shapeInd);
 	bool canActiveShapeDrop(const Shape& shape) const;
-	void clearPointsFromActiveShapes(short int clearedRowInd);
 	void updateActiveShapes(short int clearedRowInd);
 	void insertShapeToArr(const Shape& newShape);
 public:
@@ -51,10 +49,12 @@ public:
 	bool canPointMove(Point point, Directions direction) const;
 	inline Point getStartingPoint() const { return gameBoard[0][GameConfig::WIDTH / 2]; };
 	bool isShapeInBoard(const Shape& shape) const;
-	bool canShapeMove(const Shape& shape, ShapeMovement movement) const;
 	void dropActiveShapes();
-	bool isShapeStuck(const Shape& shape) const;
 	bool canSetShapeInGameBoard(const Shape& shape) const;
+	void explodeBomb(Shape& shape);
+	void clearShapeFromGameBoard(Shape& shape);
+	bool canShapeMove(const Shape& shape, ShapeMovement movement) const;
+	int evaluate();
 };
 
 #endif // Board.h

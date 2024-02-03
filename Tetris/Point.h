@@ -9,7 +9,7 @@ using namespace std;
 // <- Imports
 
 // Macros and enums ->
-enum class Color { WHITE = (FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE), RED = BACKGROUND_RED, BLUE = BACKGROUND_BLUE, GREEN = BACKGROUND_GREEN, BRWON = RED | GREEN, PURPLE = 80, GREY = 143, CYAN = 183 };
+enum class Color { WHITE = (FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE), RED = BACKGROUND_RED, BLUE = BACKGROUND_BLUE, GREEN = BACKGROUND_GREEN, BRWON = RED | GREEN, PURPLE = 80, GREY = 143, CYAN = 183};
 // <- Macros and enums
 
 class Point {
@@ -27,7 +27,8 @@ public:
 	bool setXY(short int x, short int y);
 	bool setSymbol(char symbol);
 	inline char getSymbol() const { return symbol; };
-	void gotoxy() const;
+	static void gotoxy (short int x, short int y); // Going to xy using coordinates
+	inline void gotoxy() const { gotoxy(x, y); }; // Going to xy using a Point instance
 	void print() const;
 	bool moveUp();
 	bool moveDown();
@@ -37,5 +38,9 @@ public:
 	inline bool areCoordinatesEqual(const Point& other) const { return x == other.x && y == other.y; };
 	inline Color getColor() const { return color; };
 	bool setColor(Color color);
+	int getHorizontalDistance(const Point& other);
+	int getVerticalDistance(const Point& other);
+	const double distance(const Point& other) const;
+	void blink();
 };
 #endif //Point.h
