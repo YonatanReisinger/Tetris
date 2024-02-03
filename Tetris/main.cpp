@@ -23,7 +23,7 @@ int main()
 	Player player1(board1, GameConfig::player1Keys, "Player 1")
 		, player2(board2, GameConfig::player2Keys, "Player 2");
 	Computer computerPlayer1(board1, GameConfig::player1Keys, "CPU 1", Computer::Level::BEST)
-		, computerPlayer2(board2, GameConfig::player2Keys, "CPU 2", Computer::Level::BEST);
+		, computerPlayer2(board2, GameConfig::player2Keys, "CPU 2",Computer::Level::BEST);
 	GameColorStatus colorChoice;
 	Computer:: Level levelChoice1, levelChoice2;
 	Game* pGame = nullptr;

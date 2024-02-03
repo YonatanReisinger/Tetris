@@ -31,8 +31,7 @@ void Game::run()
 	
 	board1.print();
 	board2.print();
-	
-	player1.findBestMove();
+
 	// while both boards have space
 	while (isGamePlaying)
 	{
@@ -45,6 +44,10 @@ void Game::run()
 			setStatus(GameStatus::PAUSED);
 			break;
 		}
+		// MAYBE ADD !!!!!!!!!!!!!!!!!!!!
+		//setCurrentShape(player1, startPoint1);
+		//setCurrentShape(player2, startPoint2);
+
 		// the following code is repeat as it helps the reactivity of the game !!!
 		isGamePlaying = checkAndProcessKeyboardInput();
 		if (!isGamePlaying) // if the player typed on ESC char that represents pausing the game

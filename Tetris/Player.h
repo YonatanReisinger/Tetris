@@ -22,8 +22,6 @@ protected:
 	Key const keys[NUM_OF_KEYS];
 	Shape* currPlayingShape;
 
-	int dropShapeAndRatePlacement(Shape tmpShape);
-
 public:
 	Player(const Board& board, const Key keys[], const string name, int score = 0);
 	Player(const Player& other) = delete;
@@ -42,6 +40,5 @@ public:
 	bool isStuck() const;
 	bool canCurrShapeMove(ShapeMovement movement) const;	
 	//void updateCurShapeInGame(const Game& game);
-	Shape findBestMove();
 };
 #endif // PLAYER.h
