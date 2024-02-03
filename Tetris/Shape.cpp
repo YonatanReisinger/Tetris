@@ -977,5 +977,24 @@ Point* const Shape:: getPoints()
 {
 	return points;
 }
+bool Shape::isAbove(const Shape& shape)
+{
+	bool res = true;
+	for (int i = 0; i < NUM_OF_POINTS&&res; i++)
+	{
+		if (points[i].getX() != shape.points[i].getX())
+			res = false;
+	}
+	return res;
+}
+bool Shape::isToTheRight(const Shape& shape) const
+{
+	return (points[0].getX() > shape.points[0].getX());
+}
+bool Shape::isToTheLeft(const Shape& shape) const
+{
+	return (points[0].getX() < shape.points[0].getX());
+}
+
 
 

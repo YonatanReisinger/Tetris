@@ -1,5 +1,5 @@
 #ifndef __COMPUTER_H__
-#define __COMPUTE_H__
+#define __COMPUTER_H__
 // Imports ->
 #include "Player.h"
 // <- Imports
@@ -14,10 +14,12 @@ public:
 	inline Level getLevel() const { return level; };
 	static Level getLevelFromKeyboard();
 	virtual int getKeyInd(Key inputKey);
+	Key getKey();
+	bool setCurrShapeFinalState(const Shape& shape);
 
 protected:
 	Level level;
-
+	Shape currShapeFinalState;
 };
 #endif //Computer.h
 
