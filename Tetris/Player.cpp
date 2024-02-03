@@ -6,13 +6,12 @@
 * Description: Constructs a player with a game board, keys, name, and an optional score.
 
 *************************/
-Player::Player(const Board& board, const Key keys[], const string name, bool isHuman, Level level , int score) : board(board), name(name), isHuman(isHuman)
+Player::Player(const Board& board, const Key keys[], const string name, int score) : board(board), name(name)
 	, keys{keys[KeyInd:: LEFT_IND], keys[KeyInd::RIGHT_IND], keys[KeyInd::ROTATE_RIGHT_IND], keys[KeyInd::ROTATE_LEFT_IND], keys[KeyInd::DROP_IND] }
 {
 	this->board.clear();
 	setScore(score);
 	setCurrShape(nullptr) ;
-	setLevel(level);
 }
 /*Player destructor*/
 Player:: ~Player()
@@ -78,8 +77,7 @@ int Player:: getKeyInd(Key inputKey)
 {
 	short int i;
 	int resInd = NOT_FOUND;
-	if (!isHuman) // CPU player dont have keys
-		return NOT_FOUND;
+	
 	// search if the input key is part of the players keys
 	for (i = 0; i < NUM_OF_KEYS && resInd == NOT_FOUND; i++)
 		// the input key can be either small letters or capital letters
@@ -107,55 +105,32 @@ bool Player:: isStuck() const
 }
 bool Player:: canCurrShapeMove(ShapeMovement movement) const
 {
-	Shape tempShape(*currPlayingShape);
-	tempShape.move(movement);
-	return board.canSetShapeInGameBoard(tempShape);
+	return board.canShapeMove(*currPlayingShape, movement);
 }
-Level Player:: getLevelFromKeyboard()
-{
-	Level levelChoice;
-	cout << "Choose level: (a) BEST (b) GOOD and (c) NOVICE" << endl;
-	do
-	{
-		levelChoice = (Level)_getch();
-	} while (levelChoice != Level::BEST && levelChoice != Level::GOOD && levelChoice != Level::NOVICE
-		&& tolower(levelChoice) != Level::BEST && tolower(levelChoice) != Level::GOOD && tolower(levelChoice) != Level::NOVICE);
-	return ('a' <= levelChoice <= 'z') ? levelChoice : (Level)tolower(levelChoice);
-}
-bool Player:: setLevel(Level level)
-{
-	if (level == Level::BEST || level == Level::GOOD || level == Level::NOVICE || level == Level::HUMAN)
-	{
-		this->level = level;
-		return true;
-	}
-	else
-		return false;
-}
-const Shape& Player:: optimizeMove()
+
+Shape Player:: findBestMove()
 {
 	short int i, numOfRotationsPossible = 4;
-	Shape tmpShape(*currPlayingShape), resShape, originalShape(*currPlayingShape);
-	ShapeMovement direction = RIGHT, rotation = ShapeMovement::ROTATE_RIGHT;
+	Shape *pResShape, originalShape(*currPlayingShape), tmpShape(*currPlayingShape);
+	ShapeMovement currentDirection = RIGHT, currentRotation = ShapeMovement::ROTATE_RIGHT;
+	int bestMoveScore = 0, curMoveScore = 0;
+
 	// Go through all the possible lanes on the board the shape can drop from
-	while (canCurrShapeMove(direction))
+	while (board.canShapeMove(tmpShape, currentDirection))
 	{
-		currPlayingShape->move(direction);
+		tmpShape.move(currentDirection);
 		// Check all rotations possibilites
 		for (i = 0; i < numOfRotationsPossible; i++)
 		{
-			// Drop the point from this specific place till it reaches the ground
-			while (canCurrShapeMove(ShapeMovement::DROP))
-				currPlayingShape->move(ShapeMovement::DROP);
-			// Set the shape in the board in that place and check the result
-			if (board.canSetShapeInGameBoard(*currPlayingShape))
+			curMoveScore = dropShapeAndRatePlacement(tmpShape);
+			if (curMoveScore > bestMoveScore)
 			{
-				board.setShapeInGameBoard(*currPlayingShape, false);
-				board.clearShapeFromGameBoard(*currPlayingShape);
+				bestMoveScore = curMoveScore;
+				*pResShape = tmpShape;
 			}
-			// CHECK THAT IT CHECKS ALL ROTATION POSSIBILITES !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-			if (canCurrShapeMove(rotation))
-				currPlayingShape->move(direction);
+			
+			if (board.canShapeMove(tmpShape, currentRotation))
+				tmpShape.move(currentRotation);
 			else
 				numOfRotationsPossible--;
 		}
@@ -165,6 +140,22 @@ const Shape& Player:: optimizeMove()
 
 	*currPlayingShape = originalShape;
 	return resShape;
+}
+int Player::dropShapeAndRatePlacement(Shape tmpShape)
+{
+	int moveScore;
+	// Drop the point from this specific place till it reaches the ground
+	while (board.canShapeMove(tmpShape, ShapeMovement::DROP))
+		tmpShape.move(ShapeMovement::DROP);
+	// Set the shape in the board in that place and check the result
+	if (board.canSetShapeInGameBoard(tmpShape))
+	{
+		board.setShapeInGameBoard(tmpShape, false);
+		// based on the current state of the board return an int for the score of the move
+		moveScore = board.evaluate();
+		board.clearShapeFromGameBoard(tmpShape);
+	}
+	return moveScore;
 }
 //void Player:: updateCurShapeInGame(const Game& game)
 //{

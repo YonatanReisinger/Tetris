@@ -53,6 +53,8 @@ public:
 	bool canSetShapeInGameBoard(const Shape& shape) const;
 	void explodeBomb(Shape& shape);
 	void clearShapeFromGameBoard(Shape& shape);
+	bool canShapeMove(const Shape& shape, ShapeMovement movement) const;
+	int evaluate();
 };
 
 #endif // Board.h

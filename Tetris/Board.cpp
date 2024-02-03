@@ -539,3 +539,13 @@ void Board::explodeBomb(Shape& bomb)
 	for (i = 0; i < numOfActiveShapes; i++)
 		setShapeInGameBoard(activeShapes[i], false);
 }
+bool Board::canShapeMove(const Shape& shape, ShapeMovement movement) const
+{
+	Shape tempShape = shape;
+	tempShape.move(movement);
+	return canSetShapeInGameBoard(tempShape);
+}
+int Board:: evaluate() 
+{
+	return 1;
+}
