@@ -53,6 +53,10 @@ Shape::Shape(Type t, Point& start,GameColorStatus colorStatus,RotationDirection 
 			createMirrorL(points, start, colorStatus);
 			break;
 		}
+		case BOMB: {
+			createBomb(start, colorStatus);
+			return;
+		}
 	}
 	setSymbol(GameConfig::SHAPE_SYMBOL);
 }
@@ -179,6 +183,18 @@ void Shape::createMirrorL(Point* points, Point& start,GameColorStatus colorStatu
 	points[3] = p1;
 	if (colorStatus == COLORIZED) {
 		setShapeColor(Color::CYAN);
+	}
+}
+void Shape::createBomb(Point& start, GameColorStatus colorStatus)
+{
+	points[0] = start;
+	points[0].setSymbol(GameConfig::BOMB_SYMBOL);
+	points[1] = EMPTY;
+	points[2] = EMPTY;
+	points[3] = EMPTY;
+	// Change to different color after !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+	if (colorStatus == COLORIZED) {
+		setShapeColor(Color::WHITE);
 	}
 }
 /*************************
@@ -953,6 +969,13 @@ bool Shape::setShapeColor(Color color)
 	}
 	return res;
 }
-
+Type Shape:: getType() const
+{
+	return shapeType;
+}
+Point* const Shape:: getPoints()
+{
+	return points;
+}
 
 

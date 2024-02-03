@@ -7,6 +7,7 @@
 using namespace std;
 #include <string>
 #include "Game.h"
+class Game;
 // <- Imports
 
 // Macros ans enums->
@@ -14,15 +15,15 @@ using namespace std;
 #define RIGHT_ARROW 77
 // <- Macros and enums
 
-void printMenu(GameStatus gameStatus = GameStatus:: PLAYING) ;
+void printMenu(Game* pGame);
 void printWelcomeMessage();
 void printChoiceError();
 void printInstructionsAndKeys();
 void clearScreen();
-void printWinner(Game& game);
 void clearCin();
 void printInstructions();
 void printKeys();
 void printColorOption();
+void showConsoleCursor(bool showFlag);
 
 #endif // global_functions.h

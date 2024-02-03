@@ -7,15 +7,20 @@
 * Description: Prints the game menu based on the provided game status.
   Displays options for starting a new game, continuing a paused game, presenting instructions, and exiting.
 ************************/
-void printMenu(GameStatus gameStatus)
+void printMenu(Game* pGame)
 {
     printWelcomeMessage();
-	cout << "Please enter your choice:\n" << "(1) Start a new game\n" ;
-	if (gameStatus == GameStatus:: PAUSED)
+	cout << "Please enter your choice:" << endl
+        << "(" << Choice::START_HUMAN_VS_HUMAN << ") Start a new game - Human vs Human" << endl
+        << "(" << Choice::START_HUMAN_VS_CPU << ") Start a new game - Human vs Computer" << endl
+        << "(" << Choice::START_CPU_VS_CPU << ") Start a new game - Computer vs Computer" << endl;
+    // if there is a game and it is paused
+	if (pGame != nullptr && pGame->getStatus() == GameStatus::PAUSED)
 	{
-		cout << "(2) Continue a paused game\n";
+		cout << "(" << Choice:: CONTINUE <<") Continue a paused game" << endl;
 	}
-	cout << "(8) Present instructions and keys\n" << "(9) exit\n";
+    cout << "(" << Choice::INSTRUCTIONS << ") Present instructions and keys" << endl
+        << "(" << Choice:: EXIT << ") exit" << endl;
 }
 /************************
 * Name: printWelcomeMessage
@@ -93,28 +98,6 @@ void clearScreen()
     system("cls");
 }
 /************************
-* Name: printWinner
-* Input: Game& game (Reference to the game object)
-* Output: None
-* Description: Prints the winner of the game, if there is one. Clears the console screen afterward.
-************************/
-void printWinner(Game& game)
-{
-    short int winnerNum = game.getWinnerNum();
-    if (game.getStatus() == GameStatus::FINISHED && winnerNum != NO_WINNER)
-    {
-        if (winnerNum == TIE)
-            cout << "The game ended in a tie!";
-        else // there is a winnner
-            cout << "The Winner is: " << game.getPlayer(winnerNum).getName();
-        // the game was finished and the winner was used, no more need for him after that
-        game.setWinnerNum(NO_WINNER);
-        cout << "\n\n\nPress any key to continue........";
-        while (!_kbhit());
-        clearScreen();
-    }
-}
-/************************
 * Name: clearCin
 * Description: Clears the cin function buffer.
 ************************/
@@ -181,4 +164,12 @@ void printColorOption()
     cout << "You have decided to start a new game!\n";
     cout << "Please select coloring option for the game :\n";
     cout << "(1) for colorized game\n(2) for uncolorized game\n";
+}
+void showConsoleCursor(bool showFlag)
+{
+    HANDLE out = GetStdHandle(STD_OUTPUT_HANDLE);
+    CONSOLE_CURSOR_INFO     cursorInfo;
+    GetConsoleCursorInfo(out, &cursorInfo);
+    cursorInfo.bVisible = showFlag; // set the cursor visibility
+    SetConsoleCursorInfo(out, &cursorInfo);
 }
