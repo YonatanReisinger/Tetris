@@ -30,6 +30,38 @@ bool Computer::setLevel(Level level)
 	else
 		return false;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 void Computer:: findBestMove()
 {
 	short int i, numOfRotationsPossible = 4;

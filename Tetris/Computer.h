@@ -14,6 +14,8 @@ public:
 	inline Level getLevel() const { return level; };
 	static Level getLevelFromKeyboard();
 	virtual int getKeyInd(Key inputKey);
+
+
 	void findBestMove();
 	int evaluatePlacement(Shape tmpShape);
 
