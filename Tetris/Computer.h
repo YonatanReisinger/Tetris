@@ -14,10 +14,10 @@ public:
 	inline Level getLevel() const { return level; };
 	static Level getLevelFromKeyboard();
 	virtual int getKeyInd(Key inputKey);
+	Key getKey();
+	bool setCurrShapeFinalState(const Shape& shape);
 	void findBestMove();
 	int evaluatePlacement(Shape tmpShape);
-	bool setCurrShapeFinalState(const Shape& shape);
-	Key getKey();
 
 protected:
 	Level level;
