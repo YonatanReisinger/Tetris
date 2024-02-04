@@ -9,7 +9,7 @@
 using namespace std;
 // Macros ans enums->
 enum Type{PLUS,SQUARE,STRAIGHT,SKEW,MIRROR_SKEW,L,MIRROR_L, BOMB} ;
-enum RotationDirection{FACE_UP,FACE_DOWN,FACE_LEFT,FACE_RIGHT};
+enum RotationDirection{FACE_UP,FACE_RIGHT,FACE_DOWN,FACE_LEFT};
 enum ShapeMovement{LEFT,RIGHT,ROTATE_LEFT,ROTATE_RIGHT,DROP};
 #define NUM_OF_POINTS  4
 // <- Macros and enums
@@ -54,6 +54,10 @@ public:
 	bool setShapeColor(Color color);
 	Type getType() const;
 	Point* const getPoints();
+	bool isAbove(const Shape& shape);
+	inline RotationDirection getDirection() const { return shapeDirection; };
+	bool isToTheRight(const Shape& shape) const;
+	bool isToTheLeft(const Shape& shape) const;
 	friend class Board;
 };
 

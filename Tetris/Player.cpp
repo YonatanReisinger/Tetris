@@ -110,6 +110,7 @@ bool Player:: canCurrShapeMove(ShapeMovement movement) const
 {
 	return board.canShapeMove(*currPlayingShape, movement);
 }
+
 //void Player:: updateCurShapeInGame(const Game& game)
 //{
 //	int clearRowsForPlayerInRound = 0;

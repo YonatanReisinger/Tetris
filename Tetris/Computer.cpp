@@ -43,11 +43,11 @@ Key Computer::getKey()
 		else
 			key = keys[KeyInd::ROTATE_RIGHT_IND];
 	}
-	else if (currPlayingShape->isAbove(currShapeFinalState))
+	else if (currPlayingShape->isAbove(currShapeFinalState)) 
 		key = keys[KeyInd::DROP_IND];
-	else if (currPlayingShape->isToTheRight(currShapeFinalState))
+	else if (currPlayingShape->isToTheRight(currShapeFinalState)) 
 		key = keys[KeyInd::LEFT_IND];
-	else
+	else 
 		key = keys[KeyInd::RIGHT_IND];
 	return key;
 }
