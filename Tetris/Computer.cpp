@@ -30,38 +30,36 @@ bool Computer::setLevel(Level level)
 	else
 		return false;
 }
+Key Computer::getKey()
+{
+	Key key;
+	RotationDirection currDirection = currPlayingShape->getDirection();
+	RotationDirection finalDirection = currShapeFinalState.getDirection();
+	int val;
+	if (currDirection != finalDirection) {
+		val = (4 + finalDirection - currDirection) % 4;
+		if (val == 3)
+			key = keys[KeyInd::ROTATE_LEFT_IND];
+		else
+			key = keys[KeyInd::ROTATE_RIGHT_IND];
+	}
+	else if (currPlayingShape->isAbove(currShapeFinalState))
+		key = keys[KeyInd::DROP_IND];
+	else if (currPlayingShape->isToTheRight(currShapeFinalState))
+		key = keys[KeyInd::LEFT_IND];
+	else
+		key = keys[KeyInd::RIGHT_IND];
+	return key;
+}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+bool Computer::setCurrShapeFinalState(const Shape& shape)
+{
+	bool res;
+	res = currPlayingShape->getType() == shape.getType() && board.isShapeInBoard(shape);
+	if (res)
+		currShapeFinalState = shape;
+	return res;
+}
 void Computer:: findBestMove()
 {
 	short int i, numOfRotationsPossible = 4;
