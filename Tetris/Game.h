@@ -7,9 +7,11 @@
 #include "Player.h"
 #include "Shape.h"
 #include "gameConfig.h"
+#include "Computer.h"
 #include "global_functions.h"
 #include <iostream>
 #include <conio.h> // for _kbhit() and _getch()
+#include <typeinfo>
 using namespace std;
 // <- Imports
 

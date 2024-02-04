@@ -6,7 +6,8 @@
 * Output: None
 * Description: Constructor for the Game class. Initializes the game with the provided players, sets the initial game status to PLAYING, and the winner number to NO_WINNER.
 ************************/
-Game:: Game(Player &player1, Player &player2, GameColorStatus colorStatus) : player1(player1), player2(player2), colorStatus(colorStatus)
+Game:: Game(Player &player1, Player &player2, GameColorStatus colorStatus) 
+	: player1(player1), player2(player2), colorStatus(colorStatus)
 {
 	setStatus(GameStatus:: PLAYING); // new game is automatically being played
 	setWinnerNum(NO_WINNER);

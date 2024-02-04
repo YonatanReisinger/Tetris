@@ -1,5 +1,5 @@
 #include "Computer.h"
-Computer::Computer(const Board& board, const Key keys[], const string name, Level level, int bestMoveScore,int score)
+Computer::Computer(const Board& board, const Key keys[], const string name, int bestMoveScore,int score)
 	: Player(board, keys, name, score)
 {
 	setLevel(level);
@@ -42,7 +42,7 @@ void Computer:: findBestMove()
 		evaluatePossibleMovesFromSide(ShapeMovement:: RIGHT);
 		evaluatePossibleMovesFromSide(ShapeMovement::LEFT);
 		// check the placement in the current lane
-		setBestMoveScoreAndCurrShapeFinalState(dropShapeAndEvaluatePlacement(tmpShape), tmpShape);
+		setBestMoveScoreAndCurrShapeFinalState(evaluatePlacement(tmpShape), tmpShape);
 
 		if (board.canShapeMove(tmpShape, ShapeMovement::ROTATE_RIGHT))
 			tmpShape.move(ShapeMovement::ROTATE_RIGHT);
@@ -53,15 +53,33 @@ void Computer:: findBestMove()
 void Computer:: evaluatePossibleMovesFromSide(ShapeMovement direction)
 {
 	short int i;
-	Shape *pResShape, tmpShape(*currPlayingShape);
+	Shape tmpShape(*currPlayingShape);
 	int curMoveScore = 0;
+	Shape* movingPtr, horizontalShape(*currPlayingShape), verticalShape(*currPlayingShape);
+	movingPtr = &horizontalShape;
 
-	while (board.canShapeMove(tmpShape, direction))
+	while (board.canShapeMove(horizontalShape, direction))
 	{
-		tmpShape.move(direction);
-		curMoveScore = dropShapeAndEvaluatePlacement(tmpShape);
-		setBestMoveScoreAndCurrShapeFinalState(curMoveScore, tmpShape);
+		horizontalShape.move(direction);
+		verticalShape = horizontalShape;
+		// Drop the point from this specific place till it reaches the ground
+		while (board.canShapeMove(verticalShape, ShapeMovement::DROP))
+			verticalShape.move(ShapeMovement::DROP);
+
+		curMoveScore = evaluatePlacement(verticalShape);
+		setBestMoveScoreAndCurrShapeFinalState(curMoveScore, verticalShape);
 	}
+
+	//while (board.canShapeMove(tmpShape, direction))
+	//{
+	//	tmpShape.move(direction);
+	//	// Drop the point from this specific place till it reaches the ground
+	//	while (board.canShapeMove(tmpShape, ShapeMovement::DROP))
+	//		tmpShape.move(ShapeMovement::DROP);
+
+	//	curMoveScore = evaluatePlacement(tmpShape);
+	//	setBestMoveScoreAndCurrShapeFinalState(curMoveScore, tmpShape);
+	//}
 }
 bool Computer:: setBestMoveScoreAndCurrShapeFinalState(int newScore, const Shape& newShapeFinalState)
 {
@@ -81,12 +99,30 @@ bool Computer::setCurrShapeFinalState(const Shape& shape)
 		currShapeFinalState = shape;
 	return res;
 }
-int Computer::dropShapeAndEvaluatePlacement(Shape tmpShape)
+Key Computer:: getKey()
+{
+	Key key;
+	RotationDirection currDirection = currPlayingShape->getDirection();
+	RotationDirection finalDirection = currShapeFinalState.getDirection();
+	int val;
+	if (currDirection != finalDirection) {
+		val = (4 + finalDirection - currDirection) % 4;
+		if (val == 3)
+			key = keys[KeyInd::ROTATE_LEFT_IND];
+		else
+			key = keys[KeyInd::ROTATE_RIGHT_IND];
+	}
+	else if (currPlayingShape->isAbove(currShapeFinalState))
+		key = keys[KeyInd::DROP_IND];
+	else if (currPlayingShape->isToTheRight(currShapeFinalState))
+		key = keys[KeyInd::LEFT_IND];
+	else
+		key = keys[KeyInd::RIGHT_IND];
+	return key;
+}
+int Computer:: evaluatePlacement(Shape tmpShape)
 {
 	int moveScore = 0;
-	// Drop the point from this specific place till it reaches the ground
-	while (board.canShapeMove(tmpShape, ShapeMovement::DROP))
-		tmpShape.move(ShapeMovement::DROP);
 	// Set the shape in the board in that place and check the result
 	if (board.canSetShapeInGameBoard(tmpShape))
 	{
