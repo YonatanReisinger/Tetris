@@ -51,6 +51,7 @@ Key Computer::getKey()
 		key = keys[KeyInd::RIGHT_IND];
 	return key;
 }
+
 bool Computer::setCurrShapeFinalState(const Shape& shape)
 {
 	bool res;

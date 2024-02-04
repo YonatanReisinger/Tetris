@@ -32,7 +32,6 @@ void Game::run()
 	
 	board1.print();
 	board2.print();
-
 	// while both boards have space
 	while (isGamePlaying)
 	{
