@@ -22,12 +22,15 @@ int main()
 		, Point(GameConfig::WIDTH * 2 + 2 + GameConfig::DISTANCE_BETWEEN_BOARDS, GameConfig::HEIGHT + 4));
 	Player player1(board1, GameConfig::player1Keys, "Player 1")
 		, player2(board2, GameConfig::player2Keys, "Player 2");
-	Computer computerPlayer1(board1, GameConfig::player1Keys, "CPU 1", Computer::Level::BEST)
-		, computerPlayer2(board2, GameConfig::player2Keys, "CPU 2", Computer::Level::BEST);
+	Computer computerPlayer1(board1, GameConfig::player1Keys, "CPU 1")
+		, computerPlayer2(board2, GameConfig::player2Keys, "CPU 2");
 	GameColorStatus colorChoice;
-	Computer:: Level levelChoice1, levelChoice2;
 	Game* pGame = nullptr;
 	
+	Player* cpu3 = new Computer(board1, GameConfig::player1Keys, "CPU 1")
+		, * cpu4 = new Computer(board2, GameConfig::player2Keys, "CPU 2");
+	Computer* temp3 = dynamic_cast<Computer*>(cpu3), * temp4 = dynamic_cast<Computer*>(cpu4);
+
 	showConsoleCursor(false); // Get rid of the cursor
 	srand(time(0)); // for getting new random shapes every time the program runs
 	// print the whole board including the frame
@@ -42,23 +45,26 @@ int main()
 		{
 		case(Choice::START_HUMAN_VS_HUMAN):
 			colorChoice = Game:: getUserColorChoiceFromKeyboard();
-			pGame = new Game(player1, player2, colorChoice);
+			//pGame = new Game(player1, player2, colorChoice);
 			pGame->start();
 			break;
 		case(Choice::START_HUMAN_VS_CPU):
 			colorChoice = Game::getUserColorChoiceFromKeyboard();
-			levelChoice1 = Computer::getLevelFromKeyboard();
-			computerPlayer1.setLevel(levelChoice1);
+			computerPlayer1.setLevel(Computer::getLevelFromKeyboard());
 			// pGame = Game:: getSideChoiceFromKeyboard() == RIGHT_ARROW ? new Game(computerPlayer1, player2, colorChoice) : new Game(player1, computerPlayer1, colorChoice);
 			pGame->start();
 			break;
 		case(Choice::START_CPU_VS_CPU):
 			colorChoice = Game::getUserColorChoiceFromKeyboard();
-			levelChoice1 = Computer::getLevelFromKeyboard();
-			levelChoice2 = Computer::getLevelFromKeyboard();
-			computerPlayer1.setLevel(levelChoice1);
-			computerPlayer2.setLevel(levelChoice2);
-			// pGame = new Game(computerPlayer1, computerPlayer2, colorChoice);
+			cout << "Player1:" << endl;
+			temp3->setLevel(Computer::getLevelFromKeyboard());
+			clearScreen();
+			cout << "Player2:" << endl;
+			temp4->setLevel(Computer::getLevelFromKeyboard());
+			clearScreen();
+
+			pGame = new Game(*cpu3, *cpu4, colorChoice);
+			//pGame = new Game(computerPlayer1, computerPlayer2, colorChoice);
 			pGame->start();
 			break;
 		case(Choice::CONTINUE):

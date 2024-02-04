@@ -98,64 +98,19 @@ void Player:: setCurrShape(Shape* currShape)
 bool Player:: isStuck() const
 {
 	// a player current shape is stuck if it can't be set at all on the board or if it cant move to any direction
-	return !board.canSetShapeInGameBoard(*currPlayingShape) ||
+	bool res = !board.canSetShapeInGameBoard(*currPlayingShape) ||
 		(!canCurrShapeMove(ShapeMovement::DROP)
 			&& !canCurrShapeMove(ShapeMovement::LEFT)
 			&& !canCurrShapeMove(ShapeMovement::RIGHT));
+	if (res == true)
+		res = res;
+	return res;
 }
 bool Player:: canCurrShapeMove(ShapeMovement movement) const
 {
 	return board.canShapeMove(*currPlayingShape, movement);
 }
 
-Shape Player:: findBestMove()
-{
-	short int i, numOfRotationsPossible = 4;
-	Shape *pResShape, originalShape(*currPlayingShape), tmpShape(*currPlayingShape);
-	ShapeMovement currentDirection = RIGHT, currentRotation = ShapeMovement::ROTATE_RIGHT;
-	int bestMoveScore = 0, curMoveScore = 0;
-
-	// Go through all the possible lanes on the board the shape can drop from
-	while (board.canShapeMove(tmpShape, currentDirection))
-	{
-		tmpShape.move(currentDirection);
-		// Check all rotations possibilites
-		for (i = 0; i < numOfRotationsPossible; i++)
-		{
-			curMoveScore = dropShapeAndRatePlacement(tmpShape);
-			if (curMoveScore > bestMoveScore)
-			{
-				bestMoveScore = curMoveScore;
-				pResShape = &tmpShape;
-			}
-			
-			if (board.canShapeMove(tmpShape, currentRotation))
-				tmpShape.move(currentRotation);
-			else
-				numOfRotationsPossible--;
-		}
-	}
-
-
-
-	return *pResShape;
-}
-int Player::dropShapeAndRatePlacement(Shape tmpShape)
-{
-	int moveScore;
-	// Drop the point from this specific place till it reaches the ground
-	while (board.canShapeMove(tmpShape, ShapeMovement::DROP))
-		tmpShape.move(ShapeMovement::DROP);
-	// Set the shape in the board in that place and check the result
-	if (board.canSetShapeInGameBoard(tmpShape))
-	{
-		board.setShapeInGameBoard(tmpShape, false);
-		// based on the current state of the board return an int for the score of the move
-		moveScore = board.evaluate();
-		board.clearShapeFromGameBoard(tmpShape);
-	}
-	return moveScore;
-}
 //void Player:: updateCurShapeInGame(const Game& game)
 //{
 //	int clearRowsForPlayerInRound = 0;

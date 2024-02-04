@@ -34,6 +34,11 @@ private:
 	bool canActiveShapeDrop(const Shape& shape) const;
 	void updateActiveShapes(short int clearedRowInd);
 	void insertShapeToArr(const Shape& newShape);
+	void calculateEvaluationParameters(int& maxHeight, int& holesPenalty, int& fullRows) const;
+	int getBlockedFromAbovePenalty(int row, int col) const;
+	int getBlockedFromSidePenalty(int row, int col) const;
+
+
 public:
 	bool setRow(short int i, char boardSymbol);
 	Board(const Point& topLeft, const Point& topRight, const Point& bottomLeft, const Point& bottomRight);
@@ -54,7 +59,7 @@ public:
 	void explodeBomb(Shape& shape);
 	void clearShapeFromGameBoard(Shape& shape);
 	bool canShapeMove(const Shape& shape, ShapeMovement movement) const;
-	int evaluate();
+	int evaluate() const;
 };
 
 #endif // Board.h
