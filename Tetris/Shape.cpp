@@ -995,16 +995,15 @@ bool Shape::isToTheLeft(const Shape& shape) const
 {
 	return (points[0].getX() < shape.points[0].getX());
 }
-short int Shape:: getLowestY()
+bool Shape:: setShapeRotationDirection(RotationDirection shapeDirection)
 {
-	short int i, res = 0;
-	for (i = 0; i < 4 && points[i].getSymbol() != EMPTY; i++)
+	if (shapeDirection == FACE_UP || shapeDirection == FACE_RIGHT || shapeDirection == FACE_DOWN || shapeDirection == FACE_LEFT)
 	{
-		if (points[i].getY() > res)
-			res = points[i].getY();
+		this->shapeDirection = shapeDirection;
+		return true;
 	}
-	return res;
+	else
+		return false;
 }
-
 
 

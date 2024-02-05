@@ -22,15 +22,14 @@ void Game::run()
 {
 	bool isGamePlaying = true;
 	Board& board1 = player1.getBoard(), &board2 = player2.getBoard();
-	Point startPoint1 = board1.getStartingPoint(), startPoint2 = board2.getStartingPoint();
 
 	if (getStatus() != GameStatus::PAUSED) // random new shapes just if it is completely new game 
 	{
-		player1.setCurrShape(getRandomShape(startPoint1));
-		player2.setCurrShape(getRandomShape(startPoint2));
+		player1.setRandomCurrShape(getColorStatus());
+		player2.setRandomCurrShape(getColorStatus());
+		
 		player1.findBestMove();
 		player2.findBestMove();
-		
 	}
 
 	board1.print();
@@ -59,8 +58,8 @@ void Game::run()
 			break;
 		}
 		
-		setCurrentShape(player1, startPoint1);
-		setCurrentShape(player2, startPoint2);
+		setCurrentShapeInBoard(player1);
+		setCurrentShapeInBoard(player2);
 		
 		// if one of the current shapes can't move anymore, it means that the player has lost and the game should end
 		isGamePlaying = !player1.isStuck() && !player2.isStuck();
@@ -128,23 +127,6 @@ bool Game:: setStatus(GameStatus status)
 	return res;
 }
 /************************
-* Name: Game::getRandomShape
-* Input: Point& startPoint (The starting point for the new shape)
-* Output: Shape* representing a randomly generated shape
-* Description: Generates a new shape with a random type, starting point, and color status.
-************************/
-inline Shape* Game:: getRandomShape(Point startPoint) const
-{
-	Shape* s;
-	unsigned int randomNum;
-	randomNum = (rand() % 100) + 1; // Generate a random number between 1 and 100
-	if (randomNum < GameConfig::CHANCE_FOR_BOMB * 100)
-		s = new Shape(Type:: BOMB, startPoint, getColorStatus());
-	else
-		s = new Shape(Type(rand() % NUM_OF_SHAPES), startPoint,getColorStatus()) ;
-	return s;
-}
-/************************
 * Name: Game::moveShapeOnScreen
 * Input: Shape& shape (Reference to the shape to be moved), ShapeMovement movement (The direction of movement), GamePace pace (The speed of movement)
 * Output: None
@@ -208,12 +190,12 @@ void Game:: processPlayerInput(Key key, Player& player)
 	}
 }
 /************************
-* Name: Game::setCurrentShape
+* Name: Game::setCurrentShapeInBoard
 * Input: Player& player (Reference to the player whose current shape is being set), Point& startPoint (The starting point for the new shape)
 * Output: None
 * Description: Sets the current shape for the player, either generating a new shape or moving the existing one down the board. Handles clearing full rows, updating scores, and printing the new shape.
 ************************/
-void Game:: setCurrentShape(Player& player,Point& startPoint)
+void Game:: setCurrentShapeInBoard(Player& player)
 {
 	int clearRowsForPlayerInRound = 0;
 	Board& board = player.getBoard();
@@ -253,7 +235,7 @@ void Game:: setCurrentShape(Player& player,Point& startPoint)
 			clearRowsForPlayerInRound = board.clearFullRows();
 		}
 		
-		player.setCurrShape(getRandomShape(startPoint));
+		player.setRandomCurrShape(getColorStatus());
 		player.findBestMove();
 	}
 }

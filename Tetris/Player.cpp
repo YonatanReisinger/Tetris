@@ -11,7 +11,8 @@ Player::Player(const Board& board, const Key keys[], const string name, int scor
 {
 	this->board.clear();
 	setScore(score);
-	setCurrShape(nullptr) ;
+	setCurrShape(nullptr);
+	setStartpoint(board.getStartingPoint());
 }
 /*Player destructor*/
 Player:: ~Player()
@@ -112,8 +113,34 @@ bool Player:: canCurrShapeMove(ShapeMovement movement) const
 }
 void Player:: findBestMove()
 {
+	// A normal player doesnt have a way to find his best move
 	if (typeid(this) == typeid(Player))
 		return;
+}
+bool Player::setStartpoint(const Point& startPoint)
+{
+	if (board.isPointInBoard(startPoint))
+	{
+		this->startPoint = startPoint;
+		return true;
+	}
+	else
+		return false;
+}
+const Point& Player:: getStartPoint() const
+{
+	return startPoint;
+}
+void Player:: setRandomCurrShape(GameColorStatus color)
+{
+	Shape* s;
+	unsigned int randomNum;
+	randomNum = (rand() % 100) + 1; // Generate a random number between 1 and 100
+	if (randomNum < GameConfig::CHANCE_FOR_BOMB * 100)
+		s = new Shape(Type::BOMB, startPoint, color);
+	else
+		s = new Shape(Type(rand() % NUM_OF_SHAPES), startPoint, color);
+	setCurrShape(s);
 }
 //void Player:: updateCurShapeInGame(const Game& game)
 //{

@@ -25,8 +25,15 @@ protected:
 	Shape currShapeFinalState;
 	int bestMoveScore;
 
-	void evaluatePossibleMovesFromSide(ShapeMovement direction);
+	void evaluatePossibleMovesFromSide(const Shape& tmpShape, ShapeMovement direction);
 	bool updateBestMoveScoreAndCurrShapeFinalState(int newScore, const Shape& newShapeFinalState);
+	int evaluate() const;
+	int evaluate(Shape& bomb) const;
+	void calculateEvaluationParameters(int& maxHeight, int& holesPenalty, int& fullRows) const;
+	int getBlockedFromAbovePenalty(int row, int col) const;
+	int getBlockedFromSidePenalty(int row, int col) const;
+	bool shouldMakeRandomMove() const;
+	void findRandomMove();
 };
 #endif //Computer.h
 

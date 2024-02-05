@@ -30,13 +30,13 @@ public:
 	static constexpr float CHANCE_FOR_BOMB = 0.05;
 	static constexpr unsigned int BOMB_EXPLOSION_RANGE = 4;
 
-	static constexpr int CLEARED_LINES_IMPORTANCE = 3;
-	static constexpr int HEIGT_IMPORTANCE = 2;
-	static constexpr int HOLES_IMPORTANCE = 1;
+	static constexpr float CHANCE_FOR_GOOD_CPU_RANDOM_MOVE = 0.03;
+	static constexpr float CHANCE_FOR_NOVICE_CPU_RANDOM_MOVE = 0.1;
+
 	static constexpr unsigned short int HOLES_BLOCKED_FROM_ABOVE_PENALTY = 2;
 	static constexpr unsigned short int HOLES_BLOCKED_FROM_SIDE_PENALTY = 1;
 	static constexpr unsigned short int SCORE_PER_HEIGHT = 40;
-	static constexpr unsigned short int SCORE_PER_FILLED_ROW = 20;
+	static constexpr unsigned short int SCORE_PER_FILLED_ROW = 50;
 
 };
 #endif //GameConfig.h

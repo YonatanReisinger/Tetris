@@ -47,6 +47,7 @@ public:
 	void print() const;
 	void clearShape();
 	void setSymbol(char symbol);
+	bool setShapeRotationDirection(RotationDirection shapeDirection);
 	void move(ShapeMovement movement);
 	int getPointInd(const Point& p1) const;
 	bool isShapeClear() const;
@@ -58,7 +59,7 @@ public:
 	inline RotationDirection getDirection() const { return shapeDirection; };
 	bool isToTheRight(const Shape& shape) const;
 	bool isToTheLeft(const Shape& shape) const;
-	short int getLowestY();
+
 	friend class Board;
 };
 

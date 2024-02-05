@@ -10,7 +10,8 @@ using namespace std;
 // <- Imports
 
 // Macros ans enums->
-enum Borders {TOP_LEFT, TOP_RIGHT, BOTTOM_LEFT, BOTTOM_RIGHT} ;
+enum Borders {TOP_LEFT, TOP_RIGHT, BOTTOM_LEFT, BOTTOM_RIGHT};
+typedef const Point (*gameBoardPointer)[GameConfig::WIDTH];
 // <- Macros and enums
 
 class Board{
@@ -27,22 +28,16 @@ private:
 	void printFrame() const;
 	void printHorizontalLine(Point& leftEnd, Point& rightEnd, char symbol = GameConfig:: BORDER_SYMBOL) const;
 	void printVerticalLine(Point& topEnd, Point& bottomEnd, char symbol = GameConfig:: BORDER_SYMBOL) const;
-	bool isPointInBoard(const Point& point) const;
-	bool isPointFull(const Point& point) const;
-	bool isRowFull(short int i) const;
 	void removeActiveShapeFromArr(Shape& shape, int shapeInd);
 	bool canActiveShapeDrop(const Shape& shape) const;
 	void updateActiveShapes(short int clearedRowInd);
 	void insertShapeToArr(const Shape& newShape);
-	void calculateEvaluationParameters(int& maxHeight, int& holesPenalty, int& fullRows) const;
-	int getBlockedFromAbovePenalty(int row, int col) const;
-	int getBlockedFromSidePenalty(int row, int col) const;
-
-
+	
 public:
 	bool setRow(short int i, char boardSymbol);
 	Board(const Point& topLeft, const Point& topRight, const Point& bottomLeft, const Point& bottomRight);
 	inline Point* getBorders() { return borders; };
+	gameBoardPointer getGameBoard() const;
 	bool setNumOfShapes(size_t size);
 	bool setPointInGameBoard(const Point& point);
 	bool setShapeInGameBoard(const Shape& shape, bool isShapeNew);
@@ -59,7 +54,9 @@ public:
 	void explodeBomb(Shape& shape);
 	void clearShapeFromGameBoard(Shape& shape);
 	bool canShapeMove(const Shape& shape, ShapeMovement movement) const;
-	int evaluate() const;
+	bool isPointInBoard(const Point& point) const;
+	bool isRowFull(short int i) const;
+	bool isPointFull(const Point& point) const;
 };
 
 #endif // Board.h

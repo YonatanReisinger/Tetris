@@ -21,6 +21,7 @@ protected:
 	int score;
 	Key const keys[NUM_OF_KEYS];
 	Shape* currPlayingShape;
+	Point startPoint;
 
 public:
 	Player(const Board& board, const Key keys[], const string name, int score = 0);
@@ -40,6 +41,10 @@ public:
 	bool isStuck() const;
 	bool canCurrShapeMove(ShapeMovement movement) const;
 	virtual void findBestMove();
+	bool setStartpoint(const Point& startPoint);
+	const Point& getStartPoint() const;
+	void setRandomCurrShape(GameColorStatus color);
+
 	//void updateCurShapeInGame(const Game& game);
 };
 #endif // PLAYER.h

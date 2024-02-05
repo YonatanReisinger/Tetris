@@ -42,7 +42,7 @@ public:
 	GameStatus getStatus() const { return status; };
 	bool setStatus(GameStatus status);
 	inline const Player& getPlayer(int playerNum) const { return playerNum == 1 ? player1 : player2; };
-	void setCurrentShape(Player& player, Point& startPoint); // MAYBE CAHNGE IT TO A PLAYER FUNCTION !!!!!!!!!!!1
+	void setCurrentShapeInBoard(Player& player); // MAYBE CAHNGE IT TO A PLAYER FUNCTION !!!!!!!!!!!1
 	bool setWinnerNum(short int winnerNum);
 	inline short int getWinnerNum() const { return winnerNum; };
 	inline GameColorStatus const getColorStatus() const { return colorStatus; };
@@ -50,7 +50,6 @@ public:
 	static GameColorStatus getUserColorChoiceFromKeyboard();
 	static Key getSideChoiceFromKeyboard();
 	void moveShapeOnScreen(Shape& shape, ShapeMovement movement, GamePace pace) const;
-	inline Shape* getRandomShape(Point startPoint) const;
 	Key getKeys(Key& key1, Key& key2);
 };
 #endif // Game.h
