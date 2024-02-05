@@ -387,7 +387,7 @@ void Board:: updateActiveShapes(short int clearedRowInd)
 				if (activeShapes[i].points[j].getY() <= clearedRowInd)
 					activeShapes[i].points[j].moveDown();
 				//if the point is in the row of clearence, clear it
-				else if (activeShapes[i].points[j].getY() == (clearedRowInd + 1))
+				else if (activeShapes[i].points[j].getY() == (clearedRowInd + 1)) ///////////////////////
 					activeShapes[i].points[j].setSymbol(EMPTY);
 				// if it is a point that didnt change, get it back to its original point on the board
 				else

@@ -5,10 +5,6 @@ Computer::Computer(const Board& board, const Key keys[], const string name, int 
 	setLevel(level);
 	this->bestMoveScore = bestMoveScore;
 }
-int Computer:: getKeyInd(Key inputKey)
-{
-	return NOT_FOUND;
-}
 Computer:: Level Computer:: getLevelFromKeyboard()
 {
 	Level levelChoice;
@@ -52,7 +48,7 @@ Key Computer::getKey()
 	return key;
 }
 
-bool Computer::setCurrShapeFinalState(const Shape& shape)
+bool Computer:: setCurrShapeFinalState(const Shape& shape)
 {
 	bool res;
 	res = currPlayingShape->getType() == shape.getType() && board.isShapeInBoard(shape);
@@ -64,15 +60,16 @@ void Computer:: findBestMove()
 {
 	short int i, numOfRotationsPossible = 4;
 	Shape tmpShape(*currPlayingShape);
-	// ShapeMovement currentDirection = RIGHT, currentRotation = ShapeMovement::ROTATE_RIGHT;
+	setBestMoveScore(0); // Reset the best move score because Each cuurent shape has a different best move score
 
+	// Remeber to do something else for bomb !!!!!!!!!!!!!!!!
 	for (i = 0; i < numOfRotationsPossible; i++)
 	{
 		// For every rotation check all the possible lanes to fall from the sides of the current shape
 		evaluatePossibleMovesFromSide(ShapeMovement:: RIGHT);
 		evaluatePossibleMovesFromSide(ShapeMovement::LEFT);
 		// check the placement in the current lane
-		setBestMoveScoreAndCurrShapeFinalState(evaluatePlacement(tmpShape), tmpShape);
+		updateBestMoveScoreAndCurrShapeFinalState(evaluatePlacement(tmpShape), tmpShape);
 
 		if (board.canShapeMove(tmpShape, ShapeMovement::ROTATE_RIGHT))
 			tmpShape.move(ShapeMovement::ROTATE_RIGHT);
@@ -82,9 +79,9 @@ void Computer:: findBestMove()
 }
 void Computer:: evaluatePossibleMovesFromSide(ShapeMovement direction)
 {
-	short int i;
+	short int i, maxAllowedHeight = GameConfig::HEIGHT / 2;;
 	Shape tmpShape(*currPlayingShape);
-	int curMoveScore = 0;
+	int moveScore = 0;
 	Shape* movingPtr, horizontalShape(*currPlayingShape), verticalShape(*currPlayingShape);
 	movingPtr = &horizontalShape;
 
@@ -96,8 +93,16 @@ void Computer:: evaluatePossibleMovesFromSide(ShapeMovement direction)
 		while (board.canShapeMove(verticalShape, ShapeMovement::DROP))
 			verticalShape.move(ShapeMovement::DROP);
 
-		curMoveScore = evaluatePlacement(verticalShape);
-		setBestMoveScoreAndCurrShapeFinalState(curMoveScore, verticalShape);
+		// Check if the current move will exceed the maximum allowed height
+		if (verticalShape.getLowestY() > maxAllowedHeight)
+		{
+			// Optionally, prioritize moves that bring the height down
+			int heightDiff = verticalShape.getLowestY() - maxAllowedHeight;
+			moveScore -= heightDiff * 3;
+		}
+
+		moveScore = evaluatePlacement(verticalShape);
+		updateBestMoveScoreAndCurrShapeFinalState(moveScore, verticalShape);
 	}
 
 	//while (board.canShapeMove(tmpShape, direction))
@@ -111,15 +116,14 @@ void Computer:: evaluatePossibleMovesFromSide(ShapeMovement direction)
 	//	setBestMoveScoreAndCurrShapeFinalState(curMoveScore, tmpShape);
 	//}
 }
-bool Computer:: setBestMoveScoreAndCurrShapeFinalState(int newScore, const Shape& newShapeFinalState)
+bool Computer:: updateBestMoveScoreAndCurrShapeFinalState(int newScore, const Shape& newShapeFinalState)
 {
-	if (newScore > bestMoveScore)
-	{
-		bestMoveScore = newScore;
-		return setCurrShapeFinalState(newShapeFinalState);
-	}
-	else
-		return false;
+	return newScore > bestMoveScore ? setBestMoveScore(newScore) && setCurrShapeFinalState(newShapeFinalState) : false;
+}
+bool Computer::setBestMoveScore(int newScore)
+{
+	bestMoveScore = newScore;
+	return true;
 }
 int Computer:: evaluatePlacement(Shape tmpShape)
 {
@@ -133,4 +137,8 @@ int Computer:: evaluatePlacement(Shape tmpShape)
 		board.clearShapeFromGameBoard(tmpShape);
 	}
 	return moveScore;
+}
+Shape Computer:: getcurrShapeFinalState()
+{
+	return currShapeFinalState;
 }

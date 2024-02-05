@@ -58,6 +58,7 @@ public:
 	inline RotationDirection getDirection() const { return shapeDirection; };
 	bool isToTheRight(const Shape& shape) const;
 	bool isToTheLeft(const Shape& shape) const;
+	short int getLowestY();
 	friend class Board;
 };
 

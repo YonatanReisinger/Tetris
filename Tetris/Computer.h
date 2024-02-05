@@ -13,11 +13,12 @@ public:
 	bool setLevel(Level level);
 	inline Level getLevel() const { return level; };
 	static Level getLevelFromKeyboard();
-	virtual int getKeyInd(Key inputKey);
 	Key getKey();
 	bool setCurrShapeFinalState(const Shape& shape);
 	void findBestMove();
 	int evaluatePlacement(Shape tmpShape);
+	Shape getcurrShapeFinalState();
+	bool setBestMoveScore(int newScore);
 
 protected:
 	Level level;
@@ -25,7 +26,7 @@ protected:
 	int bestMoveScore;
 
 	void evaluatePossibleMovesFromSide(ShapeMovement direction);
-	bool setBestMoveScoreAndCurrShapeFinalState(int newScore, const Shape& newShapeFinalState);
+	bool updateBestMoveScoreAndCurrShapeFinalState(int newScore, const Shape& newShapeFinalState);
 };
 #endif //Computer.h
 
