@@ -995,6 +995,16 @@ bool Shape::isToTheLeft(const Shape& shape) const
 {
 	return (points[0].getX() < shape.points[0].getX());
 }
+short int Shape:: getLowestY()
+{
+	short int i, res = 0;
+	for (i = 0; i < 4 && points[i].getSymbol() != EMPTY; i++)
+	{
+		if (points[i].getY() > res)
+			res = points[i].getY();
+	}
+	return res;
+}
 
 
 

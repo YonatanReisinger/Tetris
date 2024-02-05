@@ -33,9 +33,9 @@ public:
 	static constexpr int CLEARED_LINES_IMPORTANCE = 3;
 	static constexpr int HEIGT_IMPORTANCE = 2;
 	static constexpr int HOLES_IMPORTANCE = 1;
-	static constexpr unsigned short int HOLES_BLOCKED_FROM_ABOVE_PENALTY = 10;
-	static constexpr unsigned short int HOLES_BLOCKED_FROM_SIDE_PENALTY = 5;
-	static constexpr unsigned short int SCORE_PER_HEIGHT = 10;
+	static constexpr unsigned short int HOLES_BLOCKED_FROM_ABOVE_PENALTY = 2;
+	static constexpr unsigned short int HOLES_BLOCKED_FROM_SIDE_PENALTY = 1;
+	static constexpr unsigned short int SCORE_PER_HEIGHT = 40;
 	static constexpr unsigned short int SCORE_PER_FILLED_ROW = 20;
 
 };

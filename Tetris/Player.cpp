@@ -110,7 +110,11 @@ bool Player:: canCurrShapeMove(ShapeMovement movement) const
 {
 	return board.canShapeMove(*currPlayingShape, movement);
 }
-
+void Player:: findBestMove()
+{
+	if (typeid(this) == typeid(Player))
+		return;
+}
 //void Player:: updateCurShapeInGame(const Game& game)
 //{
 //	int clearRowsForPlayerInRound = 0;

@@ -28,8 +28,11 @@ void Game::run()
 	{
 		player1.setCurrShape(getRandomShape(startPoint1));
 		player2.setCurrShape(getRandomShape(startPoint2));
+		player1.findBestMove();
+		player2.findBestMove();
+		
 	}
-	
+
 	board1.print();
 	board2.print();
 	// while both boards have space
@@ -55,6 +58,7 @@ void Game::run()
 			setStatus(GameStatus::PAUSED);
 			break;
 		}
+		
 		setCurrentShape(player1, startPoint1);
 		setCurrentShape(player2, startPoint2);
 		
@@ -167,20 +171,17 @@ void Game:: moveShapeOnScreen(Shape& shape, ShapeMovement movement, GamePace pac
 ************************/
 bool Game:: checkAndProcessKeyboardInput()
 {
-	Computer* cpu1, * cpu2;
 	bool res = true;
-	Key key1, key2;
-	if (_kbhit()) {
-		getKeys(player1, player2, key1, key2);
-		if (key1 != ESC && key2 != ESC)
-		{
-			processPlayerInput(key1, player1);
-			processPlayerInput(key2, player2);
-			res = true;
-		}
-		else
-			res = false;
+	Key key1, key2, keyboardKey;
+	keyboardKey = getKeys(key1, key2);
+	if (keyboardKey)
+	{
+		processPlayerInput(key1, player1);
+		processPlayerInput(key2, player2);
+		res = true;
 	}
+	else
+		res = false;
 	return res;
 }
 /************************
@@ -217,6 +218,7 @@ void Game:: setCurrentShape(Player& player,Point& startPoint)
 	int clearRowsForPlayerInRound = 0;
 	Board& board = player.getBoard();
 	Shape& currShape = *(player.getCurrShape());
+
 	if (player.canCurrShapeMove(ShapeMovement::DROP))
 		moveShapeOnScreen(currShape, ShapeMovement::DROP, GamePace::NORMAL);
 	//if the shape can't move anymore
@@ -250,12 +252,9 @@ void Game:: setCurrentShape(Player& player,Point& startPoint)
 			board.printGameBoard();
 			clearRowsForPlayerInRound = board.clearFullRows();
 		}
+		
 		player.setCurrShape(getRandomShape(startPoint));
-		// get a new random shape
-		/*
-		if(ani == CPU)
-			currShapeFinalDestination = player.findBestMove;
-		*/
+		player.findBestMove();
 	}
 }
 /************************
@@ -359,10 +358,12 @@ Key Game:: getSideChoiceFromKeyboard()
 	return sideChoice;
 }
 
-void Game::getKeys(Player& player1, Player& player2, Key& key1, Key& key2)
+Key Game::getKeys(Key& key1, Key& key2)
 {
 	Computer* cpu1, *cpu2;
-	Key keyboardKey = _getch();
+	Key keyboardKey = '0';
+	if (_kbhit())
+		keyboardKey = _getch();
 	//Human vs Human
 	if (typeid(player1) == typeid(Player) && typeid(player2) == typeid(Player)) {
 		key1 = keyboardKey;
@@ -385,4 +386,5 @@ void Game::getKeys(Player& player1, Player& player2, Key& key1, Key& key2)
 		key1 = cpu1->getKey();
 		key2 = keyboardKey;
 	}
+	return keyboardKey;
 }

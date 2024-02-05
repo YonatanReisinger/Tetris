@@ -15,11 +15,11 @@ using namespace std;
 int main()
 {
 	unsigned int choice;
-	Board board1(Point(1, 1 + 4), Point(GameConfig::WIDTH, 1 + 4), Point(1, GameConfig::HEIGHT + 4), Point(GameConfig::WIDTH, GameConfig::HEIGHT + 4));
-	Board board2(Point(GameConfig::WIDTH + 2 + GameConfig::DISTANCE_BETWEEN_BOARDS + 1, 1 + 4)
-		, Point(GameConfig::WIDTH * 2 + 2 + GameConfig::DISTANCE_BETWEEN_BOARDS, 1 + 4)
-		, Point(GameConfig::WIDTH + 2 + GameConfig::DISTANCE_BETWEEN_BOARDS + 1, GameConfig::HEIGHT + 4)
-		, Point(GameConfig::WIDTH * 2 + 2 + GameConfig::DISTANCE_BETWEEN_BOARDS, GameConfig::HEIGHT + 4));
+	Board board1(Point(1, 1), Point(GameConfig::WIDTH, 1), Point(1, GameConfig::HEIGHT), Point(GameConfig::WIDTH, GameConfig::HEIGHT));
+	Board board2(Point(GameConfig::WIDTH + 2 + GameConfig::DISTANCE_BETWEEN_BOARDS + 1, 1)
+		, Point(GameConfig::WIDTH * 2 + 2 + GameConfig::DISTANCE_BETWEEN_BOARDS, 1)
+		, Point(GameConfig::WIDTH + 2 + GameConfig::DISTANCE_BETWEEN_BOARDS + 1, GameConfig::HEIGHT)
+		, Point(GameConfig::WIDTH * 2 + 2 + GameConfig::DISTANCE_BETWEEN_BOARDS, GameConfig::HEIGHT));
 	Player player1(board1, GameConfig::player1Keys, "Player 1")
 		, player2(board2, GameConfig::player2Keys, "Player 2");
 	Computer computerPlayer1(board1, GameConfig::player1Keys, "CPU 1")
@@ -45,7 +45,7 @@ int main()
 		{
 		case(Choice::START_HUMAN_VS_HUMAN):
 			colorChoice = Game:: getUserColorChoiceFromKeyboard();
-			//pGame = new Game(player1, player2, colorChoice);
+			pGame = new Game(player1, player2, colorChoice);
 			pGame->start();
 			break;
 		case(Choice::START_HUMAN_VS_CPU):
