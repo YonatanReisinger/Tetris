@@ -48,7 +48,6 @@ public:
 	inline GameColorStatus const getColorStatus() const { return colorStatus; };
 	void printWinner() const;
 	static GameColorStatus getUserColorChoiceFromKeyboard();
-	static Key getSideChoiceFromKeyboard();
 	void moveShapeOnScreen(Shape& shape, ShapeMovement movement, GamePace pace) const;
 	Key getKeys(Key& key1, Key& key2);
 };

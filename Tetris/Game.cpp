@@ -47,8 +47,8 @@ void Game::run()
 			break;
 		}
 		// MAYBE ADD !!!!!!!!!!!!!!!!!!!!
-		//setCurrentShape(player1, startPoint1);
-		//setCurrentShape(player2, startPoint2);
+		// setCurrentShapeInBoard(player1);
+		// setCurrentShapeInBoard(player2);
 
 		// the following code is repeat as it helps the reactivity of the game !!!
 		isGamePlaying = checkAndProcessKeyboardInput();
@@ -327,19 +327,6 @@ GameColorStatus Game::getUserColorChoiceFromKeyboard()
 	clearScreen();
 	return (GameColorStatus)(colorChoice - '0');
 }
-Key Game:: getSideChoiceFromKeyboard()
-{
-	Key sideChoice;
-	cout << "Which board would you like to play on?" << endl
-		<< "Please indicate your choice by pressing the corresponding arrow(Left or Right)";
-	do
-	{
-		sideChoice = _getch();
-	} while (sideChoice != LEFT_ARROW && sideChoice != RIGHT_ARROW);
-	clearScreen();
-	return sideChoice;
-}
-
 Key Game::getKeys(Key& key1, Key& key2)
 {
 	Computer* cpu1, *cpu2;
