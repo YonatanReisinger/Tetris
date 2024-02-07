@@ -215,8 +215,8 @@ void Board:: printGameBoard() const
 void Board:: printFrame() const
 {
 	//the frame should be outside the borders of the board
-	Point topLeftBorderFrame(borders[TOP_LEFT].getX() - 1, borders[TOP_LEFT].getY() - 1)
-		, topRightBorderFrame(borders[TOP_RIGHT].getX() + 1, borders[TOP_RIGHT].getY() - 1)
+	Point topLeftBorderFrame(borders[TOP_LEFT].getX() - 1, borders[TOP_LEFT].getY())
+		, topRightBorderFrame(borders[TOP_RIGHT].getX() + 1, borders[TOP_RIGHT].getY())
 		, bottomLeftBorderFrame(borders[BOTTOM_LEFT].getX() - 1, borders[BOTTOM_LEFT].getY() + 1)
 		, bottomRightBorderFrame(borders[BOTTOM_RIGHT].getX() + 1, borders[BOTTOM_RIGHT].getY() + 1);
 	printHorizontalLine(bottomLeftBorderFrame, bottomRightBorderFrame);
@@ -539,71 +539,13 @@ void Board::explodeBomb(Shape& bomb)
 	for (i = 0; i < numOfActiveShapes; i++)
 		setShapeInGameBoard(activeShapes[i], false);
 }
-bool Board::canShapeMove(const Shape& shape, ShapeMovement movement) const
+bool Board::canShapeMove(const Shape& shape, Shape:: ShapeMovement movement) const
 {
 	Shape tempShape = shape;
 	tempShape.move(movement);
 	return canSetShapeInGameBoard(tempShape);
 }
-int Board:: evaluate() const
+gameBoardPointer Board:: getGameBoard() const
 {
-	int score = 0, maxHeight = NOT_FOUND, holesPenalty = 0, fullRows = 0;
-
-	calculateEvaluationParameters(maxHeight, holesPenalty, fullRows);
-
-	// Increment score based on the number of filled rows
-	score += fullRows * GameConfig::SCORE_PER_FILLED_ROW;
-	// Increment score based on the height of the highest occupied point
-	score += (GameConfig:: HEIGHT - maxHeight) * GameConfig::SCORE_PER_HEIGHT;
-	// Deduct score based on the number of holes
-	score -= holesPenalty;
-
-	return score;
-}
-void Board:: calculateEvaluationParameters(int& maxHeight, int& holesPenalty, int& fullRows) const
-{
-	maxHeight = NOT_FOUND;
-	holesPenalty = fullRows = 0;
-
-	for (int row = 0; row < GameConfig::HEIGHT; ++row)
-	{
-		// Check for full rows
-		fullRows += isRowFull(row);
-		for (int col = 0; col < GameConfig::WIDTH; ++col)
-		{
-			// A blocked point is an empty point that cant be reached easily. each direction it is blocked more points will be deducted from the move score
-			if (isPointFull(gameBoard[row][col]))
-			{
-				if (maxHeight != NOT_FOUND) // if the maxHeight was not found yet, update it
-					maxHeight = GameConfig::HEIGHT - row;
-				continue;
-			}
-			// Calculate the penalty for holes in that point
-			holesPenalty += getBlockedFromAbovePenalty(row, col);
-			holesPenalty += getBlockedFromSidePenalty(row, col);
-		}
-	}
-}
-int Board::getBlockedFromAbovePenalty(int row, int col) const
-{
-	int i, penalty = 0;
-
-	// If a point is blocked from above. the furether away it is blocked the less the penalty is
-	for (i = 1; i <= 3; i++)
-		if (row - i >= 0 && isPointFull(gameBoard[row - i][col]))
-			penalty += GameConfig::HOLES_BLOCKED_FROM_ABOVE_PENALTY / i;
-
-	return penalty;
-}
-
-int Board::getBlockedFromSidePenalty(int row, int col) const
-{
-	int penalty = 0;
-	// If a point is blocked from the left 
-	if (col > 0 && isPointFull(gameBoard[row][col - 1]))
-		penalty += GameConfig::HOLES_BLOCKED_FROM_SIDE_PENALTY;
-	// If a point is blocked from the right
-	if (col < GameConfig::WIDTH - 1 && isPointFull(gameBoard[row][col + 1]))
-		penalty += GameConfig::HOLES_BLOCKED_FROM_SIDE_PENALTY;
-	return penalty;
+	return gameBoard;
 }

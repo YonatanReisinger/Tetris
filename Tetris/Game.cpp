@@ -22,15 +22,14 @@ void Game::run()
 {
 	bool isGamePlaying = true;
 	Board& board1 = player1.getBoard(), &board2 = player2.getBoard();
-	Point startPoint1 = board1.getStartingPoint(), startPoint2 = board2.getStartingPoint();
 
 	if (getStatus() != GameStatus::PAUSED) // random new shapes just if it is completely new game 
 	{
-		player1.setCurrShape(getRandomShape(startPoint1));
-		player2.setCurrShape(getRandomShape(startPoint2));
+		player1.setRandomCurrShape(getColorStatus());
+		player2.setRandomCurrShape(getColorStatus());
+		
 		player1.findBestMove();
 		player2.findBestMove();
-		
 	}
 
 	board1.print();
@@ -47,9 +46,10 @@ void Game::run()
 			setStatus(GameStatus::PAUSED);
 			break;
 		}
+
 		// MAYBE ADD !!!!!!!!!!!!!!!!!!!!
-		//setCurrentShape(player1, startPoint1);
-		//setCurrentShape(player2, startPoint2);
+		// setCurrentShapeInBoard(player1);
+		// setCurrentShapeInBoard(player2);
 
 		// the following code is repeat as it helps the reactivity of the game !!!
 		isGamePlaying = checkAndProcessKeyboardInput();
@@ -58,9 +58,9 @@ void Game::run()
 			setStatus(GameStatus::PAUSED);
 			break;
 		}
-		
-		setCurrentShape(player1, startPoint1);
-		setCurrentShape(player2, startPoint2);
+
+		setCurrentShapeInBoard(player1);
+		setCurrentShapeInBoard(player2);
 		
 		// if one of the current shapes can't move anymore, it means that the player has lost and the game should end
 		isGamePlaying = !player1.isStuck() && !player2.isStuck();
@@ -128,36 +128,19 @@ bool Game:: setStatus(GameStatus status)
 	return res;
 }
 /************************
-* Name: Game::getRandomShape
-* Input: Point& startPoint (The starting point for the new shape)
-* Output: Shape* representing a randomly generated shape
-* Description: Generates a new shape with a random type, starting point, and color status.
-************************/
-inline Shape* Game:: getRandomShape(Point startPoint) const
-{
-	Shape* s;
-	unsigned int randomNum;
-	randomNum = (rand() % 100) + 1; // Generate a random number between 1 and 100
-	if (randomNum < GameConfig::CHANCE_FOR_BOMB * 100)
-		s = new Shape(Type:: BOMB, startPoint, getColorStatus());
-	else
-		s = new Shape(Type(rand() % NUM_OF_SHAPES), startPoint,getColorStatus()) ;
-	return s;
-}
-/************************
 * Name: Game::moveShapeOnScreen
 * Input: Shape& shape (Reference to the shape to be moved), ShapeMovement movement (The direction of movement), GamePace pace (The speed of movement)
 * Output: None
 * Description: Moves a shape on the screen, clearing it from the old position, printing it in the new position, and applying a delay based on the game pace.
 ************************/
-void Game:: moveShapeOnScreen(Shape& shape, ShapeMovement movement, GamePace pace) const
+void Game:: moveShapeOnScreen(Shape& shape, Shape:: ShapeMovement movement, GamePace pace) const
 {
 	Sleep((DWORD)pace);
 	shape.clearShape(); // clear the shape from the screen to make it look like it's moving
 	shape.print();
 	shape.move(movement);
 	// after it moved down, print it again in it's new place according to the shape type
-	if (shape.getType() == Type::BOMB)
+	if (shape.getType() == Shape:: Type::BOMB)
 		shape.getPoints()[0].setSymbol(GameConfig::BOMB_SYMBOL);
 	else
 		shape.setSymbol(GameConfig::SHAPE_SYMBOL);
@@ -174,7 +157,7 @@ bool Game:: checkAndProcessKeyboardInput()
 	bool res = true;
 	Key key1, key2, keyboardKey;
 	keyboardKey = getKeys(key1, key2);
-	if (keyboardKey)
+	if (keyboardKey != ESC)
 	{
 		processPlayerInput(key1, player1);
 		processPlayerInput(key2, player2);
@@ -192,40 +175,40 @@ bool Game:: checkAndProcessKeyboardInput()
 ************************/
 void Game:: processPlayerInput(Key key, Player& player)
 {
-	ShapeMovement movement;
+	Shape:: ShapeMovement movement;
 	Shape& currShape = *(player.getCurrShape()), tempShape;
 	// the index of the key indicates it's type of movement
-	movement = (ShapeMovement)player.getKeyInd(key);
+	movement = (Shape:: ShapeMovement)player.getKeyInd(key);
 	// if a valid key was pressed
 	if (movement != NOT_FOUND && player.canCurrShapeMove(movement))
 	{
 		// if the player pressed the drop bottom, drop the shape down the board while it can
-		if (movement == ShapeMovement::DROP)
-			while (player.canCurrShapeMove(ShapeMovement::DROP))
-				moveShapeOnScreen(currShape, ShapeMovement::DROP, GamePace::FAST);
+		if (movement == Shape:: ShapeMovement::DROP)
+			while (player.canCurrShapeMove(Shape:: ShapeMovement::DROP))
+				moveShapeOnScreen(currShape, Shape:: ShapeMovement::DROP, GamePace::FAST);
 		else // else, move the shape according to the movement selected
 			moveShapeOnScreen(currShape, movement, GamePace::FAST);
 	}
 }
 /************************
-* Name: Game::setCurrentShape
+* Name: Game::setCurrentShapeInBoard
 * Input: Player& player (Reference to the player whose current shape is being set), Point& startPoint (The starting point for the new shape)
 * Output: None
 * Description: Sets the current shape for the player, either generating a new shape or moving the existing one down the board. Handles clearing full rows, updating scores, and printing the new shape.
 ************************/
-void Game:: setCurrentShape(Player& player,Point& startPoint)
+void Game:: setCurrentShapeInBoard(Player& player)
 {
 	int clearRowsForPlayerInRound = 0;
 	Board& board = player.getBoard();
 	Shape& currShape = *(player.getCurrShape());
 
-	if (player.canCurrShapeMove(ShapeMovement::DROP))
-		moveShapeOnScreen(currShape, ShapeMovement::DROP, GamePace::NORMAL);
+	if (player.canCurrShapeMove(Shape:: ShapeMovement::DROP))
+		moveShapeOnScreen(currShape, Shape:: ShapeMovement::DROP, GamePace::NORMAL);
 	//if the shape can't move anymore
 	else
 	{
 		// if the shape that can't move anymore is a bomb
-		if (currShape.getType() == Type::BOMB)
+		if (currShape.getType() == Shape:: Type::BOMB)
 		{
 			board.explodeBomb(currShape);
 			board.dropActiveShapes();
@@ -253,7 +236,7 @@ void Game:: setCurrentShape(Player& player,Point& startPoint)
 			clearRowsForPlayerInRound = board.clearFullRows();
 		}
 		
-		player.setCurrShape(getRandomShape(startPoint));
+		player.setRandomCurrShape(getColorStatus());
 		player.findBestMove();
 	}
 }
@@ -265,9 +248,9 @@ void Game:: setCurrentShape(Player& player,Point& startPoint)
 ************************/
 void Game:: printScores() const
 {
-	Point:: gotoxy(player1.getBoard().getBorders()[Borders::BOTTOM_LEFT].getX() + 15, GameConfig::HEIGHT + 2);
+	Point:: gotoxy(player1.getBoard().getBorders()[Board:: Borders::BOTTOM_LEFT].getX() + 15, GameConfig::HEIGHT + 2);
 	cout << "<- Score: " << player1.getScore();
-	Point:: gotoxy(player2.getBoard().getBorders()[Borders::BOTTOM_LEFT].getX() - 15, GameConfig::HEIGHT + 2);
+	Point:: gotoxy(player2.getBoard().getBorders()[Board:: Borders::BOTTOM_LEFT].getX() - 15, GameConfig::HEIGHT + 2);
 	cout << "Score: " << player2.getScore() << " ->";
 }
 /************************
@@ -345,19 +328,6 @@ GameColorStatus Game::getUserColorChoiceFromKeyboard()
 	clearScreen();
 	return (GameColorStatus)(colorChoice - '0');
 }
-Key Game:: getSideChoiceFromKeyboard()
-{
-	Key sideChoice;
-	cout << "Which board would you like to play on?" << endl
-		<< "Please indicate your choice by pressing the corresponding arrow(Left or Right)";
-	do
-	{
-		sideChoice = _getch();
-	} while (sideChoice != LEFT_ARROW && sideChoice != RIGHT_ARROW);
-	clearScreen();
-	return sideChoice;
-}
-
 Key Game::getKeys(Key& key1, Key& key2)
 {
 	Computer* cpu1, *cpu2;
@@ -377,14 +347,83 @@ Key Game::getKeys(Key& key1, Key& key2)
 		key2 = cpu2->getKey();
 	}
 	//player vs CPU
-	else if (typeid(player1) == typeid(Player)) {
+	else {
+		cpu2 = dynamic_cast<Computer*>(&player2);
 		key1 = keyboardKey;
 		key2 = cpu2->getKey();
 	}
-	//CPU vs player
-	else {
-		key1 = cpu1->getKey();
-		key2 = keyboardKey;
-	}
 	return keyboardKey;
+}
+/************************
+* Name: printInstructionsAndKeys
+* Input: None
+* Output: None
+* Description: Prints game instructions and keys. Allows navigation between instructions and keys using arrow keys.
+************************/
+void Game:: printInstructionsAndKeys()
+{
+	Key key;
+	bool showKeys = false;
+	do {
+		clearScreen();
+		if (!showKeys) {
+			printInstructions();
+			cout << "\nPress Right arrow to see the game keys\nPress escape to return to the menu";
+		}
+		else {
+			printKeys();
+			cout << "\nPress Left arrow to go back to instructions\nPress escape to return to the menu";
+		}
+		key = _getch(); // Wait for user input
+		if (key == RIGHT_ARROW && !showKeys) {  // Right arrow key
+			showKeys = true;
+		}
+		else if (key == LEFT_ARROW && showKeys) {  // Left arrow key
+			showKeys = false;
+		}
+
+	} while (key != ESC);  // Continue the loop until the user presses Esc
+}
+/************************
+* Name: printInstructions
+* Description: Prints Tetris game instructions.
+************************/
+void Game:: printInstructions()
+{
+	// Display Tetris game instructions
+	cout << "Tetris Game Instructions:" << endl;
+	// Provide instructions for playing Tetris
+	cout << "1. Use arrow keys to move and rotate the falling blocks." << endl;
+	cout << "2. Fill complete rows to clear them and score points." << endl;
+	cout << "3. The game ends when the blocks reach the top of the screen." << endl;
+}
+/************************
+* Name: printKeys
+* Description: Prints the keys for Player 1 and Player 2, including movement, rotation, and dropping.
+************************/
+void Game:: printKeys()
+{
+	// Display keys for Player 1
+	cout << "Player 1 Keys:" << endl;
+	cout << " Rotate Left = W    S = Rotate Right" << endl;
+	cout << "               +---+              " << endl;
+	cout << "               | W |              " << endl;
+	cout << "           +---+---+---+" << endl;
+	cout << " Move Left | A | S | D | Move Right" << endl;
+	cout << "           +---+---+---+" << endl;
+	cout << "               | X |" << endl;
+	cout << "               +---+" << endl;
+	cout << "               Drop" << endl;
+
+	// Display keys for Player 2
+	cout << "Player 2 Keys:" << endl;
+	cout << " Rotate Left = J    L = Rotate Right" << endl;
+	cout << "               +---+              " << endl;
+	cout << "               | I |              " << endl;
+	cout << "           +---+---+---+" << endl;
+	cout << " Move Left | J | K | L | Move Right" << endl;
+	cout << "           +---+---+---+" << endl;
+	cout << "               | M |" << endl;
+	cout << "               +---+" << endl;
+	cout << "               Drop" << endl;
 }

@@ -34,6 +34,7 @@ private:
 	void printScores() const;
 	void clearKeyboardInputBuffer() const;
 	void determineWinner();
+
 public:
 	Game(Player& player1, Player& player2, GameColorStatus colorStatus);
 	void start();
@@ -42,15 +43,16 @@ public:
 	GameStatus getStatus() const { return status; };
 	bool setStatus(GameStatus status);
 	inline const Player& getPlayer(int playerNum) const { return playerNum == 1 ? player1 : player2; };
-	void setCurrentShape(Player& player, Point& startPoint); // MAYBE CAHNGE IT TO A PLAYER FUNCTION !!!!!!!!!!!1
+	void setCurrentShapeInBoard(Player& player); // MAYBE CAHNGE IT TO A PLAYER FUNCTION !!!!!!!!!!!1
 	bool setWinnerNum(short int winnerNum);
 	inline short int getWinnerNum() const { return winnerNum; };
 	inline GameColorStatus const getColorStatus() const { return colorStatus; };
 	void printWinner() const;
 	static GameColorStatus getUserColorChoiceFromKeyboard();
-	static Key getSideChoiceFromKeyboard();
-	void moveShapeOnScreen(Shape& shape, ShapeMovement movement, GamePace pace) const;
-	inline Shape* getRandomShape(Point startPoint) const;
+	void moveShapeOnScreen(Shape& shape, Shape:: ShapeMovement movement, GamePace pace) const;
 	Key getKeys(Key& key1, Key& key2);
+	static void printInstructionsAndKeys();
+	static void printInstructions();
+	static void printKeys();
 };
 #endif // Game.h

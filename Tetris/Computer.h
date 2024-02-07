@@ -13,7 +13,7 @@ public:
 	bool setLevel(Level level);
 	inline Level getLevel() const { return level; };
 	static Level getLevelFromKeyboard();
-	Key getKey();
+	Key getKey() const;
 	bool setCurrShapeFinalState(const Shape& shape);
 	void findBestMove();
 	int evaluatePlacement(Shape tmpShape);
@@ -25,8 +25,15 @@ protected:
 	Shape currShapeFinalState;
 	int bestMoveScore;
 
-	void evaluatePossibleMovesFromSide(ShapeMovement direction);
+	void evaluatePossibleMovesFromSide(const Shape& tmpShape, Shape:: ShapeMovement direction);
 	bool updateBestMoveScoreAndCurrShapeFinalState(int newScore, const Shape& newShapeFinalState);
+	int evaluate() const;
+	int evaluate(Shape& bomb) const;
+	void calculateEvaluationParameters(short int& maxHeight, short int& holesPenalty, short int& fullRows) const;
+	int getBlockedFromAbovePenalty(int row, int col) const;
+	int getBlockedFromSidePenalty(int row, int col) const;
+	bool shouldMakeRandomMove() const;
+	void findRandomMove();
 };
 #endif //Computer.h
 

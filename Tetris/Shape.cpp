@@ -969,7 +969,7 @@ bool Shape::setShapeColor(Color color)
 	}
 	return res;
 }
-Type Shape:: getType() const
+Shape:: Type Shape:: getType() const
 {
 	return shapeType;
 }
@@ -995,16 +995,27 @@ bool Shape::isToTheLeft(const Shape& shape) const
 {
 	return (points[0].getX() < shape.points[0].getX());
 }
-short int Shape:: getLowestY()
+bool Shape:: setShapeRotationDirection(RotationDirection shapeDirection)
 {
-	short int i, res = 0;
-	for (i = 0; i < 4 && points[i].getSymbol() != EMPTY; i++)
+	if (shapeDirection == FACE_UP || shapeDirection == FACE_RIGHT || shapeDirection == FACE_DOWN || shapeDirection == FACE_LEFT)
 	{
-		if (points[i].getY() > res)
-			res = points[i].getY();
+		this->shapeDirection = shapeDirection;
+		return true;
 	}
-	return res;
+	else
+		return false;
 }
+short int Shape::getLowestY() const
+{
+	short int lowestY = points[0].getY(), currentY;
 
+	for (int i = 1; i < NUM_OF_POINTS && points[i].getSymbol() != EMPTY; ++i) {
+		currentY = points[i].getY();
+		if (currentY < lowestY) {
+			lowestY = currentY;
+		}
+	}
+	return lowestY;
+}
 
 
