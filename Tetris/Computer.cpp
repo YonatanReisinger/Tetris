@@ -26,11 +26,11 @@ bool Computer::setLevel(Level level)
 	else
 		return false;
 }
-Key Computer::getKey()
+Key Computer::getKey() const
 {
 	Key key;
-	RotationDirection currDirection = currPlayingShape->getDirection();
-	RotationDirection finalDirection = currShapeFinalState.getDirection();
+	Shape:: RotationDirection currDirection = currPlayingShape->getDirection();
+	Shape:: RotationDirection finalDirection = currShapeFinalState.getDirection();
 	int val;
 	if (currDirection != finalDirection) {
 		val = (4 + finalDirection - currDirection) % 4;
@@ -72,20 +72,20 @@ void Computer:: findBestMove()
 	for (i = 0; i < numOfRotationsPossible; i++)
 	{
 		// For every rotation check all the possible lanes to fall from the sides of the current shape
-		evaluatePossibleMovesFromSide(tmpShape, ShapeMovement:: RIGHT);
-		evaluatePossibleMovesFromSide(tmpShape, ShapeMovement::LEFT);
+		evaluatePossibleMovesFromSide(tmpShape, Shape:: ShapeMovement:: RIGHT);
+		evaluatePossibleMovesFromSide(tmpShape, Shape:: ShapeMovement::LEFT);
 		// check the placement in the current lane
 		updateBestMoveScoreAndCurrShapeFinalState(evaluatePlacement(tmpShape), tmpShape);
 
-		if (tmpShape.getType() == Type::BOMB) // No need to rotate a bomb
+		if (tmpShape.getType() == Shape:: Type::BOMB) // No need to rotate a bomb
 			break;
-		if (board.canShapeMove(tmpShape, ShapeMovement::ROTATE_RIGHT))
-			tmpShape.move(ShapeMovement::ROTATE_RIGHT);
+		if (board.canShapeMove(tmpShape, Shape:: ShapeMovement::ROTATE_RIGHT))
+			tmpShape.move(Shape:: ShapeMovement::ROTATE_RIGHT);
 		else
 			numOfRotationsPossible--;
 	}
 }
-void Computer:: evaluatePossibleMovesFromSide(const Shape& tmpShape, ShapeMovement direction)
+void Computer:: evaluatePossibleMovesFromSide(const Shape& tmpShape, Shape:: ShapeMovement direction)
 {
 	int moveScore = 0;
 	Shape horizontalShape(tmpShape), verticalShape(tmpShape);
@@ -95,8 +95,8 @@ void Computer:: evaluatePossibleMovesFromSide(const Shape& tmpShape, ShapeMoveme
 		horizontalShape.move(direction);
 		verticalShape = horizontalShape;
 		// Drop the point from this specific place till it reaches the ground
-		while (board.canShapeMove(verticalShape, ShapeMovement::DROP))
-			verticalShape.move(ShapeMovement::DROP);
+		while (board.canShapeMove(verticalShape, Shape:: ShapeMovement::DROP))
+			verticalShape.move(Shape:: ShapeMovement::DROP);
 
 		moveScore = evaluatePlacement(verticalShape);
 		updateBestMoveScoreAndCurrShapeFinalState(moveScore, verticalShape);
@@ -119,7 +119,7 @@ int Computer:: evaluatePlacement(Shape tmpShape)
 	{
 		board.setShapeInGameBoard(tmpShape, false);
 		// based on the current state of the board return an int for the score of the move
-		moveScore = tmpShape.getType() != Type:: BOMB ? evaluate() : evaluate(tmpShape);
+		moveScore = tmpShape.getType() != Shape:: Type:: BOMB ? evaluate() : evaluate(tmpShape);
 		board.clearShapeFromGameBoard(tmpShape);
 	}
 	return moveScore;
@@ -130,20 +130,30 @@ Shape Computer:: getcurrShapeFinalState()
 }
 int Computer::evaluate() const
 {
-	int score = 0, maxHeight = NOT_FOUND, holesPenalty = 0, fullRows = 0;
+	short int score = 0, maxHeight = NOT_FOUND, holesPenalty = 0, fullRows = 0, scorePerFilledRow, scorePerHeight;
 
 	calculateEvaluationParameters(maxHeight, holesPenalty, fullRows);
 
+	if (maxHeight <= GameConfig::THRESHOLD_FOR_DANGEROUS_HEIGHT)
+	{
+		scorePerFilledRow = GameConfig::SCORE_PER_FILLED_ROW;
+		scorePerHeight = GameConfig::SCORE_PER_HEIGHT;
+	}
+	else // The shapes in the board are to high, thus clearing rows and reducing height is more important
+	{
+		scorePerFilledRow = GameConfig::DANGEROUS_SCORE_PER_FILLED_ROW;
+		scorePerHeight = GameConfig:: DANGEROUS_SCORE_PER_HEIGHT;
+	}
 	// Increment score based on the number of filled rows
-	score += fullRows * GameConfig::SCORE_PER_FILLED_ROW;
+	score += fullRows * scorePerFilledRow;
 	// Increment score based on the height of the highest occupied point
-	score += (GameConfig::HEIGHT - maxHeight) * GameConfig::SCORE_PER_HEIGHT;
+	score += (GameConfig::HEIGHT - maxHeight) * scorePerHeight;
 	// Deduct score based on the number of holes
 	score -= holesPenalty;
 
 	return score;
 }
-void Computer::calculateEvaluationParameters(int& maxHeight, int& holesPenalty, int& fullRows) const
+void Computer::calculateEvaluationParameters(short int& maxHeight, short int& holesPenalty, short int& fullRows) const
 {
 	short int row, col;
 	gameBoardPointer gameBoardP = board.getGameBoard();
@@ -229,7 +239,7 @@ void Computer:: findRandomMove()
 	do
 	{
 		tmpShape = *currPlayingShape;
-		tmpShape.setShapeRotationDirection((RotationDirection)(rand() % 4)); // Randomize the shape rotation
+		tmpShape.setShapeRotationDirection((Shape:: RotationDirection)(rand() % 4)); // Randomize the shape rotation
 		horizontalMovement = rand() % (GameConfig::WIDTH / 2); // randomize the location across the X-axis
 		for (i = 0; i < abs(horizontalMovement); ++i)
 		{
@@ -239,8 +249,8 @@ void Computer:: findRandomMove()
 				tmpShape.moveLeft();
 		}
 		// Drop the point from this specific place till it reaches the ground
-		while (board.canShapeMove(tmpShape, ShapeMovement::DROP))
-			tmpShape.move(ShapeMovement::DROP);
+		while (board.canShapeMove(tmpShape, Shape:: ShapeMovement::DROP))
+			tmpShape.move(Shape:: ShapeMovement::DROP);
 
 	} while (!board.canSetShapeInGameBoard(tmpShape)); // try until you find a random move that can be set on the board
 	setCurrShapeFinalState(tmpShape);

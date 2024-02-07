@@ -39,7 +39,7 @@ public:
 	inline Shape* getCurrShape() { return currPlayingShape; };
 	void setCurrShape(Shape* currShape);
 	bool isStuck() const;
-	bool canCurrShapeMove(ShapeMovement movement) const;
+	bool canCurrShapeMove(Shape:: ShapeMovement movement) const;
 	virtual void findBestMove();
 	bool setStartpoint(const Point& startPoint);
 	const Point& getStartPoint() const;

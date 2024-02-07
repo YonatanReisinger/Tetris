@@ -98,16 +98,17 @@ void Player:: setCurrShape(Shape* currShape)
 }
 bool Player:: isStuck() const
 {
+	bool isShapeStuck, isShapeAtTopOfBoard;
 	// a player current shape is stuck if it can't be set at all on the board or if it cant move to any direction
-	bool res = !board.canSetShapeInGameBoard(*currPlayingShape) ||
-		(!canCurrShapeMove(ShapeMovement::DROP)
-			&& !canCurrShapeMove(ShapeMovement::LEFT)
-			&& !canCurrShapeMove(ShapeMovement::RIGHT));
-	if (res == true)
-		res = res;
-	return res;
+	isShapeStuck = !board.canSetShapeInGameBoard(*currPlayingShape) ||
+		(!canCurrShapeMove(Shape:: ShapeMovement::DROP)
+			&& !canCurrShapeMove(Shape:: ShapeMovement::LEFT)
+			&& !canCurrShapeMove(Shape:: ShapeMovement::RIGHT));
+	isShapeAtTopOfBoard = currPlayingShape->getLowestY() == board.getBorders()[Board::Borders::TOP_LEFT].getY();
+	// if the both of them happen then the new shape is stuck on top of the board and thus the game should finish
+	return isShapeStuck && isShapeAtTopOfBoard;
 }
-bool Player:: canCurrShapeMove(ShapeMovement movement) const
+bool Player:: canCurrShapeMove(Shape:: ShapeMovement movement) const
 {
 	return board.canShapeMove(*currPlayingShape, movement);
 }
@@ -137,9 +138,9 @@ void Player:: setRandomCurrShape(GameColorStatus color)
 	unsigned int randomNum;
 	randomNum = (rand() % 100) + 1; // Generate a random number between 1 and 100
 	if (randomNum < GameConfig::CHANCE_FOR_BOMB * 100)
-		s = new Shape(Type::BOMB, startPoint, color);
+		s = new Shape(Shape:: Type::BOMB, startPoint, color);
 	else
-		s = new Shape(Type(rand() % NUM_OF_SHAPES), startPoint, color);
+		s = new Shape(Shape:: Type(rand() % NUM_OF_SHAPES), startPoint, color);
 	setCurrShape(s);
 }
 //void Player:: updateCurShapeInGame(const Game& game)

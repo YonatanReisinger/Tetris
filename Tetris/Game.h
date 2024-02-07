@@ -34,6 +34,7 @@ private:
 	void printScores() const;
 	void clearKeyboardInputBuffer() const;
 	void determineWinner();
+
 public:
 	Game(Player& player1, Player& player2, GameColorStatus colorStatus);
 	void start();
@@ -48,7 +49,10 @@ public:
 	inline GameColorStatus const getColorStatus() const { return colorStatus; };
 	void printWinner() const;
 	static GameColorStatus getUserColorChoiceFromKeyboard();
-	void moveShapeOnScreen(Shape& shape, ShapeMovement movement, GamePace pace) const;
+	void moveShapeOnScreen(Shape& shape, Shape:: ShapeMovement movement, GamePace pace) const;
 	Key getKeys(Key& key1, Key& key2);
+	static void printInstructionsAndKeys();
+	static void printInstructions();
+	static void printKeys();
 };
 #endif // Game.h

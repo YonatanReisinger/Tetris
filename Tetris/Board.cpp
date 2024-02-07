@@ -215,8 +215,8 @@ void Board:: printGameBoard() const
 void Board:: printFrame() const
 {
 	//the frame should be outside the borders of the board
-	Point topLeftBorderFrame(borders[TOP_LEFT].getX() - 1, borders[TOP_LEFT].getY() - 1)
-		, topRightBorderFrame(borders[TOP_RIGHT].getX() + 1, borders[TOP_RIGHT].getY() - 1)
+	Point topLeftBorderFrame(borders[TOP_LEFT].getX() - 1, borders[TOP_LEFT].getY())
+		, topRightBorderFrame(borders[TOP_RIGHT].getX() + 1, borders[TOP_RIGHT].getY())
 		, bottomLeftBorderFrame(borders[BOTTOM_LEFT].getX() - 1, borders[BOTTOM_LEFT].getY() + 1)
 		, bottomRightBorderFrame(borders[BOTTOM_RIGHT].getX() + 1, borders[BOTTOM_RIGHT].getY() + 1);
 	printHorizontalLine(bottomLeftBorderFrame, bottomRightBorderFrame);
@@ -539,7 +539,7 @@ void Board::explodeBomb(Shape& bomb)
 	for (i = 0; i < numOfActiveShapes; i++)
 		setShapeInGameBoard(activeShapes[i], false);
 }
-bool Board::canShapeMove(const Shape& shape, ShapeMovement movement) const
+bool Board::canShapeMove(const Shape& shape, Shape:: ShapeMovement movement) const
 {
 	Shape tempShape = shape;
 	tempShape.move(movement);

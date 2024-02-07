@@ -18,11 +18,8 @@ class Game;
 void printMenu(Game* pGame);
 void printWelcomeMessage();
 void printChoiceError();
-void printInstructionsAndKeys();
 void clearScreen();
 void clearCin();
-void printInstructions();
-void printKeys();
 void printColorOption();
 void showConsoleCursor(bool showFlag);
 

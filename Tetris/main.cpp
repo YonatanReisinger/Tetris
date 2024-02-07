@@ -46,6 +46,7 @@ int main()
 			break;
 		case(Choice::START_HUMAN_VS_CPU):
 			tempCpu2->setLevel(Computer::getLevelFromKeyboard());
+			clearScreen();
 			pGame = new Game(player1, *cpu2, Game::getUserColorChoiceFromKeyboard());
 			pGame->start();
 			break;
@@ -69,14 +70,14 @@ int main()
 			}
 			break;
 		case(Choice::INSTRUCTIONS):
-			printInstructionsAndKeys();
+			Game:: printInstructionsAndKeys();
 			break;
 		default:
 			printChoiceError(); 
 			break;
 		}
 		clearScreen();
-		if (pGame != nullptr)
+		if (pGame != nullptr && pGame->getWinnerNum() != NO_WINNER)
 		{
 			pGame->printWinner();
 			cout << "\n\n\nPress any key to continue........";

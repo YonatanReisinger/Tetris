@@ -969,7 +969,7 @@ bool Shape::setShapeColor(Color color)
 	}
 	return res;
 }
-Type Shape:: getType() const
+Shape:: Type Shape:: getType() const
 {
 	return shapeType;
 }
@@ -1004,6 +1004,18 @@ bool Shape:: setShapeRotationDirection(RotationDirection shapeDirection)
 	}
 	else
 		return false;
+}
+short int Shape::getLowestY() const
+{
+	short int lowestY = points[0].getY(), currentY;
+
+	for (int i = 1; i < NUM_OF_POINTS && points[i].getSymbol() != EMPTY; ++i) {
+		currentY = points[i].getY();
+		if (currentY < lowestY) {
+			lowestY = currentY;
+		}
+	}
+	return lowestY;
 }
 
 
