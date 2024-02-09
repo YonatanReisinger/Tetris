@@ -31,7 +31,7 @@ int main()
 	showConsoleCursor(false); // Get rid of the cursor
 	srand(time(0)); // for getting new random shapes every time the program runs
 	// print the whole board including the frame
-	printMenu(nullptr); //the program just started and therefore for sure no paused game exists
+	Game:: printMenu(nullptr); //the program just started and therefore for sure no paused game exists
 	cin >> choice;
 
 	while (choice != Choice::EXIT)
@@ -90,7 +90,7 @@ int main()
 			delete pGame;
 			pGame = nullptr;
 		}
-		printMenu(pGame);
+		Game:: printMenu(pGame);
 		cin >> choice;
 	}
 	cout << "Good Game! Goodbye!" << endl;

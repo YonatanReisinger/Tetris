@@ -40,7 +40,7 @@ public:
 	bool setShapeColor(Color color);
 	Type getType() const;
 	Point* const getPoints();
-	bool isAbove(const Shape& shape);
+	bool isAbove(const Shape& shape) const;
 	inline RotationDirection getDirection() const { return shapeDirection; };
 	bool isToTheRight(const Shape& shape) const;
 	bool isToTheLeft(const Shape& shape) const;

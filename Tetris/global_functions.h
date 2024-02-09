@@ -15,7 +15,6 @@ class Game;
 #define RIGHT_ARROW 77
 // <- Macros and enums
 
-void printMenu(Game* pGame);
 void printWelcomeMessage();
 void printChoiceError();
 void clearScreen();

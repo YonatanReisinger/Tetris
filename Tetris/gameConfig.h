@@ -7,6 +7,7 @@ enum Choice { START_HUMAN_VS_HUMAN = 1, START_HUMAN_VS_CPU = 2, START_CPU_VS_CPU
 enum class Directions {LEFT, RIGHT, UP, DOWN} ;
 enum class GamePace { NORMAL = 300, MODERATE = 150 ,FAST = 50, BLINKING_PACE = 100};
 enum GameColorStatus { COLORIZED = 1, UNCOLORIZED = 2};
+
 #define EMPTY ' '
 #define NOT_FOUND -1
 #define ESC 27

@@ -181,12 +181,13 @@ bool Game:: checkAndProcessKeyboardInput()
 ************************/
 void Game:: processPlayerInput(Player& player)
 {
+	short int i;
 	Shape:: ShapeMovement movement = (Shape::ShapeMovement)NOT_FOUND;
 	Shape& currShape = *(player.getCurrShape());
 
 	//movement = (Shape::ShapeMovement)player.getKeyInd(key);
 	// the index of the key indicates it's type of movement
-	for (short int i = 0; i < keysPressed.size() && movement == NOT_FOUND; ++i)
+	for (i = 0; i < keysPressed.size() && movement == NOT_FOUND; ++i)
 		movement = (Shape::ShapeMovement)player.getKeyInd(keysPressed[i]);
 
 	// if a valid key was pressed
@@ -327,6 +328,12 @@ void Game:: printWinner() const
 			cout << "The Winner is: " << getPlayer(winnerNum).getName();
 	}
 }
+/************************
+* Name: getUserColorChoiceFromKeyboard
+* Input: None
+* Output: GameColorStatus representing the user's color choice
+* Description: Gets the user's color choice from the keyboard input.
+************************/
 GameColorStatus Game::getUserColorChoiceFromKeyboard()
 {
 	unsigned char colorChoice;
@@ -338,6 +345,12 @@ GameColorStatus Game::getUserColorChoiceFromKeyboard()
 	clearScreen();
 	return (GameColorStatus)(colorChoice - '0');
 }
+/************************
+* Name: setKeysPressed
+* Input: None
+* Output: None
+* Description: Sets the keys pressed during the game.
+************************/
 void Game::setKeysPressed()
 {
 	Computer* cpu1, *cpu2;
@@ -357,6 +370,28 @@ void Game::setKeysPressed()
 		keysPressed.push_back(cpu2->getKey());
 	}
 	clearKeyboardInputBuffer();
+}
+/************************
+* Name: printMenu
+* Input: GameStatus gameStatus (The current status of the game)
+* Output: None
+* Description: Prints the game menu based on the provided game status.
+  Displays options for starting a new game, continuing a paused game, presenting instructions, and exiting.
+************************/
+void  Game::printMenu(Game* pGame)
+{
+	printWelcomeMessage();
+	cout << "Please enter your choice:" << endl
+		<< "(" << Choice::START_HUMAN_VS_HUMAN << ") Start a new game - Human vs Human" << endl
+		<< "(" << Choice::START_HUMAN_VS_CPU << ") Start a new game - Human vs Computer" << endl
+		<< "(" << Choice::START_CPU_VS_CPU << ") Start a new game - Computer vs Computer" << endl;
+	// if there is a game and it is paused
+	if (pGame != nullptr && pGame->getStatus() == GameStatus::PAUSED)
+	{
+		cout << "(" << Choice::CONTINUE << ") Continue a paused game" << endl;
+	}
+	cout << "(" << Choice::INSTRUCTIONS << ") Present instructions and keys" << endl
+		<< "(" << Choice::EXIT << ") exit" << endl;
 }
 /************************
 * Name: printInstructionsAndKeys
@@ -431,11 +466,22 @@ void Game:: printKeys()
 	cout << "               +---+" << endl;
 	cout << "               Drop" << endl;
 }
-void Game:: clearKeysPressed()
+/************************
+* Name: clearKeysPressed
+* Input: None
+* Output: None
+* Description: Clears the keys pressed during the game.
+************************/
+inline void Game:: clearKeysPressed()
 {
 	keysPressed.resize(0);
 }
-bool Game:: wasEscapePressed()
+/************************
+* Name: wasEscapePressed
+* Input: None
+* Output: bool indicating whether the escape key was pressed during the game.
+************************/
+bool Game:: wasEscapePressed() const
 {
 	for (Key key : keysPressed)
 		if (key == ESC)

@@ -1,34 +1,11 @@
 #include "global_functions.h"
 
 /************************
-* Name: printMenu
-* Input: GameStatus gameStatus (The current status of the game)
-* Output: None
-* Description: Prints the game menu based on the provided game status.
-  Displays options for starting a new game, continuing a paused game, presenting instructions, and exiting.
-************************/
-void printMenu(Game* pGame)
-{
-    printWelcomeMessage();
-	cout << "Please enter your choice:" << endl
-        << "(" << Choice::START_HUMAN_VS_HUMAN << ") Start a new game - Human vs Human" << endl
-        << "(" << Choice::START_HUMAN_VS_CPU << ") Start a new game - Human vs Computer" << endl
-        << "(" << Choice::START_CPU_VS_CPU << ") Start a new game - Computer vs Computer" << endl;
-    // if there is a game and it is paused
-	if (pGame != nullptr && pGame->getStatus() == GameStatus::PAUSED)
-	{
-		cout << "(" << Choice:: CONTINUE <<") Continue a paused game" << endl;
-	}
-    cout << "(" << Choice::INSTRUCTIONS << ") Present instructions and keys" << endl
-        << "(" << Choice:: EXIT << ") exit" << endl;
-}
-/************************
 * Name: printWelcomeMessage
 * Input: None
 * Output: None
 * Description: Prints a welcome message for the Tetris game.
 ************************/
-
 void printWelcomeMessage()
 {
     string message = "Welcome to Tetris! Have fun playing!";
@@ -88,6 +65,12 @@ void printColorOption()
     cout << "Please select coloring option for the game :\n";
     cout << "(1) for colorized game\n(2) for uncolorized game\n";
 }
+/************************
+* Name: showConsoleCursor
+* Input: bool showFlag (Flag to indicate whether to show or hide the console cursor)
+* Output: None
+* Description: Controls the visibility of the console cursor based on the provided flag. Uses the Windows API functions to retrieve and modify the cursor information.
+************************/
 void showConsoleCursor(bool showFlag)
 {
     HANDLE out = GetStdHandle(STD_OUTPUT_HANDLE);

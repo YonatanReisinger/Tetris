@@ -44,7 +44,7 @@ public:
 	GameStatus getStatus() const { return status; };
 	bool setStatus(GameStatus status);
 	inline const Player& getPlayer(int playerNum) const { return playerNum == 1 ? player1 : player2; };
-	void setCurrentShapeInBoard(Player& player); // MAYBE CAHNGE IT TO A PLAYER FUNCTION !!!!!!!!!!!1
+	void setCurrentShapeInBoard(Player& player);
 	bool setWinnerNum(short int winnerNum);
 	inline short int getWinnerNum() const { return winnerNum; };
 	inline GameColorStatus const getColorStatus() const { return colorStatus; };
@@ -52,11 +52,12 @@ public:
 	static GameColorStatus getUserColorChoiceFromKeyboard();
 	void moveShapeOnScreen(Shape& shape, Shape:: ShapeMovement movement, GamePace pace) const;
 	void setKeysPressed();
+	static void printMenu(Game* pGame);
 	static void printInstructionsAndKeys();
 	static void printInstructions();
 	static void printKeys();
 	static void clearKeyboardInputBuffer();
-	void clearKeysPressed();
-	bool wasEscapePressed();
+	inline void clearKeysPressed();
+	bool wasEscapePressed() const;
 };
 #endif // Game.h

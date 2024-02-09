@@ -214,18 +214,42 @@ bool Point:: setColor(Color color)
 	}
 	return res;
 }
+/************************
+* Name: getHorizontalDistance
+* Input: const Point& other (The other point)
+* Output: int (The horizontal distance between this point and the other point)
+* Description: Calculates the horizontal distance between this point and another point.
+************************/
 int Point:: getHorizontalDistance(const Point & other)
 {
 	return abs(this->x - other.x);
 }
+/************************
+* Name: getVerticalDistance
+* Input: const Point& other (The other point)
+* Output: int (The vertical distance between this point and the other point)
+* Description: Calculates the vertical distance between this point and another point.
+************************/
 int Point:: getVerticalDistance(const Point& other)
 {
 	return abs(this->y - other.y);
 }
+/************************
+* Name: distance
+* Input: const Point& other (The other point)
+* Output: double (The distance between this point and the other point)
+* Description: Calculates the Euclidean distance between this point and another point in 2D space.
+************************/
 const double Point::distance(const Point& other) const
 {
 	return sqrt(pow(this->x - other.x, 2) + pow(this->y - other.y, 2));
 }
+/************************
+* Name: blink
+* Input: None
+* Output: None
+* Description: Makes the point blink on the screen by temporarily hiding its symbol and then restoring it after a brief delay.
+************************/
 void Point:: blink()
 {
 	char symbol = this->symbol;
