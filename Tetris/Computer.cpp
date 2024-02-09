@@ -235,12 +235,18 @@ bool Computer::shouldMakeRandomMove() const
 void Computer:: findRandomMove()
 {
 	Shape tmpShape;
-	short int i, horizontalMovement;
+	short int i, horizontalMovement, randomNumOfRotations;
 	do
 	{
 		tmpShape = *currPlayingShape;
-		tmpShape.setShapeRotationDirection((Shape:: RotationDirection)(rand() % 4)); // Randomize the shape rotation
-		horizontalMovement = rand() % (GameConfig::WIDTH / 2); // randomize the location across the X-axis
+		if (tmpShape.getType() != Shape::Type::BOMB)
+		{
+			randomNumOfRotations = rand() % 4;
+			for (i = 0; i < randomNumOfRotations && board.canShapeMove(tmpShape, Shape::ShapeMovement::ROTATE_RIGHT); ++i)
+				tmpShape.move(Shape::ShapeMovement::ROTATE_RIGHT);
+		}
+		// randomize the location across the X-axis (between 6 moves to the right and 6 moves to the left)
+		horizontalMovement = (rand() % GameConfig::WIDTH) - (GameConfig::WIDTH / 2);
 		for (i = 0; i < abs(horizontalMovement); ++i)
 		{
 			if (horizontalMovement > 0) //for right movement

@@ -81,6 +81,7 @@ int main()
 		{
 			pGame->printWinner();
 			cout << "\n\n\nPress any key to continue........";
+			Game::clearKeyboardInputBuffer();
 			while (!_kbhit());
 			clearScreen();
 		}

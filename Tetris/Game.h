@@ -12,6 +12,7 @@
 #include <iostream>
 #include <conio.h> // for _kbhit() and _getch()
 #include <typeinfo>
+#include <vector>
 using namespace std;
 // <- Imports
 
@@ -27,12 +28,12 @@ private:
 	Player &player1, &player2;
 	short int winnerNum;
 	GameColorStatus const colorStatus;
+	vector<Key> keysPressed;
 
 	void run(); //game logic
 	bool checkAndProcessKeyboardInput();
-	void processPlayerInput(Key key, Player& player);
+	void processPlayerInput(Player& player);
 	void printScores() const;
-	void clearKeyboardInputBuffer() const;
 	void determineWinner();
 
 public:
@@ -50,9 +51,12 @@ public:
 	void printWinner() const;
 	static GameColorStatus getUserColorChoiceFromKeyboard();
 	void moveShapeOnScreen(Shape& shape, Shape:: ShapeMovement movement, GamePace pace) const;
-	Key getKeys(Key& key1, Key& key2);
+	void setKeysPressed();
 	static void printInstructionsAndKeys();
 	static void printInstructions();
 	static void printKeys();
+	static void clearKeyboardInputBuffer();
+	void clearKeysPressed();
+	bool wasEscapePressed();
 };
 #endif // Game.h
