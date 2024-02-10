@@ -17,7 +17,7 @@ public:
 	bool setCurrShapeFinalState(const Shape& shape);
 	void findBestMove();
 	int evaluatePlacement(Shape tmpShape);
-	Shape getcurrShapeFinalState();
+	Shape getcurrShapeFinalState() const;
 	bool setBestMoveScore(int newScore);
 
 protected:
@@ -26,7 +26,7 @@ protected:
 	int bestMoveScore;
 
 	void evaluatePossibleMovesFromSide(const Shape& tmpShape, Shape:: ShapeMovement direction);
-	bool updateBestMoveScoreAndCurrShapeFinalState(int newScore, const Shape& newShapeFinalState);
+	inline bool updateBestMoveScoreAndCurrShapeFinalState(int newScore, const Shape& newShapeFinalState);
 	int evaluate() const;
 	int evaluate(Shape& bomb) const;
 	void calculateEvaluationParameters(short int& maxHeight, short int& holesPenalty, short int& fullRows) const;

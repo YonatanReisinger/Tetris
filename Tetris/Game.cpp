@@ -11,6 +11,7 @@ Game:: Game(Player &player1, Player &player2, GameColorStatus colorStatus)
 {
 	setStatus(GameStatus:: PLAYING); // new game is automatically being played
 	setWinnerNum(NO_WINNER);
+	keysPressed.reserve(20);
 }
 /************************
 * Name: Game::run
@@ -46,6 +47,7 @@ void Game::run()
 			setStatus(GameStatus::PAUSED);
 			break;
 		}
+		clearKeysPressed();
 
 		// MAYBE ADD !!!!!!!!!!!!!!!!!!!!
 		// setCurrentShapeInBoard(player1);
@@ -58,6 +60,7 @@ void Game::run()
 			setStatus(GameStatus::PAUSED);
 			break;
 		}
+		clearKeysPressed();
 
 		setCurrentShapeInBoard(player1);
 		setCurrentShapeInBoard(player2);
@@ -96,6 +99,7 @@ bool Game::resume()
 	// run the game and update to gameStatus in the end
 	if (status == GameStatus::PAUSED) // cant resume a game that was not paused before
 	{
+		clearKeysPressed();
 		run();
 		return true;
 	}
@@ -155,16 +159,18 @@ void Game:: moveShapeOnScreen(Shape& shape, Shape:: ShapeMovement movement, Game
 bool Game:: checkAndProcessKeyboardInput()
 {
 	bool res = true;
-	Key key1, key2, keyboardKey;
-	keyboardKey = getKeys(key1, key2);
-	if (keyboardKey != ESC)
+	Key keyboardKey;
+	setKeysPressed();
+	
+	if (wasEscapePressed())
+		res = false;
+	else
 	{
-		processPlayerInput(key1, player1);
-		processPlayerInput(key2, player2);
+		processPlayerInput(player1);
+		processPlayerInput(player2);
 		res = true;
 	}
-	else
-		res = false;
+
 	return res;
 }
 /************************
@@ -173,12 +179,17 @@ bool Game:: checkAndProcessKeyboardInput()
 * Output: None
 * Description: Processes player input, interpreting the key and applying the corresponding movement to the player's current shape on the board.
 ************************/
-void Game:: processPlayerInput(Key key, Player& player)
+void Game:: processPlayerInput(Player& player)
 {
-	Shape:: ShapeMovement movement;
-	Shape& currShape = *(player.getCurrShape()), tempShape;
+	short int i;
+	Shape:: ShapeMovement movement = (Shape::ShapeMovement)NOT_FOUND;
+	Shape& currShape = *(player.getCurrShape());
+
+	//movement = (Shape::ShapeMovement)player.getKeyInd(key);
 	// the index of the key indicates it's type of movement
-	movement = (Shape:: ShapeMovement)player.getKeyInd(key);
+	for (i = 0; i < keysPressed.size() && movement == NOT_FOUND; ++i)
+		movement = (Shape::ShapeMovement)player.getKeyInd(keysPressed[i]);
+
 	// if a valid key was pressed
 	if (movement != NOT_FOUND && player.canCurrShapeMove(movement))
 	{
@@ -259,7 +270,7 @@ void Game:: printScores() const
 * Output: None
 * Description: Clears the keyboard input buffer, ensuring no residual input is processed.
 ************************/
-void Game:: clearKeyboardInputBuffer() const
+void Game:: clearKeyboardInputBuffer()
 {
 	char temp;
 	while (_kbhit())
@@ -317,6 +328,12 @@ void Game:: printWinner() const
 			cout << "The Winner is: " << getPlayer(winnerNum).getName();
 	}
 }
+/************************
+* Name: getUserColorChoiceFromKeyboard
+* Input: None
+* Output: GameColorStatus representing the user's color choice
+* Description: Gets the user's color choice from the keyboard input.
+************************/
 GameColorStatus Game::getUserColorChoiceFromKeyboard()
 {
 	unsigned char colorChoice;
@@ -328,31 +345,53 @@ GameColorStatus Game::getUserColorChoiceFromKeyboard()
 	clearScreen();
 	return (GameColorStatus)(colorChoice - '0');
 }
-Key Game::getKeys(Key& key1, Key& key2)
+/************************
+* Name: setKeysPressed
+* Input: None
+* Output: None
+* Description: Sets the keys pressed during the game.
+************************/
+void Game::setKeysPressed()
 {
 	Computer* cpu1, *cpu2;
-	Key keyboardKey = '0';
-	if (_kbhit())
-		keyboardKey = _getch();
-	//Human vs Human
-	if (typeid(player1) == typeid(Player) && typeid(player2) == typeid(Player)) {
-		key1 = keyboardKey;
-		key2 = keyboardKey;
-	}
+
+	while (_kbhit())
+		keysPressed.push_back(_getch());
 	//CPU vs CPU
-	else if (typeid(player1) != typeid(Player) && typeid(player2) != typeid(Player)) {
+	if (typeid(player1) != typeid(Player) && typeid(player2) != typeid(Player)) {
 		cpu1 = dynamic_cast<Computer*>(&player1);
 		cpu2 = dynamic_cast<Computer*>(&player2);
-		key1 = cpu1->getKey();
-		key2 = cpu2->getKey();
+		keysPressed.push_back(cpu1->getKey());
+		keysPressed.push_back(cpu2->getKey());
 	}
 	//player vs CPU
-	else {
+	else if (typeid(player1) == typeid(Player) && typeid(player2) != typeid(Player)) {
 		cpu2 = dynamic_cast<Computer*>(&player2);
-		key1 = keyboardKey;
-		key2 = cpu2->getKey();
+		keysPressed.push_back(cpu2->getKey());
 	}
-	return keyboardKey;
+	clearKeyboardInputBuffer();
+}
+/************************
+* Name: printMenu
+* Input: GameStatus gameStatus (The current status of the game)
+* Output: None
+* Description: Prints the game menu based on the provided game status.
+  Displays options for starting a new game, continuing a paused game, presenting instructions, and exiting.
+************************/
+void  Game::printMenu(Game* pGame)
+{
+	printWelcomeMessage();
+	cout << "Please enter your choice:" << endl
+		<< "(" << Choice::START_HUMAN_VS_HUMAN << ") Start a new game - Human vs Human" << endl
+		<< "(" << Choice::START_HUMAN_VS_CPU << ") Start a new game - Human vs Computer" << endl
+		<< "(" << Choice::START_CPU_VS_CPU << ") Start a new game - Computer vs Computer" << endl;
+	// if there is a game and it is paused
+	if (pGame != nullptr && pGame->getStatus() == GameStatus::PAUSED)
+	{
+		cout << "(" << Choice::CONTINUE << ") Continue a paused game" << endl;
+	}
+	cout << "(" << Choice::INSTRUCTIONS << ") Present instructions and keys" << endl
+		<< "(" << Choice::EXIT << ") exit" << endl;
 }
 /************************
 * Name: printInstructionsAndKeys
@@ -426,4 +465,26 @@ void Game:: printKeys()
 	cout << "               | M |" << endl;
 	cout << "               +---+" << endl;
 	cout << "               Drop" << endl;
+}
+/************************
+* Name: clearKeysPressed
+* Input: None
+* Output: None
+* Description: Clears the keys pressed during the game.
+************************/
+inline void Game:: clearKeysPressed()
+{
+	keysPressed.resize(0);
+}
+/************************
+* Name: wasEscapePressed
+* Input: None
+* Output: bool indicating whether the escape key was pressed during the game.
+************************/
+bool Game:: wasEscapePressed() const
+{
+	for (Key key : keysPressed)
+		if (key == ESC)
+			return true;
+	return false;
 }

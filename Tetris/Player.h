@@ -9,7 +9,6 @@
 // <- Imports
 
 // Macros ans enums->
-enum KeyInd { LEFT_IND, RIGHT_IND, ROTATE_LEFT_IND, ROTATE_RIGHT_IND, DROP_IND} ;
 typedef unsigned char Key;
 class Computer;
 // <- Macros and enums
@@ -24,6 +23,8 @@ protected:
 	Point startPoint;
 
 public:
+	enum KeyInd { LEFT_IND, RIGHT_IND, ROTATE_LEFT_IND, ROTATE_RIGHT_IND, DROP_IND };
+
 	Player(const Board& board, const Key keys[], const string name, int score = 0);
 	Player(const Player& other) = delete;
 	Player& operator=(const Player& other) = delete;
@@ -35,7 +36,7 @@ public:
 	inline int getScore() const { return score; };
 	bool increaseScore(int increase);
 	void reset();
-	int getKeyInd(Key inputKey);
+	int getKeyInd(Key inputKey) const;
 	inline Shape* getCurrShape() { return currPlayingShape; };
 	void setCurrShape(Shape* currShape);
 	bool isStuck() const;
@@ -44,7 +45,5 @@ public:
 	bool setStartpoint(const Point& startPoint);
 	const Point& getStartPoint() const;
 	void setRandomCurrShape(GameColorStatus color);
-
-	//void updateCurShapeInGame(const Game& game);
 };
 #endif // PLAYER.h

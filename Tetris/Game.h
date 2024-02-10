@@ -12,6 +12,7 @@
 #include <iostream>
 #include <conio.h> // for _kbhit() and _getch()
 #include <typeinfo>
+#include <vector>
 using namespace std;
 // <- Imports
 
@@ -27,12 +28,12 @@ private:
 	Player &player1, &player2;
 	short int winnerNum;
 	GameColorStatus const colorStatus;
+	vector<Key> keysPressed;
 
 	void run(); //game logic
 	bool checkAndProcessKeyboardInput();
-	void processPlayerInput(Key key, Player& player);
+	void processPlayerInput(Player& player);
 	void printScores() const;
-	void clearKeyboardInputBuffer() const;
 	void determineWinner();
 
 public:
@@ -43,16 +44,20 @@ public:
 	GameStatus getStatus() const { return status; };
 	bool setStatus(GameStatus status);
 	inline const Player& getPlayer(int playerNum) const { return playerNum == 1 ? player1 : player2; };
-	void setCurrentShapeInBoard(Player& player); // MAYBE CAHNGE IT TO A PLAYER FUNCTION !!!!!!!!!!!1
+	void setCurrentShapeInBoard(Player& player);
 	bool setWinnerNum(short int winnerNum);
 	inline short int getWinnerNum() const { return winnerNum; };
 	inline GameColorStatus const getColorStatus() const { return colorStatus; };
 	void printWinner() const;
 	static GameColorStatus getUserColorChoiceFromKeyboard();
 	void moveShapeOnScreen(Shape& shape, Shape:: ShapeMovement movement, GamePace pace) const;
-	Key getKeys(Key& key1, Key& key2);
+	void setKeysPressed();
+	static void printMenu(Game* pGame);
 	static void printInstructionsAndKeys();
 	static void printInstructions();
 	static void printKeys();
+	static void clearKeyboardInputBuffer();
+	inline void clearKeysPressed();
+	bool wasEscapePressed() const;
 };
 #endif // Game.h

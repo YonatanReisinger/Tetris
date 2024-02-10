@@ -1,10 +1,27 @@
 #include "Computer.h"
+
+/************************
+* Name: Computer
+* Input: const Board& board (Reference to the game board),
+*        const Key keys[] (Array of keys),
+*        const string name (Name of the computer player),
+*        int bestMoveScore (Initial best move score),
+*        int score (Initial score)
+* Output: None
+* Description: Constructor for the Computer class.
+************************/
 Computer::Computer(const Board& board, const Key keys[], const string name, int bestMoveScore,int score)
 	: Player(board, keys, name, score)
 {
 	setLevel(level);
 	this->bestMoveScore = bestMoveScore;
 }
+/************************
+* Name: getLevelFromKeyboard
+* Input: None
+* Output: Level representing the chosen level
+* Description: Prompts the user to choose a level for the computer player and returns the chosen level.
+************************/
 Computer:: Level Computer:: getLevelFromKeyboard()
 {
 	Level levelChoice;
@@ -16,6 +33,12 @@ Computer:: Level Computer:: getLevelFromKeyboard()
 		&& tolower(levelChoice) != Level::BEST && tolower(levelChoice) != Level::GOOD && tolower(levelChoice) != Level::NOVICE);
 	return ('a' <= levelChoice <= 'z') ? levelChoice : (Level)tolower(levelChoice);
 }
+/************************
+* Name: setLevel
+* Input: Level level (Level to set for the computer player)
+* Output: bool representing success (true) or failure (false)
+* Description: Sets the level for the computer player.
+************************/
 bool Computer::setLevel(Level level)
 {
 	if (level == Level::BEST || level == Level::GOOD || level == Level::NOVICE || level == Level::HUMAN)
@@ -26,6 +49,12 @@ bool Computer::setLevel(Level level)
 	else
 		return false;
 }
+/************************
+* Name: getKey
+* Input: None
+* Output: Key representing the next move key
+* Description: Returns the next move key for the computer player.
+************************/
 Key Computer::getKey() const
 {
 	Key key;
@@ -47,7 +76,12 @@ Key Computer::getKey() const
 		key = keys[KeyInd::RIGHT_IND];
 	return key;
 }
-
+/************************
+* Name: setCurrShapeFinalState
+* Input: const Shape& shape (Shape representing the final state)
+* Output: bool representing success (true) or failure (false)
+* Description: Sets the final state of the current shape.
+************************/
 bool Computer:: setCurrShapeFinalState(const Shape& shape)
 {
 	bool res;
@@ -56,6 +90,12 @@ bool Computer:: setCurrShapeFinalState(const Shape& shape)
 		currShapeFinalState = shape;
 	return res;
 }
+/************************
+* Name: findBestMove
+* Input: None
+* Output: None
+* Description: Finds the best move for the computer player based on the current game state.
+************************/
 void Computer:: findBestMove()
 {
 	short int i, numOfRotationsPossible = 4;
@@ -85,6 +125,13 @@ void Computer:: findBestMove()
 			numOfRotationsPossible--;
 	}
 }
+/************************
+* Name: evaluatePossibleMovesFromSide
+* Input: const Shape& tmpShape (Temporary shape),
+*        Shape::ShapeMovement direction (Direction to evaluate)
+* Output: None
+* Description: Evaluates possible moves from the given side for the temporary shape.
+************************/
 void Computer:: evaluatePossibleMovesFromSide(const Shape& tmpShape, Shape:: ShapeMovement direction)
 {
 	int moveScore = 0;
@@ -102,7 +149,14 @@ void Computer:: evaluatePossibleMovesFromSide(const Shape& tmpShape, Shape:: Sha
 		updateBestMoveScoreAndCurrShapeFinalState(moveScore, verticalShape);
 	}
 }
-bool Computer:: updateBestMoveScoreAndCurrShapeFinalState(int newScore, const Shape& newShapeFinalState)
+/************************
+* Name: updateBestMoveScoreAndCurrShapeFinalState
+* Input: int newScore (New score to compare),
+*        const Shape& newShapeFinalState (New final state shape)
+* Output: bool representing whether the update was successful
+* Description: Updates the best move score and current shape final state if the new score is better.
+************************/
+inline bool Computer:: updateBestMoveScoreAndCurrShapeFinalState(int newScore, const Shape& newShapeFinalState)
 {
 	return newScore > bestMoveScore ? setBestMoveScore(newScore) && setCurrShapeFinalState(newShapeFinalState) : false;
 }
@@ -111,6 +165,12 @@ bool Computer::setBestMoveScore(int newScore)
 	bestMoveScore = newScore;
 	return true;
 }
+/************************
+* Name: evaluatePlacement
+* Input: Shape tmpShape (Temporary shape)
+* Output: int representing the score for the placement
+* Description: Evaluates the placement of the temporary shape on the game board.
+************************/
 int Computer:: evaluatePlacement(Shape tmpShape)
 {
 	int moveScore = 0;
@@ -124,10 +184,22 @@ int Computer:: evaluatePlacement(Shape tmpShape)
 	}
 	return moveScore;
 }
-Shape Computer:: getcurrShapeFinalState()
+/************************
+* Name: getcurrShapeFinalState
+* Input: None
+* Output: Shape representing the current shape's final state
+* Description: Returns the current shape's final state.
+************************/
+Shape Computer:: getcurrShapeFinalState() const
 {
 	return currShapeFinalState;
 }
+/************************
+* Name: evaluate
+* Input: None
+* Output: int representing the score based on the current game state
+* Description: Evaluates the game state and returns a score.
+************************/
 int Computer::evaluate() const
 {
 	short int score = 0, maxHeight = NOT_FOUND, holesPenalty = 0, fullRows = 0, scorePerFilledRow, scorePerHeight;
@@ -153,6 +225,14 @@ int Computer::evaluate() const
 
 	return score;
 }
+/************************
+* Name: calculateEvaluationParameters
+* Input: short int& maxHeight (Reference to the maximum height),
+*        short int& holesPenalty (Reference to the penalty for holes),
+*        short int& fullRows (Reference to the number of full rows)
+* Output: None
+* Description: Calculates evaluation parameters such as maximum height, holes penalty, and full rows.
+************************/
 void Computer::calculateEvaluationParameters(short int& maxHeight, short int& holesPenalty, short int& fullRows) const
 {
 	short int row, col;
@@ -180,6 +260,13 @@ void Computer::calculateEvaluationParameters(short int& maxHeight, short int& ho
 		}
 	}
 }
+/************************
+* Name: getBlockedFromAbovePenalty
+* Input: (Row index),
+*        (Column index)
+* Output: int representing the penalty for being blocked from above
+* Description: Calculates the penalty for being blocked from above at the given position.
+************************/
 int Computer::getBlockedFromAbovePenalty(int row, int col) const
 {
 	int i, penalty = 0;
@@ -192,7 +279,13 @@ int Computer::getBlockedFromAbovePenalty(int row, int col) const
 
 	return penalty;
 }
-
+/************************
+* Name: getBlockedFromSidePenalty
+* Input: (Row index),
+*        (Column index)
+* Output: int representing the penalty for being blocked from the side
+* Description: Calculates the penalty for being blocked from the side at the given position.
+************************/
 int Computer::getBlockedFromSidePenalty(int row, int col) const
 {
 	int penalty = 0;
@@ -206,6 +299,12 @@ int Computer::getBlockedFromSidePenalty(int row, int col) const
 		penalty += GameConfig::HOLES_BLOCKED_FROM_SIDE_PENALTY;
 	return penalty;
 }
+/************************
+* Name: evaluate
+* Input: Shape& bomb (Bomb shape)
+* Output: int representing the score based on the bomb's impact
+* Description: Evaluates the game state considering the impact of a bomb.
+************************/
 int Computer:: evaluate(Shape& bomb) const
 {
 	short int row, col, pointsInBombRange = 0;
@@ -218,6 +317,12 @@ int Computer:: evaluate(Shape& bomb) const
 
 	return pointsInBombRange;
 }
+/************************
+* Name: shouldMakeRandomMove
+* Input: None
+* Output: bool representing whether the computer should make a random move
+* Description: Determines if the computer should make a random move based on its level.
+************************/
 bool Computer::shouldMakeRandomMove() const
 {
 	unsigned int randomNum;
@@ -232,15 +337,27 @@ bool Computer::shouldMakeRandomMove() const
 	else
 		return false;
 }
+/************************
+* Name: findRandomMove
+* Input: None
+* Output: None
+* Description: Finds a random move for the computer player.
+************************/
 void Computer:: findRandomMove()
 {
 	Shape tmpShape;
-	short int i, horizontalMovement;
+	short int i, horizontalMovement, randomNumOfRotations;
 	do
 	{
 		tmpShape = *currPlayingShape;
-		tmpShape.setShapeRotationDirection((Shape:: RotationDirection)(rand() % 4)); // Randomize the shape rotation
-		horizontalMovement = rand() % (GameConfig::WIDTH / 2); // randomize the location across the X-axis
+		if (tmpShape.getType() != Shape::Type::BOMB)
+		{
+			randomNumOfRotations = rand() % 4;
+			for (i = 0; i < randomNumOfRotations && board.canShapeMove(tmpShape, Shape::ShapeMovement::ROTATE_RIGHT); ++i)
+				tmpShape.move(Shape::ShapeMovement::ROTATE_RIGHT);
+		}
+		// randomize the location across the X-axis (between 6 moves to the right and 6 moves to the left)
+		horizontalMovement = (rand() % GameConfig::WIDTH) - (GameConfig::WIDTH / 2);
 		for (i = 0; i < abs(horizontalMovement); ++i)
 		{
 			if (horizontalMovement > 0) //for right movement

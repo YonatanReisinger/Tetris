@@ -74,7 +74,7 @@ void Player:: reset()
 
 ************************
 */
-int Player:: getKeyInd(Key inputKey)
+int Player:: getKeyInd(Key inputKey) const
 {
 	short int i;
 	int resInd = NOT_FOUND;
@@ -96,6 +96,12 @@ void Player:: setCurrShape(Shape* currShape)
 {
 	currPlayingShape = currShape;
 }
+/************************
+* Name: isStuck
+* Input: None
+* Output: bool (True if the current shape is stuck, False otherwise)
+* Description: Checks if the player's current shape is stuck, meaning it cannot be set on the board or moved in any direction. Also checks if the shape is at the top of the board.
+************************/
 bool Player:: isStuck() const
 {
 	bool isShapeStuck, isShapeAtTopOfBoard;
@@ -108,16 +114,34 @@ bool Player:: isStuck() const
 	// if the both of them happen then the new shape is stuck on top of the board and thus the game should finish
 	return isShapeStuck && isShapeAtTopOfBoard;
 }
+/************************
+* Name: canCurrShapeMove
+* Input: Shape::ShapeMovement movement (The movement to be checked)
+* Output: bool (True if the current shape can move in the specified direction, False otherwise)
+* Description: Checks if the player's current shape can move in the specified direction on the board.
+************************/
 bool Player:: canCurrShapeMove(Shape:: ShapeMovement movement) const
 {
 	return board.canShapeMove(*currPlayingShape, movement);
 }
+/************************
+* Name: findBestMove
+* Input: None
+* Output: None
+* Description: Finds the best move for the player. Since this function is not implemented for regular players, it does nothing.
+************************/
 void Player:: findBestMove()
 {
 	// A normal player doesnt have a way to find his best move
 	if (typeid(this) == typeid(Player))
 		return;
 }
+/************************
+* Name: setStartpoint
+* Input: const Point& startPoint (The starting point to be set)
+* Output: bool (True if the starting point was set successfully, False otherwise)
+* Description: Sets the starting point for the player's shapes on the board.
+************************/
 bool Player::setStartpoint(const Point& startPoint)
 {
 	if (board.isPointInBoard(startPoint))
@@ -128,10 +152,22 @@ bool Player::setStartpoint(const Point& startPoint)
 	else
 		return false;
 }
+/************************
+* Name: getStartPoint
+* Input: None
+* Output: const Point& (Reference to the starting point of the player's shapes)
+* Description: Retrieves the starting point for the player's shapes on the board.
+************************/
 const Point& Player:: getStartPoint() const
 {
 	return startPoint;
 }
+/************************
+* Name: setRandomCurrShape
+* Input: GameColorStatus color (The color status of the game)
+* Output: None
+* Description: Sets the player's current shape to a randomly generated shape, based on the provided color status. There's a chance for a bomb shape to be generated as well.
+************************/
 void Player:: setRandomCurrShape(GameColorStatus color)
 {
 	Shape* s;

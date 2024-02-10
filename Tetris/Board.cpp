@@ -510,6 +510,12 @@ bool Board:: canSetShapeInGameBoard(const Shape& shape) const
 		res = !isPointFull(shape.points[i]) && isPointInBoard(shape.points[i]);
 	return res;
 }
+/************************
+* Name: Board::explodeBomb
+* Input: Shape& bomb (The bomb shape to explode)
+* Output: None
+* Description: Simulates the explosion of a bomb shape on the game board, clearing points within its explosion range.
+************************/
 void Board::explodeBomb(Shape& bomb)
 {
 	short int i, j;
@@ -539,12 +545,23 @@ void Board::explodeBomb(Shape& bomb)
 	for (i = 0; i < numOfActiveShapes; i++)
 		setShapeInGameBoard(activeShapes[i], false);
 }
+/************************
+* Name: Board::canShapeMove
+* Input: const Shape& shape (The shape to check), Shape::ShapeMovement movement (The movement to check)
+* Output: bool representing whether the shape can move in the specified direction
+* Description: Checks if the specified shape can move in the given direction without colliding with other shapes or going out of bounds.
+************************/
 bool Board::canShapeMove(const Shape& shape, Shape:: ShapeMovement movement) const
 {
 	Shape tempShape = shape;
 	tempShape.move(movement);
 	return canSetShapeInGameBoard(tempShape);
 }
+/************************
+* Name: Board::getGameBoard
+* Output: gameBoardPointer
+* Description: Returns a pointer to the game board.
+************************/
 gameBoardPointer Board:: getGameBoard() const
 {
 	return gameBoard;

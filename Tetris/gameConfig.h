@@ -5,8 +5,9 @@
 
 enum Choice { START_HUMAN_VS_HUMAN = 1, START_HUMAN_VS_CPU = 2, START_CPU_VS_CPU = 3, CONTINUE = 4, INSTRUCTIONS = 8, EXIT = 9 };
 enum class Directions {LEFT, RIGHT, UP, DOWN} ;
-enum class GamePace { NORMAL = 500, MODERATE = 300 ,FAST = 50, BLINKING_PACE = 150};
+enum class GamePace { NORMAL = 300, MODERATE = 150 ,FAST = 50, BLINKING_PACE = 100};
 enum GameColorStatus { COLORIZED = 1, UNCOLORIZED = 2};
+
 #define EMPTY ' '
 #define NOT_FOUND -1
 #define ESC 27
@@ -33,12 +34,12 @@ public:
 	static constexpr float CHANCE_FOR_GOOD_CPU_RANDOM_MOVE = 0.03;
 	static constexpr float CHANCE_FOR_NOVICE_CPU_RANDOM_MOVE = 0.1;
 
-	static constexpr unsigned short int HOLES_BLOCKED_FROM_ABOVE_PENALTY = 6;
+	static constexpr unsigned short int HOLES_BLOCKED_FROM_ABOVE_PENALTY = 8;
 	static constexpr unsigned short int HOLES_BLOCKED_FROM_SIDE_PENALTY = 3;
-	static constexpr unsigned short int SCORE_PER_HEIGHT = 25;
-	static constexpr unsigned short int SCORE_PER_FILLED_ROW = 35;
-	static constexpr unsigned short int THRESHOLD_FOR_DANGEROUS_HEIGHT = 12;
-	static constexpr unsigned short int DANGEROUS_SCORE_PER_HEIGHT = 40;
-	static constexpr unsigned short int DANGEROUS_SCORE_PER_FILLED_ROW = 50;
+	static constexpr unsigned short int SCORE_PER_HEIGHT = 20;
+	static constexpr unsigned short int SCORE_PER_FILLED_ROW = 60;
+	static constexpr unsigned short int THRESHOLD_FOR_DANGEROUS_HEIGHT = 10;
+	static constexpr unsigned short int DANGEROUS_SCORE_PER_HEIGHT = 50;
+	static constexpr unsigned short int DANGEROUS_SCORE_PER_FILLED_ROW = 80;
 };
 #endif //GameConfig.h

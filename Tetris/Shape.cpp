@@ -969,15 +969,33 @@ bool Shape::setShapeColor(Color color)
 	}
 	return res;
 }
+/************************
+* Name: getType
+* Input: None
+* Output: Shape::Type (The type of the shape)
+* Description: Gets the type of the shape.
+************************/
 Shape:: Type Shape:: getType() const
 {
 	return shapeType;
 }
+/************************
+* Name: getPoints
+* Input: None
+* Output: Point* const (A constant pointer to the points of the shape)
+* Description: Gets the array of points representing the shape.
+************************/
 Point* const Shape:: getPoints()
 {
 	return points;
 }
-bool Shape::isAbove(const Shape& shape)
+/************************
+* Name: isAbove
+* Input: const Shape& shape (The other shape to compare against)
+* Output: bool (True if this shape is above the other shape, otherwise false)
+* Description: Checks if this shape is positioned above the provided shape.
+************************/
+bool Shape::isAbove(const Shape& shape) const
 {
 	bool res = true;
 	for (int i = 0; i < NUM_OF_POINTS&&res; i++)
@@ -987,14 +1005,32 @@ bool Shape::isAbove(const Shape& shape)
 	}
 	return res;
 }
+/************************
+* Name: isToTheRight
+* Input: const Shape& shape (The other shape to compare against)
+* Output: bool (True if this shape is to the right of the other shape, otherwise false)
+* Description: Checks if this shape is positioned to the right of the provided shape.
+************************/
 bool Shape::isToTheRight(const Shape& shape) const
 {
 	return (points[0].getX() > shape.points[0].getX());
 }
+/************************
+* Name: isToTheLeft
+* Input: const Shape& shape (The other shape to compare against)
+* Output: bool (True if this shape is to the left of the other shape, otherwise false)
+* Description: Checks if this shape is positioned to the left of the provided shape.
+************************/
 bool Shape::isToTheLeft(const Shape& shape) const
 {
 	return (points[0].getX() < shape.points[0].getX());
 }
+/************************
+* Name: setShapeRotationDirection
+* Input: RotationDirection shapeDirection (The direction to set the shape's rotation)
+* Output: bool (True if the rotation direction was set successfully, otherwise false)
+* Description: Sets the rotation direction of the shape.
+************************/
 bool Shape:: setShapeRotationDirection(RotationDirection shapeDirection)
 {
 	if (shapeDirection == FACE_UP || shapeDirection == FACE_RIGHT || shapeDirection == FACE_DOWN || shapeDirection == FACE_LEFT)
@@ -1005,6 +1041,12 @@ bool Shape:: setShapeRotationDirection(RotationDirection shapeDirection)
 	else
 		return false;
 }
+/************************
+* Name: getLowestY
+* Input: None
+* Output: short int (The Y coordinate of the lowest point of the shape)
+* Description: Gets the Y coordinate of the lowest point of the shape.
+************************/
 short int Shape::getLowestY() const
 {
 	short int lowestY = points[0].getY(), currentY;
