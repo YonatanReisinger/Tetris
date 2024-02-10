@@ -14,19 +14,19 @@ public:
 	inline Level getLevel() const { return level; };
 	static Level getLevelFromKeyboard();
 	Key getKey() const;
-	bool setCurrShapeFinalState(const Shape& shape);
+	bool setCurrShapeFinalState(const Shape& shape) const;
 	void findBestMove();
 	int evaluatePlacement(Shape tmpShape);
 	Shape getcurrShapeFinalState() const;
-	bool setBestMoveScore(int newScore);
+	inline bool setBestMoveScore(int newScore) const;
 
 protected:
 	Level level;
-	Shape currShapeFinalState;
-	int bestMoveScore;
+	mutable Shape currShapeFinalState;
+	mutable int bestMoveScore;
 
 	void evaluatePossibleMovesFromSide(const Shape& tmpShape, Shape:: ShapeMovement direction);
-	inline bool updateBestMoveScoreAndCurrShapeFinalState(int newScore, const Shape& newShapeFinalState);
+	inline bool updateBestMoveScoreAndCurrShapeFinalState(int newScore, const Shape& newShapeFinalState) const;
 	int evaluate() const;
 	int evaluate(Shape& bomb) const;
 	void calculateEvaluationParameters(short int& maxHeight, short int& holesPenalty, short int& fullRows) const;

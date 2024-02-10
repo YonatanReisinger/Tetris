@@ -82,7 +82,7 @@ Key Computer::getKey() const
 * Output: bool representing success (true) or failure (false)
 * Description: Sets the final state of the current shape.
 ************************/
-bool Computer:: setCurrShapeFinalState(const Shape& shape)
+bool Computer:: setCurrShapeFinalState(const Shape& shape) const
 {
 	bool res;
 	res = currPlayingShape->getType() == shape.getType() && board.isShapeInBoard(shape);
@@ -99,7 +99,7 @@ bool Computer:: setCurrShapeFinalState(const Shape& shape)
 void Computer:: findBestMove()
 {
 	short int i, numOfRotationsPossible = 4;
-	Shape tmpShape(*currPlayingShape);
+	Shape tmpShape(*currPlayingShape), verticalShape;
 	setBestMoveScore(0); // Reset the best move score because Each cuurent shape has a different best move score
 	
 	if (shouldMakeRandomMove())
@@ -115,9 +115,13 @@ void Computer:: findBestMove()
 		evaluatePossibleMovesFromSide(tmpShape, Shape:: ShapeMovement:: RIGHT);
 		evaluatePossibleMovesFromSide(tmpShape, Shape:: ShapeMovement::LEFT);
 		// check the placement in the current lane
-		updateBestMoveScoreAndCurrShapeFinalState(evaluatePlacement(tmpShape), tmpShape);
+		verticalShape = tmpShape;
+		while (board.canShapeMove(verticalShape, Shape::ShapeMovement::DROP))
+			verticalShape.move(Shape::ShapeMovement::DROP);
+		updateBestMoveScoreAndCurrShapeFinalState(evaluatePlacement(verticalShape), verticalShape);
 
-		if (tmpShape.getType() == Shape:: Type::BOMB) // No need to rotate a bomb
+		// No need to rotate a bomb or a square
+		if (tmpShape.getType() == Shape:: Type::BOMB || tmpShape.getType() == Shape::Type::SQUARE) 
 			break;
 		if (board.canShapeMove(tmpShape, Shape:: ShapeMovement::ROTATE_RIGHT))
 			tmpShape.move(Shape:: ShapeMovement::ROTATE_RIGHT);
@@ -156,11 +160,11 @@ void Computer:: evaluatePossibleMovesFromSide(const Shape& tmpShape, Shape:: Sha
 * Output: bool representing whether the update was successful
 * Description: Updates the best move score and current shape final state if the new score is better.
 ************************/
-inline bool Computer:: updateBestMoveScoreAndCurrShapeFinalState(int newScore, const Shape& newShapeFinalState)
+inline bool Computer:: updateBestMoveScoreAndCurrShapeFinalState(int newScore, const Shape& newShapeFinalState) const
 {
 	return newScore > bestMoveScore ? setBestMoveScore(newScore) && setCurrShapeFinalState(newShapeFinalState) : false;
 }
-bool Computer::setBestMoveScore(int newScore)
+inline bool Computer::setBestMoveScore(int newScore) const
 {
 	bestMoveScore = newScore;
 	return true;
@@ -202,24 +206,14 @@ Shape Computer:: getcurrShapeFinalState() const
 ************************/
 int Computer::evaluate() const
 {
-	short int score = 0, maxHeight = NOT_FOUND, holesPenalty = 0, fullRows = 0, scorePerFilledRow, scorePerHeight;
+	short int score = 0, maxHeight = NOT_FOUND, holesPenalty = 0, fullRows = 0;
 
 	calculateEvaluationParameters(maxHeight, holesPenalty, fullRows);
 
-	if (maxHeight <= GameConfig::THRESHOLD_FOR_DANGEROUS_HEIGHT)
-	{
-		scorePerFilledRow = GameConfig::SCORE_PER_FILLED_ROW;
-		scorePerHeight = GameConfig::SCORE_PER_HEIGHT;
-	}
-	else // The shapes in the board are to high, thus clearing rows and reducing height is more important
-	{
-		scorePerFilledRow = GameConfig::DANGEROUS_SCORE_PER_FILLED_ROW;
-		scorePerHeight = GameConfig:: DANGEROUS_SCORE_PER_HEIGHT;
-	}
 	// Increment score based on the number of filled rows
-	score += fullRows * scorePerFilledRow;
+	score += fullRows * GameConfig::SCORE_PER_FILLED_ROW;
 	// Increment score based on the height of the highest occupied point
-	score += (GameConfig::HEIGHT - maxHeight) * scorePerHeight;
+	score += (GameConfig::HEIGHT - maxHeight) * GameConfig::SCORE_PER_HEIGHT;
 	// Deduct score based on the number of holes
 	score -= holesPenalty;
 
