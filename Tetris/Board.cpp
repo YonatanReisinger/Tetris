@@ -528,12 +528,15 @@ void Board::explodeBomb(Shape& bomb)
 		// temporarly remove the active shape from the board
 		clearShapeFromGameBoard(activeShapes[i]);
 		// adjust the places of points of the shape according to the line cleared
-		for (j = 0; j < NUM_OF_POINTS && activeShapes[i].points[j].getSymbol() != EMPTY; j++)
+		for (j = 0; j < NUM_OF_POINTS; j++)
 		{
-			if (activeShapes[i].points[j].distance(bombPoint) <= GameConfig::BOMB_EXPLOSION_RANGE)
-				activeShapes[i].points[j].setSymbol(EMPTY);
-			else
-				activeShapes[i].points[j].setSymbol(GameConfig:: SHAPE_SYMBOL);
+			if (activeShapes[i].points[j].getSymbol() != EMPTY)
+			{
+				if (activeShapes[i].points[j].distance(bombPoint) <= GameConfig::BOMB_EXPLOSION_RANGE)
+					activeShapes[i].points[j].setSymbol(EMPTY);
+				else
+					activeShapes[i].points[j].setSymbol(GameConfig::SHAPE_SYMBOL);
+			}
 		}
 		if (activeShapes[i].isShapeClear()) // if by bombing a whole shape is empty 
 		{

@@ -32,14 +32,11 @@ public:
 	static constexpr unsigned int BOMB_EXPLOSION_RANGE = 4;
 
 	static constexpr float CHANCE_FOR_GOOD_CPU_RANDOM_MOVE = 0.03;
-	static constexpr float CHANCE_FOR_NOVICE_CPU_RANDOM_MOVE = 0.1;
+	static constexpr float CHANCE_FOR_NOVICE_CPU_RANDOM_MOVE = 0.08;
 
 	static constexpr unsigned short int HOLES_BLOCKED_FROM_ABOVE_PENALTY = 8;
 	static constexpr unsigned short int HOLES_BLOCKED_FROM_SIDE_PENALTY = 3;
 	static constexpr unsigned short int SCORE_PER_HEIGHT = 20;
 	static constexpr unsigned short int SCORE_PER_FILLED_ROW = 60;
-	static constexpr unsigned short int THRESHOLD_FOR_DANGEROUS_HEIGHT = 10;
-	static constexpr unsigned short int DANGEROUS_SCORE_PER_HEIGHT = 50;
-	static constexpr unsigned short int DANGEROUS_SCORE_PER_FILLED_ROW = 80;
 };
 #endif //GameConfig.h

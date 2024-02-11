@@ -49,19 +49,6 @@ void Game::run()
 		}
 		clearKeysPressed();
 
-		// MAYBE ADD !!!!!!!!!!!!!!!!!!!!
-		// setCurrentShapeInBoard(player1);
-		// setCurrentShapeInBoard(player2);
-
-		// the following code is repeat as it helps the reactivity of the game !!!
-		isGamePlaying = checkAndProcessKeyboardInput();
-		if (!isGamePlaying) // if the player typed on ESC char that represents pausing the game
-		{
-			setStatus(GameStatus::PAUSED);
-			break;
-		}
-		clearKeysPressed();
-
 		setCurrentShapeInBoard(player1);
 		setCurrentShapeInBoard(player2);
 		
