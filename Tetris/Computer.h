@@ -7,7 +7,7 @@
 class Computer: virtual public Player
 {
 public:
-	enum Level { BEST = 'a', GOOD = 'b', NOVICE = 'c', HUMAN = 'h' };
+	enum Level { BEST = 'a', GOOD = 'b', NOVICE = 'c'};
 	Computer(const Board& board, const Key keys[], const string name, int bestMoveScore = 0, int score = 0);
 
 	bool setLevel(Level level);

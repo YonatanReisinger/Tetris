@@ -41,7 +41,7 @@ Computer:: Level Computer:: getLevelFromKeyboard()
 ************************/
 bool Computer::setLevel(Level level)
 {
-	if (level == Level::BEST || level == Level::GOOD || level == Level::NOVICE || level == Level::HUMAN)
+	if (level == Level::BEST || level == Level::GOOD || level == Level::NOVICE)
 	{
 		this->level = level;
 		return true;
@@ -341,28 +341,30 @@ void Computer:: findRandomMove()
 {
 	Shape tmpShape;
 	short int i, horizontalMovement, randomNumOfRotations;
-	do
-	{
-		tmpShape = *currPlayingShape;
-		if (tmpShape.getType() != Shape::Type::BOMB)
-		{
-			randomNumOfRotations = rand() % 4;
-			for (i = 0; i < randomNumOfRotations && board.canShapeMove(tmpShape, Shape::ShapeMovement::ROTATE_RIGHT); ++i)
-				tmpShape.move(Shape::ShapeMovement::ROTATE_RIGHT);
-		}
-		// randomize the location across the X-axis (between 6 moves to the right and 6 moves to the left)
-		horizontalMovement = (rand() % GameConfig::WIDTH) - (GameConfig::WIDTH / 2);
-		for (i = 0; i < abs(horizontalMovement); ++i)
-		{
-			if (horizontalMovement > 0) //for right movement
-				tmpShape.moveRight();
-			else //for left movement
-				tmpShape.moveLeft();
-		}
-		// Drop the point from this specific place till it reaches the ground
-		while (board.canShapeMove(tmpShape, Shape:: ShapeMovement::DROP))
-			tmpShape.move(Shape:: ShapeMovement::DROP);
 
-	} while (!board.canSetShapeInGameBoard(tmpShape)); // try until you find a random move that can be set on the board
+	tmpShape = *currPlayingShape;
+
+	// No need to rotate a bomb or square
+	if (tmpShape.getType() != Shape::Type::BOMB && tmpShape.getType() != Shape::Type::SQUARE)
+	{
+		randomNumOfRotations = rand() % 4;
+		for (i = 0; i < randomNumOfRotations && board.canShapeMove(tmpShape, Shape::ShapeMovement::ROTATE_RIGHT); ++i)
+			tmpShape.move(Shape::ShapeMovement::ROTATE_RIGHT);
+	}
+
+	// randomize the location across the X-axis (between 6 moves to the right and 6 moves to the left)
+	horizontalMovement = (rand() % GameConfig::WIDTH) - (GameConfig::WIDTH / 2);
+	for (i = 0; i < abs(horizontalMovement); ++i)
+	{
+		if (horizontalMovement > 0 && board.canShapeMove(tmpShape, Shape::ShapeMovement::RIGHT)) //for right movement
+			tmpShape.moveRight();
+		else if (horizontalMovement < 0 && board.canShapeMove(tmpShape, Shape::ShapeMovement::LEFT)) //for left movement
+			tmpShape.moveLeft();
+	}
+
+	// Drop the point from this specific place till it reaches the ground
+	while (board.canShapeMove(tmpShape, Shape::ShapeMovement::DROP))
+		tmpShape.move(Shape::ShapeMovement::DROP);
+
 	setCurrShapeFinalState(tmpShape);
 }

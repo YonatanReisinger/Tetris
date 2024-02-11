@@ -31,8 +31,8 @@ public:
 	static constexpr float CHANCE_FOR_BOMB = 0.05;
 	static constexpr unsigned int BOMB_EXPLOSION_RANGE = 4;
 
-	static constexpr float CHANCE_FOR_GOOD_CPU_RANDOM_MOVE = 0.03;
-	static constexpr float CHANCE_FOR_NOVICE_CPU_RANDOM_MOVE = 0.1;
+	static constexpr float CHANCE_FOR_GOOD_CPU_RANDOM_MOVE = 0.05;
+	static constexpr float CHANCE_FOR_NOVICE_CPU_RANDOM_MOVE = 1;
 
 	static constexpr unsigned short int HOLES_BLOCKED_FROM_ABOVE_PENALTY = 8;
 	static constexpr unsigned short int HOLES_BLOCKED_FROM_SIDE_PENALTY = 3;
