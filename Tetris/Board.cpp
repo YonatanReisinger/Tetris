@@ -129,12 +129,13 @@ bool Board::setPointInGameBoard(const Point& point)
 bool Board:: setShapeInGameBoard(const Shape& shape, bool isShapeNew)
 {
 	short int i;
+	
 	if (canSetShapeInGameBoard(shape))
 	{
 		for (i = 0; i < NUM_OF_POINTS; i++)
 		{
-			if (shape.points[i].getSymbol() != EMPTY) // insert just non empty points
-				setPointInGameBoard(shape.points[i]);
+			if (shape.getPoints()[i].getSymbol() != EMPTY) // insert just non empty points
+				setPointInGameBoard(shape.getPoints()[i]);
 		}
 		if (isShapeNew) // add an new shape to the active shape array in its correct place
 			insertShapeToArr(shape);
@@ -338,8 +339,8 @@ bool Board:: isShapeInBoard(const Shape& shape) const
 	short int i;
 	bool res = true;
 	// a shape can move iff all of its active points can move
-	for (i = 0; i < NUM_OF_POINTS && shape.points[i].getSymbol() != EMPTY && res; i++)
-		res = isPointInBoard(shape.points[i]);
+	for (i = 0; i < NUM_OF_POINTS && shape.getPoints()[i].getSymbol() != EMPTY && res; i++)
+		res = isPointInBoard(shape.getPoints()[i]);
 	return res;
 }
 /************************
@@ -381,17 +382,17 @@ void Board:: updateActiveShapes(short int clearedRowInd)
 		for (j = 0; j < NUM_OF_POINTS; j++)
 		{
 			// adjust the places of points of the shape according to the line cleared
-			if (activeShapes[i].points[j].getSymbol() != EMPTY)
+			if (activeShapes[i].getPoints()[j].getSymbol() != EMPTY)
 			{
 				// if above the line, drop it's points
-				if (activeShapes[i].points[j].getY() <= clearedRowInd)
-					activeShapes[i].points[j].moveDown();
+				if (activeShapes[i].getPoints()[j].getY() <= clearedRowInd)
+					activeShapes[i].getPoints()[j].moveDown();
 				//if the point is in the row of clearence, clear it
-				else if (activeShapes[i].points[j].getY() == (clearedRowInd + 1)) ///////////////////////
-					activeShapes[i].points[j].setSymbol(EMPTY);
+				else if (activeShapes[i].getPoints()[j].getY() == (clearedRowInd + 1)) ///////////////////////
+					activeShapes[i].getPoints()[j].setSymbol(EMPTY);
 				// if it is a point that didnt change, get it back to its original point on the board
 				else
-					activeShapes[i].points[j].setSymbol(GameConfig:: SHAPE_SYMBOL);
+					activeShapes[i].getPoints()[j].setSymbol(GameConfig::SHAPE_SYMBOL);
 			}
 		}
 		if (activeShapes[i].isShapeClear()) // if by clearinf the full rows a whole shape is empty 
@@ -442,16 +443,16 @@ bool Board::canActiveShapeDrop(const Shape& shape) const
 	for (i = 0; i < NUM_OF_POINTS && res; i++)
 	{
 		// check just the non empry points that can drop which are above the line of clearance
-		if (shape.points[i].getSymbol() != EMPTY)
+		if (shape.getPoints()[i].getSymbol() != EMPTY)
 		{
-			tempPoint = shape.points[i];
+			tempPoint = shape.getPoints()[i];
 			tempPoint.move(Directions::DOWN);
 			tempPointInd = shape.getPointInd(tempPoint);
 			// a point can drop if either the place below is free or if the place below it is part of it's own shape active points
-			res = canPointMove(shape.points[i], Directions::DOWN)
-				|| (tempPointInd != NOT_FOUND && shape.points[tempPointInd].getSymbol() != EMPTY && isPointInBoard(tempPoint));
+			res = canPointMove(shape.getPoints()[i], Directions::DOWN)
+				|| (tempPointInd != NOT_FOUND && shape.getPoints()[tempPointInd].getSymbol() != EMPTY && isPointInBoard(tempPoint));
 		}
-		else if (shape.points[i].getSymbol() == EMPTY)
+		else if (shape.getPoints()[i].getSymbol() == EMPTY)
 			emptyCounter++;
 	}
 	// an empty shape can't drop and also a shape that does not have one point that can drop 
@@ -470,11 +471,11 @@ void Board:: clearShapeFromGameBoard(Shape& shape)
 	short int i;
 	for (i = 0; i < NUM_OF_POINTS; i++)
 	{
-		if (shape.points[i].getSymbol() != EMPTY) // clear just the points that are part of the game
+		if (shape.getPoints()[i].getSymbol() != EMPTY) // clear just the points that are part of the game
 		{
-			shape.points[i].setSymbol(EMPTY);
-			setPointInGameBoard(shape.points[i]);
-			shape.points[i].setSymbol(GameConfig::SHAPE_SYMBOL);
+			shape.getPoints()[i].setSymbol(EMPTY);
+			setPointInGameBoard(shape.getPoints()[i]);
+			shape.getPoints()[i].setSymbol(GameConfig::SHAPE_SYMBOL);
 		}
 	}
 }
@@ -506,8 +507,8 @@ bool Board:: canSetShapeInGameBoard(const Shape& shape) const
 	short int i;
 	bool res = true;
 	// if all the points could be set on the board thus all the shape can
-	for (i = 0; i < NUM_OF_POINTS && (shape.points[i].getSymbol() != EMPTY) && res; i++)
-		res = !isPointFull(shape.points[i]) && isPointInBoard(shape.points[i]);
+	for (i = 0; i < NUM_OF_POINTS && (shape.getPoints()[i].getSymbol() != EMPTY) && res; i++)
+		res = !isPointFull(shape.getPoints()[i]) && isPointInBoard(shape.getPoints()[i]);
 	return res;
 }
 /************************
@@ -519,7 +520,7 @@ bool Board:: canSetShapeInGameBoard(const Shape& shape) const
 void Board::explodeBomb(Shape& bomb)
 {
 	short int i, j;
-	Point& bombPoint = bomb.points[0];
+	Point& bombPoint = bomb.getPoints()[0];
 	for (i = 0; i < 3; i++) // Make the bomb "explode" by making it blink 3 times 
 		bombPoint.blink();
 	// update all the active shapes in the board according to the exploding of the bomb
@@ -530,12 +531,12 @@ void Board::explodeBomb(Shape& bomb)
 		// adjust the places of points of the shape according to the line cleared
 		for (j = 0; j < NUM_OF_POINTS; j++)
 		{
-			if (activeShapes[i].points[j].getSymbol() != EMPTY)
+			if (activeShapes[i].getPoints()[j].getSymbol() != EMPTY)
 			{
-				if (activeShapes[i].points[j].distance(bombPoint) <= GameConfig::BOMB_EXPLOSION_RANGE)
-					activeShapes[i].points[j].setSymbol(EMPTY);
+				if (activeShapes[i].getPoints()[j].distance(bombPoint) <= GameConfig::BOMB_EXPLOSION_RANGE)
+					activeShapes[i].getPoints()[j].setSymbol(EMPTY);
 				else
-					activeShapes[i].points[j].setSymbol(GameConfig::SHAPE_SYMBOL);
+					activeShapes[i].getPoints()[j].setSymbol(GameConfig::SHAPE_SYMBOL);
 			}
 		}
 		if (activeShapes[i].isShapeClear()) // if by bombing a whole shape is empty 

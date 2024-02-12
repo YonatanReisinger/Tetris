@@ -26,31 +26,31 @@ Shape::Shape(Type t, Point& start,GameColorStatus colorStatus,RotationDirection 
 	this->shapeDirection = shapeDirection;
 	switch (t) {
 		case SQUARE: {
-			createSquare(points, start,colorStatus);
+			createSquare(start,colorStatus);
 			break;
 		}
 		case STRAIGHT: {
-			createStraight(points, start,colorStatus);
+			createStraight(start,colorStatus);
 			break;
 		}
 		case PLUS: {
-			createPlus(points, start, colorStatus);
+			createPlus(start, colorStatus);
 			break;
 		}
 		case SKEW: {
-			createSkew(points, start, colorStatus);
+			createSkew(start, colorStatus);
 			break;
 		}
 		case MIRROR_SKEW: {
-			createMirrorSkew(points, start, colorStatus);
+			createMirrorSkew(start, colorStatus);
 			break;
 		}
 		case L: {
-			createL(points, start, colorStatus);
+			createL(start, colorStatus);
 			break;
 		}
 		case MIRROR_L: {
-			createMirrorL(points, start, colorStatus);
+			createMirrorL(start, colorStatus);
 			break;
 		}
 		case BOMB: {
@@ -90,7 +90,7 @@ void Shape::moveRight() {
   with the specified color status.
 
 *************************/
-void Shape::createSquare(Point* points, Point& start,GameColorStatus colorStatus) {
+void Shape::createSquare(Point& start,GameColorStatus colorStatus) {
 	Point p1 = start;
 	points[0] = p1;//copies the starting point
 	p1.moveLeft();//takes the starting point and moves it left
@@ -111,7 +111,7 @@ void Shape::createSquare(Point* points, Point& start,GameColorStatus colorStatus
    with the specified color status.
 
 *************************/
-void Shape::createStraight(Point* points, Point& start,GameColorStatus colorStatus) {
+void Shape::createStraight(Point& start,GameColorStatus colorStatus) {
 	Point p1 = start;
 	points[0] = p1;//copies the starting point
 	p1.moveDown();//takes the starting point and moves it left
@@ -131,7 +131,7 @@ void Shape::createStraight(Point* points, Point& start,GameColorStatus colorStat
 * Description: Creates a plus shape using the specified points, starting from the provided starting point, with the specified color status.
 
 *************************/
-void Shape::createPlus(Point* points, Point& start,GameColorStatus colorStatus) {
+void Shape::createPlus(Point& start,GameColorStatus colorStatus) {
 	Point p1 = start;
 	points[0] = p1;
 	p1.moveDown();
@@ -152,7 +152,7 @@ void Shape::createPlus(Point* points, Point& start,GameColorStatus colorStatus) 
 * Description: Creates an L-shaped figure using the specified points, starting from the provided starting point, with the specified color status.
 
 *************************/
-void Shape::createL(Point* points, Point& start,GameColorStatus colorStatus) {
+void Shape::createL(Point& start,GameColorStatus colorStatus) {
 	Point p1 = start;
 	points[0] = p1;
 	p1.moveDown();
@@ -172,7 +172,7 @@ void Shape::createL(Point* points, Point& start,GameColorStatus colorStatus) {
 * Description: Creates a mirror L-shaped figure using the specified points, starting from the provided starting point, with the specified color status.
 
 *************************/
-void Shape::createMirrorL(Point* points, Point& start,GameColorStatus colorStatus) {
+void Shape::createMirrorL(Point& start,GameColorStatus colorStatus) {
 	Point p1 = start;
 	points[0] = p1;
 	p1.moveDown();
@@ -204,7 +204,7 @@ void Shape::createBomb(Point& start, GameColorStatus colorStatus)
 * Description: Creates a skew shape using the specified points, starting from the provided starting point, with the specified color status.
 
 *************************/
-void Shape::createSkew(Point* points, Point& start,GameColorStatus colorStatus) {
+void Shape::createSkew(Point& start,GameColorStatus colorStatus) {
 	Point p1 = start;
 	points[0] = p1;
 	p1.moveDown();
@@ -225,7 +225,7 @@ void Shape::createSkew(Point* points, Point& start,GameColorStatus colorStatus) 
   with the specified color status.
 
 *************************/
-void Shape::createMirrorSkew(Point* points, Point& start,GameColorStatus colorStatus) {
+void Shape::createMirrorSkew(Point& start,GameColorStatus colorStatus) {
 	Point p1 = start;
 	points[0] = p1;
 	p1.moveDown();
@@ -986,6 +986,10 @@ Shape:: Type Shape:: getType() const
 * Description: Gets the array of points representing the shape.
 ************************/
 Point* const Shape:: getPoints()
+{
+	return points;
+}
+const Point* const Shape:: getPoints() const
 {
 	return points;
 }

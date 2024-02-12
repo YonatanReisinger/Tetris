@@ -40,12 +40,11 @@ public:
 	bool setShapeColor(Color color);
 	Type getType() const;
 	Point* const getPoints();
+	const Point* const getPoints() const;
 	bool isAbove(const Shape& shape) const;
 	inline RotationDirection getDirection() const { return shapeDirection; };
 	bool isToTheRight(const Shape& shape) const;
 	bool isToTheLeft(const Shape& shape) const;
-
-	friend class Board;
 
 private:
 	/*each shape will be held by an array of 4 points and an enum that represents
@@ -53,13 +52,13 @@ private:
 	Point points[NUM_OF_POINTS];
 	Type shapeType;
 	RotationDirection shapeDirection;
-	void createSquare(Point* points, Point& start, GameColorStatus colorStatus);
-	void createStraight(Point* points, Point& start, GameColorStatus colorStatus);
-	void createPlus(Point* points, Point& start, GameColorStatus colorStatus);
-	void createSkew(Point* points, Point& start, GameColorStatus colorStatus);
-	void createMirrorSkew(Point* points, Point& start, GameColorStatus colorStatus);
-	void createL(Point* points, Point& start, GameColorStatus colorStatus);
-	void createMirrorL(Point* points, Point& start, GameColorStatus colorStatus);
+	void createSquare(Point& start, GameColorStatus colorStatus);
+	void createStraight(Point& start, GameColorStatus colorStatus);
+	void createPlus(Point& start, GameColorStatus colorStatus);
+	void createSkew(Point& start, GameColorStatus colorStatus);
+	void createMirrorSkew(Point& start, GameColorStatus colorStatus);
+	void createL(Point& start, GameColorStatus colorStatus);
+	void createMirrorL(Point& start, GameColorStatus colorStatus);
 	void createBomb(Point& start, GameColorStatus colorStatus);
 	void rotatePlus(ShapeMovement direction);
 	void rotateMirrorL(ShapeMovement direction);
