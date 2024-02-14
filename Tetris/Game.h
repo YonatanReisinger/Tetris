@@ -59,5 +59,6 @@ public:
 	static void clearKeyboardInputBuffer();
 	inline void clearKeysPressed();
 	bool wasEscapePressed() const;
+	void clearCharFromKeysPressed(char ch);
 };
 #endif // Game.h
