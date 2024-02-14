@@ -50,30 +50,30 @@ bool Computer::setLevel(Level level)
 		return false;
 }
 /************************
-* Name: getKey
+* Name: pressKey
 * Input: None
 * Output: Key representing the next move key
 * Description: Returns the next move key for the computer player.
 ************************/
-Key Computer::getKey() const
+Key Computer::pressKey() const
 {
 	Key key;
-	Shape:: RotationDirection currDirection = currPlayingShape->getDirection();
+	Shape:: RotationDirection currDirection = getCurrShape()->getDirection();
 	Shape:: RotationDirection finalDirection = currShapeFinalState.getDirection();
 	int val;
 	if (currDirection != finalDirection) {
 		val = (4 + finalDirection - currDirection) % 4;
 		if (val == 3)
-			key = keys[KeyInd::ROTATE_LEFT_IND];
+			key = getKeys()[KeyInd::ROTATE_LEFT_IND];
 		else
-			key = keys[KeyInd::ROTATE_RIGHT_IND];
+			key = getKeys()[KeyInd::ROTATE_RIGHT_IND];
 	}
-	else if (currPlayingShape->isAbove(currShapeFinalState)) 
-		key = keys[KeyInd::DROP_IND];
-	else if (currPlayingShape->isToTheRight(currShapeFinalState)) 
-		key = keys[KeyInd::LEFT_IND];
+	else if (getCurrShape()->isAbove(currShapeFinalState))
+		key = getKeys()[KeyInd::DROP_IND];
+	else if (getCurrShape()->isToTheRight(currShapeFinalState))
+		key = getKeys()[KeyInd::LEFT_IND];
 	else 
-		key = keys[KeyInd::RIGHT_IND];
+		key = getKeys()[KeyInd::RIGHT_IND];
 	return key;
 }
 /************************
@@ -85,7 +85,7 @@ Key Computer::getKey() const
 bool Computer:: setCurrShapeFinalState(const Shape& shape) const
 {
 	bool res;
-	res = currPlayingShape->getType() == shape.getType() && board.isShapeInBoard(shape);
+	res = getCurrShape()->getType() == shape.getType() && getBoard().isShapeInBoard(shape);
 	if (res)
 		currShapeFinalState = shape;
 	return res;
@@ -99,7 +99,7 @@ bool Computer:: setCurrShapeFinalState(const Shape& shape) const
 void Computer:: findBestMove()
 {
 	short int i, numOfRotationsPossible = 4;
-	Shape tmpShape(*currPlayingShape), verticalShape;
+	Shape tmpShape(*getCurrShape()), verticalShape;
 	setBestMoveScore(0); // Reset the best move score because Each cuurent shape has a different best move score
 	
 	if (shouldMakeRandomMove())
@@ -116,14 +116,14 @@ void Computer:: findBestMove()
 		evaluatePossibleMovesFromSide(tmpShape, Shape:: ShapeMovement::LEFT);
 		// check the placement in the current lane
 		verticalShape = tmpShape;
-		while (board.canShapeMove(verticalShape, Shape::ShapeMovement::DROP))
+		while (getBoard().canShapeMove(verticalShape, Shape::ShapeMovement::DROP))
 			verticalShape.move(Shape::ShapeMovement::DROP);
 		updateBestMoveScoreAndCurrShapeFinalState(evaluatePlacement(verticalShape), verticalShape);
 
 		// No need to rotate a bomb or a square
 		if (tmpShape.getType() == Shape:: Type::BOMB || tmpShape.getType() == Shape::Type::SQUARE) 
 			break;
-		if (board.canShapeMove(tmpShape, Shape:: ShapeMovement::ROTATE_RIGHT))
+		if (getBoard().canShapeMove(tmpShape, Shape:: ShapeMovement::ROTATE_RIGHT))
 			tmpShape.move(Shape:: ShapeMovement::ROTATE_RIGHT);
 		else
 			numOfRotationsPossible--;
@@ -141,12 +141,12 @@ void Computer:: evaluatePossibleMovesFromSide(const Shape& tmpShape, Shape:: Sha
 	int moveScore = 0;
 	Shape horizontalShape(tmpShape), verticalShape(tmpShape);
 
-	while (board.canShapeMove(horizontalShape, direction))
+	while (getBoard().canShapeMove(horizontalShape, direction))
 	{
 		horizontalShape.move(direction);
 		verticalShape = horizontalShape;
 		// Drop the point from this specific place till it reaches the ground
-		while (board.canShapeMove(verticalShape, Shape:: ShapeMovement::DROP))
+		while (getBoard().canShapeMove(verticalShape, Shape:: ShapeMovement::DROP))
 			verticalShape.move(Shape:: ShapeMovement::DROP);
 
 		moveScore = evaluatePlacement(verticalShape);
@@ -179,12 +179,12 @@ int Computer:: evaluatePlacement(Shape tmpShape)
 {
 	int moveScore = 0;
 	// Set the shape in the board in that place and check the result
-	if (board.canSetShapeInGameBoard(tmpShape))
+	if (getBoard().canSetShapeInGameBoard(tmpShape))
 	{
-		board.setShapeInGameBoard(tmpShape, false);
+		getBoard().setShapeInGameBoard(tmpShape, false);
 		// based on the current state of the board return an int for the score of the move
 		moveScore = tmpShape.getType() != Shape:: Type:: BOMB ? evaluate() : evaluate(tmpShape);
-		board.clearShapeFromGameBoard(tmpShape);
+		getBoard().clearShapeFromGameBoard(tmpShape);
 	}
 	return moveScore;
 }
@@ -230,7 +230,7 @@ int Computer::evaluate() const
 void Computer::calculateEvaluationParameters(short int& maxHeight, short int& holesPenalty, short int& fullRows) const
 {
 	short int row, col;
-	gameBoardPointer gameBoardP = board.getGameBoard();
+	gameBoardPointer gameBoardP = getBoard().getGameBoard();
 
 	maxHeight = NOT_FOUND;
 	holesPenalty = fullRows = 0;
@@ -238,11 +238,11 @@ void Computer::calculateEvaluationParameters(short int& maxHeight, short int& ho
 	for (row = 0; row < GameConfig::HEIGHT; ++row)
 	{
 		// Check for full rows
-		fullRows += board.isRowFull(row);
+		fullRows += getBoard().isRowFull(row);
 		for (col = 0; col < GameConfig::WIDTH; ++col)
 		{
 			// A blocked point is an empty point that cant be reached easily. each direction it is blocked more points will be deducted from the move score
-			if (board.isPointFull(gameBoardP[row][col]))
+			if (getBoard().isPointFull(gameBoardP[row][col]))
 			{
 				if (maxHeight == NOT_FOUND) // if the maxHeight was not found yet, update it
 					maxHeight = GameConfig::HEIGHT - row;
@@ -264,11 +264,11 @@ void Computer::calculateEvaluationParameters(short int& maxHeight, short int& ho
 int Computer::getBlockedFromAbovePenalty(int row, int col) const
 {
 	int i, penalty = 0;
-	gameBoardPointer gameBoardP = board.getGameBoard();
+	gameBoardPointer gameBoardP = getBoard().getGameBoard();
 
 	// If a point is blocked from above. the furether away it is blocked the less the penalty is
 	for (i = 1; i <= 3; i++)
-		if (row - i >= 0 && board.isPointFull(gameBoardP[row - i][col]))
+		if (row - i >= 0 && getBoard().isPointFull(gameBoardP[row - i][col]))
 			penalty += GameConfig::HOLES_BLOCKED_FROM_ABOVE_PENALTY / i;
 
 	return penalty;
@@ -283,13 +283,13 @@ int Computer::getBlockedFromAbovePenalty(int row, int col) const
 int Computer::getBlockedFromSidePenalty(int row, int col) const
 {
 	int penalty = 0;
-	gameBoardPointer gameBoardP = board.getGameBoard();
+	gameBoardPointer gameBoardP = getBoard().getGameBoard();
 
 	// If a point is blocked from the left 
-	if (col > 0 && board.isPointFull(gameBoardP[row][col - 1]))
+	if (col > 0 && getBoard().isPointFull(gameBoardP[row][col - 1]))
 		penalty += GameConfig::HOLES_BLOCKED_FROM_SIDE_PENALTY;
 	// If a point is blocked from the right
-	if (col < GameConfig::WIDTH - 1 && board.isPointFull(gameBoardP[row][col + 1]))
+	if (col < GameConfig::WIDTH - 1 && getBoard().isPointFull(gameBoardP[row][col + 1]))
 		penalty += GameConfig::HOLES_BLOCKED_FROM_SIDE_PENALTY;
 	return penalty;
 }
@@ -302,11 +302,11 @@ int Computer::getBlockedFromSidePenalty(int row, int col) const
 int Computer:: evaluate(Shape& bomb) const
 {
 	short int row, col, pointsInBombRange = 0;
-	gameBoardPointer gameBoardP = board.getGameBoard();
+	gameBoardPointer gameBoardP = getBoard().getGameBoard();
 
 	for (row = 0; row < GameConfig::HEIGHT; ++row)
 		for (col = 0; col < GameConfig::WIDTH; ++col)
-			if (board.isPointFull(gameBoardP[row][col]) && bomb.getPoints()[0].distance(gameBoardP[row][col]) <= GameConfig::BOMB_EXPLOSION_RANGE)
+			if (getBoard().isPointFull(gameBoardP[row][col]) && bomb.getPoints()[0].distance(gameBoardP[row][col]) <= GameConfig::BOMB_EXPLOSION_RANGE)
 				pointsInBombRange++;
 
 	return pointsInBombRange;
@@ -342,13 +342,13 @@ void Computer:: findRandomMove()
 	Shape tmpShape;
 	short int i, horizontalMovement, randomNumOfRotations;
 
-	tmpShape = *currPlayingShape;
+	tmpShape = *getCurrShape();
 
 	// No need to rotate a bomb or square
 	if (tmpShape.getType() != Shape::Type::BOMB && tmpShape.getType() != Shape::Type::SQUARE)
 	{
 		randomNumOfRotations = rand() % 4;
-		for (i = 0; i < randomNumOfRotations && board.canShapeMove(tmpShape, Shape::ShapeMovement::ROTATE_RIGHT); ++i)
+		for (i = 0; i < randomNumOfRotations && getBoard().canShapeMove(tmpShape, Shape::ShapeMovement::ROTATE_RIGHT); ++i)
 			tmpShape.move(Shape::ShapeMovement::ROTATE_RIGHT);
 	}
 
@@ -356,14 +356,14 @@ void Computer:: findRandomMove()
 	horizontalMovement = (rand() % GameConfig::WIDTH) - (GameConfig::WIDTH / 2);
 	for (i = 0; i < abs(horizontalMovement); ++i)
 	{
-		if (horizontalMovement > 0 && board.canShapeMove(tmpShape, Shape::ShapeMovement::RIGHT)) //for right movement
+		if (horizontalMovement > 0 && getBoard().canShapeMove(tmpShape, Shape::ShapeMovement::RIGHT)) //for right movement
 			tmpShape.moveRight();
-		else if (horizontalMovement < 0 && board.canShapeMove(tmpShape, Shape::ShapeMovement::LEFT)) //for left movement
+		else if (horizontalMovement < 0 && getBoard().canShapeMove(tmpShape, Shape::ShapeMovement::LEFT)) //for left movement
 			tmpShape.moveLeft();
 	}
 
 	// Drop the point from this specific place till it reaches the ground
-	while (board.canShapeMove(tmpShape, Shape::ShapeMovement::DROP))
+	while (getBoard().canShapeMove(tmpShape, Shape::ShapeMovement::DROP))
 		tmpShape.move(Shape::ShapeMovement::DROP);
 
 	setCurrShapeFinalState(tmpShape);

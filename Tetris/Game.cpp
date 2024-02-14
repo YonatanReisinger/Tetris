@@ -341,20 +341,33 @@ GameColorStatus Game::getUserColorChoiceFromKeyboard()
 void Game::setKeysPressed()
 {
 	Computer* cpu1, *cpu2;
+	Key key;
 
 	while (_kbhit())
 		keysPressed.push_back(_getch());
+
 	//CPU vs CPU
 	if (typeid(player1) != typeid(Player) && typeid(player2) != typeid(Player)) {
 		cpu1 = dynamic_cast<Computer*>(&player1);
 		cpu2 = dynamic_cast<Computer*>(&player2);
-		keysPressed.push_back(cpu1->getKey());
-		keysPressed.push_back(cpu2->getKey());
+
+		for (int i = 0; i < NUM_OF_KEYS; ++i)
+			clearCharFromKeysPressed(player1.getKeys()[i]);
+
+		for (int i = 0; i < NUM_OF_KEYS; ++i)
+			clearCharFromKeysPressed(player2.getKeys()[i]);
+		
+		keysPressed.push_back(cpu1->pressKey());
+		keysPressed.push_back(cpu2->pressKey());
 	}
 	//player vs CPU
-	else if (typeid(player1) == typeid(Player) && typeid(player2) != typeid(Player)) {
+	else if (typeid(player1) == typeid(Player) && typeid(player2) != typeid(Player))
+	{
+		for (int i = 0; i < NUM_OF_KEYS; ++i)
+			clearCharFromKeysPressed(player2.getKeys()[i]);
+
 		cpu2 = dynamic_cast<Computer*>(&player2);
-		keysPressed.push_back(cpu2->getKey());
+		keysPressed.push_back(cpu2->pressKey());
 	}
 	clearKeyboardInputBuffer();
 }
@@ -474,4 +487,13 @@ bool Game:: wasEscapePressed() const
 		if (key == ESC)
 			return true;
 	return false;
+}
+void Game:: clearCharFromKeysPressed(char ch)
+{
+	for (int i = 0; i < keysPressed.size(); ++i)
+		if (keysPressed[i] == ch)
+		{
+			keysPressed.erase(keysPressed.begin() + i);
+			i--;
+		}
 }

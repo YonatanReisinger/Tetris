@@ -133,8 +133,7 @@ bool Player:: canCurrShapeMove(Shape:: ShapeMovement movement) const
 void Player:: findBestMove()
 {
 	// A normal player doesnt have a way to find his best move
-	if (typeid(this) == typeid(Player))
-		return;
+	return;
 }
 /************************
 * Name: setStartpoint
@@ -179,43 +178,7 @@ void Player:: setRandomCurrShape(GameColorStatus color)
 		s = new Shape(Shape:: Type(rand() % NUM_OF_SHAPES), startPoint, color);
 	setCurrShape(s);
 }
-//void Player:: updateCurShapeInGame(const Game& game)
-//{
-//	int clearRowsForPlayerInRound = 0;
-//	if (canCurrShapeMove(ShapeMovement::DROP))
-//		game.moveShapeOnScreen(*currPlayingShape, ShapeMovement::DROP, GamePace::NORMAL);
-//	//if the shape can't move anymore
-//	else
-//	{
-//		// if the shape that can't move anymore is a bomb
-//		if (currPlayingShape->getType() == Type::BOMB)
-//		{
-//			board.explodeBomb(*currPlayingShape);
-//			board.dropActiveShapes();
-//			board.printGameBoard();
-//		}
-//		// If it is a normal shape that can be set to the board
-//		else if (board.canSetShapeInGameBoard(*currPlayingShape))
-//		{
-//			board.setShapeInGameBoard(*currPlayingShape, true);
-//			increaseScore(GameConfig::SCORE_FOR_PLACING_SHAPE);
-//			// print the new shape on the playing board
-//			board.printGameBoard();
-//		}
-//		// increase the score of the player according to how many rows he cleared
-//		clearRowsForPlayerInRound = board.clearFullRows();
-//		// drop all the shapes, if after the drop more rows can be cleared, continue to do so
-//		while (clearRowsForPlayerInRound != 0)
-//		{
-//			if (clearRowsForPlayerInRound == 4) // If the player scored a tetris
-//				increaseScore(800);
-//			else
-//				increaseScore(GameConfig::SCORE_FOR_FULL_LINE * clearRowsForPlayerInRound);
-//			board.dropActiveShapes();
-//			board.printGameBoard();
-//			clearRowsForPlayerInRound = board.clearFullRows();
-//		}
-//		// get a new random shape
-//		setCurrShape(game.getRandomShape(board.getStartingPoint()));
-//	}
-//}
+const Key* const Player:: getKeys() const
+{
+	return keys;
+}

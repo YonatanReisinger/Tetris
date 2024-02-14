@@ -14,7 +14,7 @@ class Computer;
 // <- Macros and enums
 
 class Player {
-protected:
+private:
 	string const name;
 	Board board;
 	int score;
@@ -31,13 +31,14 @@ public:
 	virtual ~Player();
 
 	inline Board& getBoard() { return board; };
+	inline const Board& getBoard() const { return board; };
 	inline const string getName() const { return name; };
 	bool setScore(int score);
 	inline int getScore() const { return score; };
 	bool increaseScore(int increase);
 	void reset();
 	int getKeyInd(Key inputKey) const;
-	inline Shape* getCurrShape() { return currPlayingShape; };
+	inline Shape* getCurrShape() const { return currPlayingShape; };
 	void setCurrShape(Shape* currShape);
 	bool isStuck() const;
 	bool canCurrShapeMove(Shape:: ShapeMovement movement) const;
@@ -45,5 +46,6 @@ public:
 	bool setStartpoint(const Point& startPoint);
 	const Point& getStartPoint() const;
 	void setRandomCurrShape(GameColorStatus color);
+	const Key* const getKeys() const;
 };
 #endif // PLAYER.h

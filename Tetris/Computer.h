@@ -4,7 +4,7 @@
 #include "Player.h"
 // <- Imports
 
-class Computer: virtual public Player
+class Computer: public Player
 {
 public:
 	enum Level { BEST = 'a', GOOD = 'b', NOVICE = 'c'};
@@ -13,14 +13,14 @@ public:
 	bool setLevel(Level level);
 	inline Level getLevel() const { return level; };
 	static Level getLevelFromKeyboard();
-	Key getKey() const;
+	Key pressKey() const;
 	bool setCurrShapeFinalState(const Shape& shape) const;
 	void findBestMove();
 	int evaluatePlacement(Shape tmpShape);
 	Shape getcurrShapeFinalState() const;
 	inline bool setBestMoveScore(int newScore) const;
 
-protected:
+private:
 	Level level;
 	mutable Shape currShapeFinalState;
 	mutable int bestMoveScore;
