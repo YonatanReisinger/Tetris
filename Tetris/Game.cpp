@@ -174,11 +174,11 @@ void Game:: processPlayerInput(Player& player)
 
 	//movement = (Shape::ShapeMovement)player.getKeyInd(key);
 	// the index of the key indicates it's type of movement
-	for (i = 0; i < keysPressed.size() && movement == NOT_FOUND; ++i)
+	for (i = 0; i < keysPressed.size() && movement == (Shape::ShapeMovement)NOT_FOUND; ++i)
 		movement = (Shape::ShapeMovement)player.getKeyInd(keysPressed[i]);
 
 	// if a valid key was pressed
-	if (movement != NOT_FOUND && player.canCurrShapeMove(movement))
+	if (movement != (Shape::ShapeMovement)NOT_FOUND && player.canCurrShapeMove(movement))
 	{
 		// if the player pressed the drop bottom, drop the shape down the board while it can
 		if (movement == Shape:: ShapeMovement::DROP)
@@ -328,7 +328,7 @@ GameColorStatus Game::getUserColorChoiceFromKeyboard()
 	do
 	{
 		colorChoice = _getch();
-	} while (colorChoice != GameColorStatus::COLORIZED + '0' && colorChoice != GameColorStatus::UNCOLORIZED + '0');
+	} while (colorChoice != (char)GameColorStatus::COLORIZED + '0' && colorChoice != (char)GameColorStatus::UNCOLORIZED + '0');
 	clearScreen();
 	return (GameColorStatus)(colorChoice - '0');
 }
@@ -346,11 +346,12 @@ void Game::setKeysPressed()
 	while (_kbhit())
 		keysPressed.push_back(_getch());
 
-	//CPU vs CPU
-	if (typeid(player1) != typeid(Player) && typeid(player2) != typeid(Player)) {
-		cpu1 = dynamic_cast<Computer*>(&player1);
-		cpu2 = dynamic_cast<Computer*>(&player2);
+	cpu1 = dynamic_cast<Computer*>(&player1);
+	cpu2 = dynamic_cast<Computer*>(&player2);
 
+	//CPU vs CPU
+	if (cpu1 != nullptr && cpu2 != nullptr) {
+		
 		for (int i = 0; i < NUM_OF_KEYS; ++i)
 			clearCharFromKeysPressed(player1.getKeys()[i]);
 
@@ -361,15 +362,37 @@ void Game::setKeysPressed()
 		keysPressed.push_back(cpu2->pressKey());
 	}
 	//player vs CPU
-	else if (typeid(player1) == typeid(Player) && typeid(player2) != typeid(Player))
+	else if (cpu1 == nullptr && cpu2 != nullptr)
 	{
 		for (int i = 0; i < NUM_OF_KEYS; ++i)
 			clearCharFromKeysPressed(player2.getKeys()[i]);
 
-		cpu2 = dynamic_cast<Computer*>(&player2);
 		keysPressed.push_back(cpu2->pressKey());
 	}
 	clearKeyboardInputBuffer();
+}
+/************************
+* Name: printWelcomeMessage
+* Input: None
+* Output: None
+* Description: Prints a welcome message for the Tetris game.
+************************/
+void Game:: printWelcomeMessage()
+{
+	string message = R"(
+                  ___                       ___                       ___
+      ___        /  /\          ___        /  /\        ___          /  /\    
+     /  /\      /  /:/_        /  /\      /  /::\      /  /\        /  /:/_   
+    /  /:/     /  /:/ /\      /  /:/     /  /:/\:\    /  /:/       /  /:/ /\  
+   /  /:/     /  /:/ /:/_    /  /:/     /  /:/~/:/   /__/::\      /  /:/ /::\ 
+  /  /::\    /__/:/ /:/ /\  /  /::\    /__/:/ /:/___ \__\/\:\__  /__/:/ /:/\:\
+ /__/:/\:\   \  \:\/:/ /:/ /__/:/\:\   \  \:\/:::::/    \  \:\/\ \  \:\/:/~/:/
+ \__\/  \:\   \  \::/ /:/  \__\/  \:\   \  \::/~~~~      \__\::/  \  \::/ /:/ 
+      \  \:\   \  \:\/:/        \  \:\   \  \:\          /__/:/    \__\/ /:/  
+       \__\/    \  \::/          \__\/    \  \:\         \__\/       /__/:/   
+                 \__\/                     \__\/                     \__\/    
+)";
+	cout << message << endl;
 }
 /************************
 * Name: printMenu
@@ -474,7 +497,7 @@ void Game:: printKeys()
 ************************/
 inline void Game:: clearKeysPressed()
 {
-	keysPressed.resize(0);
+	keysPressed.clear();
 }
 /************************
 * Name: wasEscapePressed

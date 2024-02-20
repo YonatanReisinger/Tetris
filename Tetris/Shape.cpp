@@ -10,8 +10,8 @@
 
 *************************/
 Shape::Shape() {
-	shapeDirection = FACE_UP ;
-	shapeType = SQUARE;
+	shapeDirection = RotationDirection:: FACE_UP ;
+	shapeType = Type:: SQUARE;
 }
 /*************************
 * Name: Shape
@@ -25,35 +25,35 @@ Shape::Shape(Type t, Point& start,GameColorStatus colorStatus,RotationDirection 
 	shapeType = t;
 	this->shapeDirection = shapeDirection;
 	switch (t) {
-		case SQUARE: {
+		case Type:: SQUARE: {
 			createSquare(start,colorStatus);
 			break;
 		}
-		case STRAIGHT: {
+		case Type:: STRAIGHT: {
 			createStraight(start,colorStatus);
 			break;
 		}
-		case PLUS: {
+		case Type:: PLUS: {
 			createPlus(start, colorStatus);
 			break;
 		}
-		case SKEW: {
+		case Type:: SKEW: {
 			createSkew(start, colorStatus);
 			break;
 		}
-		case MIRROR_SKEW: {
+		case Type:: MIRROR_SKEW: {
 			createMirrorSkew(start, colorStatus);
 			break;
 		}
-		case L: {
+		case Type:: L: {
 			createL(start, colorStatus);
 			break;
 		}
-		case MIRROR_L: {
+		case Type:: MIRROR_L: {
 			createMirrorL(start, colorStatus);
 			break;
 		}
-		case BOMB: {
+		case Type:: BOMB: {
 			createBomb(start, colorStatus);
 			return;
 		}
@@ -99,8 +99,8 @@ void Shape::createSquare(Point& start,GameColorStatus colorStatus) {
 	points[2] = p1;
 	p1.moveRight();
 	points[3] = p1;
-	if (colorStatus == COLORIZED) {
-		setShapeColor(Color::BLUE);
+	if (colorStatus == GameColorStatus:: COLORIZED) {
+		setShapeColor(Point:: Color::BLUE);
 	}
 }
 /*************************
@@ -120,8 +120,8 @@ void Shape::createStraight(Point& start,GameColorStatus colorStatus) {
 	points[2] =p1;
 	p1.moveDown();
 	points[3] =p1;
-	if (colorStatus == COLORIZED) {
-		setShapeColor(Color::BRWON);
+	if (colorStatus == GameColorStatus:: COLORIZED) {
+		setShapeColor(Point:: Color::BRWON);
 	}
 }
 /*************************
@@ -141,8 +141,8 @@ void Shape::createPlus(Point& start,GameColorStatus colorStatus) {
 	p1.moveRight();
 	p1.moveRight();
 	points[3] = p1;
-	if (colorStatus == COLORIZED) {
-		setShapeColor(Color::GREY);
+	if (colorStatus == GameColorStatus:: COLORIZED) {
+		setShapeColor(Point:: Color::GREY);
 	}
 }
 /*************************
@@ -161,8 +161,8 @@ void Shape::createL(Point& start,GameColorStatus colorStatus) {
 	points[2] = p1;
 	p1.moveRight();
 	points[3] = p1;
-	if (colorStatus == COLORIZED) {
-		setShapeColor(Color::GREEN);
+	if (colorStatus == GameColorStatus:: COLORIZED) {
+		setShapeColor(Point:: Color::GREEN);
 	}
 }
 /*************************
@@ -181,8 +181,8 @@ void Shape::createMirrorL(Point& start,GameColorStatus colorStatus) {
 	points[2] = p1;
 	p1.moveLeft();
 	points[3] = p1;
-	if (colorStatus == COLORIZED) {
-		setShapeColor(Color::CYAN);
+	if (colorStatus == GameColorStatus:: COLORIZED) {
+		setShapeColor(Point:: Color::CYAN);
 	}
 }
 void Shape::createBomb(Point& start, GameColorStatus colorStatus)
@@ -192,9 +192,8 @@ void Shape::createBomb(Point& start, GameColorStatus colorStatus)
 	points[1] = EMPTY;
 	points[2] = EMPTY;
 	points[3] = EMPTY;
-	// Change to different color after !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-	if (colorStatus == COLORIZED) {
-		setShapeColor(Color::WHITE);
+	if (colorStatus == GameColorStatus:: COLORIZED) {
+		setShapeColor(Point:: Color::WHITE);
 	}
 }
 /*************************
@@ -213,8 +212,8 @@ void Shape::createSkew(Point& start,GameColorStatus colorStatus) {
 	points[2] = p1;
 	p1.moveDown();
 	points[3] = p1;
-	if (colorStatus == COLORIZED) {
-		setShapeColor(Color::PURPLE);
+	if (colorStatus == GameColorStatus:: COLORIZED) {
+		setShapeColor(Point:: Color::PURPLE);
 	}
 }
 /*************************
@@ -234,8 +233,8 @@ void Shape::createMirrorSkew(Point& start,GameColorStatus colorStatus) {
 	points[2] = p1;
 	p1.moveDown();
 	points[3] = p1;
-	if (colorStatus == COLORIZED) {
-		setShapeColor(Color::RED);
+	if (colorStatus == GameColorStatus:: COLORIZED) {
+		setShapeColor(Point:: Color::RED);
 	}
 }
 /*************************
@@ -247,31 +246,31 @@ void Shape::createMirrorSkew(Point& start,GameColorStatus colorStatus) {
 *************************/
 void Shape::rotateLeft(Type t) {
 	switch (t) {
-		case SQUARE: {
+		case Type:: SQUARE: {
 			break;
 		}
-		case STRAIGHT: {
-			rotateStraight(ROTATE_LEFT);
+		case Type:: STRAIGHT: {
+			rotateStraight(ShapeMovement:: ROTATE_LEFT);
 			break;
 		}
-		case PLUS: {
-			rotatePlus(ROTATE_LEFT);
+		case Type:: PLUS: {
+			rotatePlus(ShapeMovement:: ROTATE_LEFT);
 			break;
 		}
-		case SKEW: {
-			rotateSkew(ROTATE_LEFT);
+		case Type:: SKEW: {
+			rotateSkew(ShapeMovement::ROTATE_LEFT);
 			break;
 		}
-		case MIRROR_SKEW: {
-			rotateMirrorSkew(ROTATE_LEFT);
+		case Type:: MIRROR_SKEW: {
+			rotateMirrorSkew(ShapeMovement::ROTATE_LEFT);
 			break;
 		}
-		case L: {
-			rotateL(ROTATE_LEFT);
+		case Type:: L: {
+			rotateL(ShapeMovement::ROTATE_LEFT);
 			break;
 		}
-		case MIRROR_L: {
-			rotateMirrorL(ROTATE_LEFT);
+		case Type:: MIRROR_L: {
+			rotateMirrorL(ShapeMovement:: ROTATE_LEFT);
 			break;
 		}
 	}
@@ -285,31 +284,31 @@ void Shape::rotateLeft(Type t) {
 *************************/
 void Shape::rotateRight(Type t) {
 	switch (t) {
-	case SQUARE: {
+	case Type:: SQUARE: {
 		break;
 	}
-	case STRAIGHT: {
-		rotateStraight(ROTATE_RIGHT);
+	case Type:: STRAIGHT: {
+		rotateStraight(ShapeMovement::ROTATE_RIGHT);
 		break;
 	}
-	case PLUS: {
-		rotatePlus(ROTATE_RIGHT);
+	case Type:: PLUS: {
+		rotatePlus(ShapeMovement:: ROTATE_RIGHT);
 		break;
 	}
-	case SKEW: {
-		rotateSkew(ROTATE_RIGHT);
+	case Type:: SKEW: {
+		rotateSkew(ShapeMovement:: ROTATE_RIGHT);
 		break;
 	}
-	case MIRROR_SKEW: {
-		rotateMirrorSkew(ROTATE_RIGHT);
+	case Type:: MIRROR_SKEW: {
+		rotateMirrorSkew(ShapeMovement:: ROTATE_RIGHT);
 		break;
 	}
-	case L: {
-		rotateL(ROTATE_RIGHT);
+	case Type:: L: {
+		rotateL(ShapeMovement:: ROTATE_RIGHT);
 		break;
 	}
-	case MIRROR_L: {
-		rotateMirrorL(ROTATE_RIGHT);
+	case Type:: MIRROR_L: {
+		rotateMirrorL(ShapeMovement:: ROTATE_RIGHT);
 		break;
 	}
 	}
@@ -322,32 +321,32 @@ void Shape::rotateRight(Type t) {
 
 *************************/
 void Shape::rotatePlus(ShapeMovement direction) {
-	if (direction == ROTATE_LEFT) {
+	if (direction == ShapeMovement:: ROTATE_LEFT) {
 		points[3] = points[0];
 		points[0] = points[2];
 		switch (shapeDirection) {
-			case FACE_UP: {
+		case RotationDirection:: FACE_UP: {
 				points[2].moveRight();
 				points[2].moveDown();
-				shapeDirection = FACE_LEFT;
+				shapeDirection = RotationDirection:: FACE_LEFT;
 				break;
 			}
-			case FACE_LEFT: {
+			case RotationDirection:: FACE_LEFT: {
 				points[2].moveUp();
 				points[2].moveRight();
-				shapeDirection = FACE_DOWN;
+				shapeDirection = RotationDirection:: FACE_DOWN;
 				break;
 			}
-			case FACE_DOWN: {
+			case RotationDirection:: FACE_DOWN: {
 				points[2].moveLeft();
 				points[2].moveUp();
-				shapeDirection = FACE_RIGHT;
+				shapeDirection = RotationDirection:: FACE_RIGHT;
 				break;
 			}
-			case FACE_RIGHT: {
+			case RotationDirection:: FACE_RIGHT: {
 				points[2].moveLeft();
 				points[2].moveDown();
-				shapeDirection = FACE_UP;
+				shapeDirection = RotationDirection:: FACE_UP;
 				break;
 			}
 		}
@@ -356,75 +355,75 @@ void Shape::rotatePlus(ShapeMovement direction) {
 		points[2] = points[0];
 		points[0] = points[3];
 		switch (shapeDirection) {
-			case FACE_UP: {
+			case RotationDirection:: FACE_UP: {
 				points[3].moveLeft();
 				points[3].moveDown();
-				shapeDirection = FACE_RIGHT;
+				shapeDirection = RotationDirection:: FACE_RIGHT;
 				break;
 			}
-			case FACE_RIGHT: {
+			case RotationDirection:: FACE_RIGHT: {
 				points[3].moveLeft();
 				points[3].moveUp();
-				shapeDirection = FACE_DOWN;
+				shapeDirection = RotationDirection:: FACE_DOWN;
 				break;
 			}
-			case FACE_DOWN: {
+			case RotationDirection:: FACE_DOWN: {
 				points[3].moveRight();
 				points[3].moveUp();
-				shapeDirection = FACE_LEFT;
+				shapeDirection = RotationDirection:: FACE_LEFT;
 				break;
 			}
-			case FACE_LEFT: {
+			case RotationDirection:: FACE_LEFT: {
 				points[3].moveRight();
 				points[3].moveDown();
-				shapeDirection = FACE_UP;
+				shapeDirection = RotationDirection:: FACE_UP;
 				break;
 			}
 		}
 	}
 }
 void Shape::rotateMirrorL(ShapeMovement direction) {
-	if (direction == ROTATE_LEFT) 
+	if (direction == ShapeMovement:: ROTATE_LEFT)
 	{
 		switch (shapeDirection) {
-			case FACE_UP: {
+			case RotationDirection:: FACE_UP: {
 				points[0].moveDown();
 				points[0].moveLeft();
 				points[2].moveRight();
 				points[2].moveUp();
 				points[3].moveRight();
 				points[3].moveRight();
-				shapeDirection = FACE_LEFT;
+				shapeDirection = RotationDirection:: FACE_LEFT;
 				break;
 			}
-			case FACE_RIGHT: {
+			case RotationDirection:: FACE_RIGHT: {
 				points[0].moveLeft();
 				points[0].moveUp();
 				points[2].moveRight();
 				points[2].moveDown();
 				points[3].moveDown();
 				points[3].moveDown();
-				shapeDirection = FACE_UP;
+				shapeDirection = RotationDirection:: FACE_UP;
 				break;
 			}
-			case FACE_DOWN: {
+			case RotationDirection:: FACE_DOWN: {
 				points[0].moveRight();
 				points[0].moveUp();
 				points[2].moveLeft();
 				points[2].moveDown();
 				points[3].moveLeft();
 				points[3].moveLeft();
-				shapeDirection = FACE_RIGHT;
+				shapeDirection = RotationDirection:: FACE_RIGHT;
 				break;
 			}
-			case FACE_LEFT: {
+			case RotationDirection:: FACE_LEFT: {
 				points[0].moveDown();
 				points[0].moveRight();
 				points[2].moveLeft();
 				points[2].moveUp();
 				points[3].moveUp();
 				points[3].moveUp();
-				shapeDirection = FACE_DOWN;
+				shapeDirection = RotationDirection:: FACE_DOWN;
 				break;
 			}
 		}
@@ -432,53 +431,53 @@ void Shape::rotateMirrorL(ShapeMovement direction) {
 	else
 	{
 		switch (shapeDirection) {
-			case FACE_UP: {
+			case RotationDirection:: FACE_UP: {
 				points[0].moveDown();
 				points[0].moveRight();
 				points[2].moveLeft();
 				points[2].moveUp();
 				points[3].moveUp();
 				points[3].moveUp();
-				shapeDirection = FACE_RIGHT;
+				shapeDirection = RotationDirection:: FACE_RIGHT;
 				break;
 			}
-			case FACE_RIGHT: {
+			case RotationDirection:: FACE_RIGHT: {
 				points[0].moveLeft();
 				points[0].moveDown();
 				points[2].moveRight();
 				points[2].moveUp();
 				points[3].moveRight();
 				points[3].moveRight();
-				shapeDirection = FACE_DOWN;
+				shapeDirection = RotationDirection:: FACE_DOWN;
 				break;
 			}
-			case FACE_DOWN: {
+			case RotationDirection:: FACE_DOWN: {
 				points[0].moveLeft();
 				points[0].moveUp();
 				points[2].moveRight();
 				points[2].moveDown();
 				points[3].moveDown();
 				points[3].moveDown();
-				shapeDirection = FACE_LEFT;
+				shapeDirection = RotationDirection:: FACE_LEFT;
 				break;
 			}
-			case FACE_LEFT: {
+			case RotationDirection:: FACE_LEFT: {
 				points[0].moveUp();
 				points[0].moveRight();
 				points[2].moveLeft();
 				points[2].moveDown();
 				points[3].moveLeft();
 				points[3].moveLeft();
-				shapeDirection = FACE_UP;
+				shapeDirection = RotationDirection:: FACE_UP;
 				break;
 			}
 		}
 	}
 }
 void Shape::rotateStraight(ShapeMovement direction) {
-	if (direction == ROTATE_LEFT) {
+	if (direction == ShapeMovement:: ROTATE_LEFT) {
 		switch (shapeDirection) {
-			case FACE_UP: {
+			case RotationDirection:: FACE_UP: {
 				points[0].moveLeft();
 				points[0].moveDown();
 				points[2].moveRight();
@@ -487,10 +486,10 @@ void Shape::rotateStraight(ShapeMovement direction) {
 					points[3].moveRight();
 					points[3].moveUp();
 				}
-				shapeDirection = FACE_LEFT;
+				shapeDirection = RotationDirection:: FACE_LEFT;
 				break;
 			}
-			case FACE_LEFT: {
+			case RotationDirection:: FACE_LEFT: {
 				points[0].moveRight();
 				points[0].moveDown();
 				points[2].moveLeft();
@@ -499,10 +498,10 @@ void Shape::rotateStraight(ShapeMovement direction) {
 					points[3].moveLeft();
 					points[3].moveUp();
 				}
-				shapeDirection = FACE_DOWN;
+				shapeDirection = RotationDirection:: FACE_DOWN;
 				break;
 			}
-			case FACE_DOWN: {
+			case RotationDirection:: FACE_DOWN: {
 				points[0].moveUp();
 				points[0].moveRight();
 				points[2].moveLeft();
@@ -511,10 +510,10 @@ void Shape::rotateStraight(ShapeMovement direction) {
 					points[3].moveLeft();
 					points[3].moveDown();
 				}
-				shapeDirection = FACE_RIGHT;
+				shapeDirection = RotationDirection:: FACE_RIGHT;
 				break;
 			}
-			case FACE_RIGHT: {
+			case RotationDirection:: FACE_RIGHT: {
 				points[0].moveLeft();
 				points[0].moveUp();
 				points[2].moveRight();
@@ -523,14 +522,14 @@ void Shape::rotateStraight(ShapeMovement direction) {
 					points[3].moveRight();
 					points[3].moveDown();
 				}
-				shapeDirection = FACE_UP;
+				shapeDirection = RotationDirection:: FACE_UP;
 				break;
 			}
 		}
 	}
 	else {
 		switch (shapeDirection) {
-			case FACE_UP: {
+			case RotationDirection:: FACE_UP: {
 				points[0].moveRight();
 				points[0].moveDown();
 				points[2].moveLeft();
@@ -539,10 +538,10 @@ void Shape::rotateStraight(ShapeMovement direction) {
 					points[3].moveLeft();
 					points[3].moveUp();
 				}
-				shapeDirection = FACE_RIGHT;
+				shapeDirection = RotationDirection:: FACE_RIGHT;
 				break;
 			}
-			case FACE_RIGHT: {
+			case RotationDirection:: FACE_RIGHT: {
 				points[0].moveLeft();
 				points[0].moveDown();
 				points[2].moveRight();
@@ -551,10 +550,10 @@ void Shape::rotateStraight(ShapeMovement direction) {
 					points[3].moveRight();
 					points[3].moveUp();
 				}
-				shapeDirection = FACE_DOWN;
+				shapeDirection = RotationDirection:: FACE_DOWN;
 				break;
 			}
-			case FACE_DOWN: {
+			case RotationDirection:: FACE_DOWN: {
 				points[0].moveUp();
 				points[0].moveLeft();
 				points[2].moveRight();
@@ -563,10 +562,10 @@ void Shape::rotateStraight(ShapeMovement direction) {
 					points[3].moveRight();
 					points[3].moveDown();
 				}
-				shapeDirection = FACE_LEFT;
+				shapeDirection = RotationDirection:: FACE_LEFT;
 				break;
 			}
-			case FACE_LEFT: {
+			case RotationDirection:: FACE_LEFT: {
 				points[0].moveRight();
 				points[0].moveUp();
 				points[2].moveLeft();
@@ -575,53 +574,53 @@ void Shape::rotateStraight(ShapeMovement direction) {
 					points[3].moveLeft();
 					points[3].moveDown();
 				}
-				shapeDirection = FACE_UP;
+				shapeDirection = RotationDirection:: FACE_UP;
 				break;
 			}
 		}
 	}
 }
 void Shape::rotateL(ShapeMovement direction) {
-	if (direction == ROTATE_LEFT) {
+	if (direction == ShapeMovement:: ROTATE_LEFT) {
 		switch (shapeDirection) {
-			case FACE_UP: {
+		case RotationDirection:: FACE_UP: {
 				points[0].moveDown();
 				points[0].moveLeft();
 				points[2].moveRight();
 				points[2].moveUp();
 				points[3].moveUp();
 				points[3].moveUp();
-				shapeDirection = FACE_LEFT;
+				shapeDirection = RotationDirection:: FACE_LEFT;
 				break;
 			}
-			case FACE_LEFT: {
+		case RotationDirection:: FACE_LEFT: {
 				points[0].moveDown();
 				points[0].moveRight();
 				points[2].moveLeft();
 				points[2].moveUp();
 				points[3].moveLeft();
 				points[3].moveLeft();
-				shapeDirection = FACE_DOWN;
+				shapeDirection = RotationDirection:: FACE_DOWN;
 				break;
 			}
-			case FACE_DOWN: {
+		case RotationDirection:: FACE_DOWN: {
 				points[0].moveUp();
 				points[0].moveRight();
 				points[2].moveLeft();
 				points[2].moveDown();
 				points[3].moveDown();
 				points[3].moveDown();
-				shapeDirection = FACE_RIGHT;
+				shapeDirection = RotationDirection:: FACE_RIGHT;
 				break;
 			}
-			case FACE_RIGHT: {
+			case RotationDirection:: FACE_RIGHT: {
 				points[0].moveLeft();
 				points[0].moveUp();
 				points[2].moveRight();
 				points[2].moveDown();
 				points[3].moveRight();
 				points[3].moveRight();
-				shapeDirection = FACE_UP;
+				shapeDirection = RotationDirection:: FACE_UP;
 				break;
 			}
 		}
@@ -629,86 +628,86 @@ void Shape::rotateL(ShapeMovement direction) {
 	else
 	{
 		switch (shapeDirection) {
-			case FACE_UP: {
+			case RotationDirection:: FACE_UP: {
 				points[0].moveDown();
 				points[0].moveRight();
 				points[2].moveLeft();
 				points[2].moveUp();
 				points[3].moveLeft();
 				points[3].moveLeft();
-				shapeDirection = FACE_RIGHT;
+				shapeDirection = RotationDirection:: FACE_RIGHT;
 				break;
 			}
-			case FACE_RIGHT: {
+			case RotationDirection:: FACE_RIGHT: {
 				points[0].moveLeft();
 				points[0].moveDown();
 				points[2].moveRight();
 				points[2].moveUp();
 				points[3].moveUp();
 				points[3].moveUp();
-				shapeDirection = FACE_DOWN;
+				shapeDirection = RotationDirection:: FACE_DOWN;
 				break;
 			}
-			case FACE_DOWN: {
+			case RotationDirection:: FACE_DOWN: {
 				points[0].moveLeft();
 				points[0].moveUp();
 				points[2].moveRight();
 				points[2].moveDown();
 				points[3].moveRight();
 				points[3].moveRight();
-				shapeDirection = FACE_LEFT;
+				shapeDirection = RotationDirection:: FACE_LEFT;
 				break;
 			}
-			case FACE_LEFT: {
+			case RotationDirection:: FACE_LEFT: {
 				points[0].moveRight();
 				points[0].moveUp();
 				points[2].moveLeft();
 				points[2].moveDown();
 				points[3].moveDown();
 				points[3].moveDown();
-				shapeDirection = FACE_UP;
+				shapeDirection = RotationDirection:: FACE_UP;
 				break;
 			}
 		}
 	}
 }
 void Shape::rotateMirrorSkew(ShapeMovement direction) {
-	if (direction == ROTATE_LEFT) {
+	if (direction == ShapeMovement:: ROTATE_LEFT) {
 		switch (shapeDirection) {
-			case FACE_UP: {
+			case RotationDirection:: FACE_UP: {
 				points[0] = points[2];
 				points[2].moveDown();
 				points[2].moveRight();
 				points[3].moveRight();
 				points[3].moveRight();
-				shapeDirection = FACE_LEFT;
+				shapeDirection = RotationDirection:: FACE_LEFT;
 				break;
 			}
-			case FACE_LEFT: {
+			case RotationDirection:: FACE_LEFT: {
 				points[0] = points[2];
 				points[2].moveUp();
 				points[2].moveRight();
 				points[3].moveUp();
 				points[3].moveUp();
-				shapeDirection = FACE_DOWN;
+				shapeDirection = RotationDirection:: FACE_DOWN;
 				break;
 			}
-			case FACE_DOWN: {
+			case RotationDirection:: FACE_DOWN: {
 				points[0] = points[2];
 				points[2].moveLeft();
 				points[2].moveUp();
 				points[3].moveLeft();
 				points[3].moveLeft();
-				shapeDirection = FACE_RIGHT;
+				shapeDirection = RotationDirection:: FACE_RIGHT;
 				break;
 			}
-			case FACE_RIGHT: {
+			case RotationDirection:: FACE_RIGHT: {
 				points[0] = points[2];
 				points[2].moveLeft();
 				points[2].moveDown();
 				points[3].moveDown();
 				points[3].moveDown();
-				shapeDirection = FACE_UP;
+				shapeDirection = RotationDirection:: FACE_UP;
 				break;
 			}
 		}
@@ -716,82 +715,82 @@ void Shape::rotateMirrorSkew(ShapeMovement direction) {
 	else
 	{
 		switch (shapeDirection) {
-			case FACE_UP: {
+			case RotationDirection:: FACE_UP: {
 				points[2] = points[0];
 				points[0].moveDown();
 				points[0].moveRight();
 				points[3].moveUp();
 				points[3].moveUp();
-				shapeDirection = FACE_RIGHT;
+				shapeDirection = RotationDirection:: FACE_RIGHT;
 				break;
 			}
-			case FACE_LEFT: {
+			case RotationDirection:: FACE_LEFT: {
 				points[2] = points[0];
 				points[0].moveUp();
 				points[0].moveRight();
 				points[3].moveLeft();
 				points[3].moveLeft();
-				shapeDirection = FACE_UP;
+				shapeDirection = RotationDirection:: FACE_UP;
 				break;
 			}
-			case FACE_DOWN: {
+			case RotationDirection:: FACE_DOWN: {
 				points[2] = points[0];
 				points[0].moveLeft();
 				points[0].moveUp();
 				points[3].moveDown();
 				points[3].moveDown();
-				shapeDirection = FACE_LEFT;
+				shapeDirection = RotationDirection:: FACE_LEFT;
 				break;
 			}
-			case FACE_RIGHT: {
+			case RotationDirection:: FACE_RIGHT: {
 				points[2] = points[0];
 				points[0].moveDown();
 				points[0].moveLeft();
 				points[3].moveRight();
 				points[3].moveRight();
-				shapeDirection = FACE_DOWN;
+				shapeDirection = RotationDirection:: FACE_DOWN;
 				break;
 			}
 		}
 	}
 }
 void Shape::rotateSkew(ShapeMovement direction) {
-	if (direction == ROTATE_LEFT) {
+	if (direction == ShapeMovement:: ROTATE_LEFT) {
 		switch (shapeDirection) {
-			case FACE_UP: {
+			case RotationDirection:: FACE_UP: {
 				points[2] = points[0];
 				points[0].moveDown();
 				points[0].moveLeft();
 				points[3].moveUp();
 				points[3].moveUp();
-				shapeDirection = FACE_LEFT;
+				shapeDirection = RotationDirection:: FACE_LEFT;
 				break;
 			}
-			case FACE_LEFT: {
+			case RotationDirection:: FACE_LEFT: {
 				points[2] = points[0];
 				points[0].moveDown();
 				points[0].moveRight();
 				points[3].moveLeft();
 				points[3].moveLeft();
-				shapeDirection = FACE_DOWN;
+				shapeDirection = RotationDirection:: FACE_DOWN;
 				break;
 			}
-			case FACE_DOWN: {
+			case RotationDirection:: FACE_DOWN: {
 				points[2] = points[0];
 				points[0].moveRight();
 				points[0].moveUp();
 				points[3].moveDown();
 				points[3].moveDown();
-				shapeDirection = FACE_RIGHT;
+				shapeDirection = RotationDirection:: FACE_RIGHT;
 				break;
 			}
-			case FACE_RIGHT: {
+			case RotationDirection:: FACE_RIGHT: {
 				points[2] = points[0];
 				points[0].moveLeft();
 				points[0].moveUp();
 				points[3].moveRight();
 				points[3].moveRight();
-				shapeDirection = FACE_UP;
+				shapeDirection = RotationDirection:: FACE_UP;
 				break;
 			}
 		}
@@ -799,40 +798,40 @@ void Shape::rotateSkew(ShapeMovement direction) {
 	else 
 	{
 		switch (shapeDirection) {
-			case FACE_UP: {
+			case RotationDirection:: FACE_UP: {
 				points[0] = points[2];
 				points[2].moveDown();
 				points[2].moveLeft();
 				points[3].moveLeft();
 				points[3].moveLeft();
-				shapeDirection = FACE_RIGHT;
+				shapeDirection = RotationDirection:: FACE_RIGHT;
 				break;
 			}
-			case FACE_RIGHT: {
+			case RotationDirection:: FACE_RIGHT: {
 				points[0] = points[2];
 				points[2].moveLeft();
 				points[2].moveUp();
 				points[3].moveUp();
 				points[3].moveUp();
-				shapeDirection = FACE_DOWN;
+				shapeDirection = RotationDirection::FACE_DOWN;
 				break;
 			}
-			case FACE_DOWN: {
+			case RotationDirection:: FACE_DOWN: {
 				points[0] = points[2];
 				points[2].moveRight();
 				points[2].moveUp();
 				points[3].moveRight();
 				points[3].moveRight();
-				shapeDirection = FACE_LEFT;
+				shapeDirection = RotationDirection:: FACE_LEFT;
 				break;
 			}
-			case FACE_LEFT: {
+			case RotationDirection:: FACE_LEFT: {
 				points[0] = points[2];
 				points[2].moveDown();
 				points[2].moveRight();
 				points[3].moveDown();
 				points[3].moveDown();
-				shapeDirection = FACE_UP;
+				shapeDirection = RotationDirection:: FACE_UP;
 				break;
 			}
 		}
@@ -881,23 +880,23 @@ void Shape::print() const {
 *************************/
 void Shape::move(ShapeMovement movement) {
 	switch (movement) {
-	case ROTATE_LEFT: {
+	case ShapeMovement:: ROTATE_LEFT: {
 		rotateLeft(shapeType);
 		break;
 	}
-	case ROTATE_RIGHT: {
+	case ShapeMovement:: ROTATE_RIGHT: {
 		rotateRight(shapeType);
 		break;
 	}
-	case LEFT: {
+	case ShapeMovement:: LEFT: {
 		moveLeft();
 		break;
 	}
-	case RIGHT: {
+	case ShapeMovement:: RIGHT: {
 		moveRight();
 		break;
 	}
-	case DROP :
+	case ShapeMovement:: DROP :
 		moveDown();
 		break;
 	}
@@ -961,7 +960,7 @@ short int Shape:: getHighestY() const
 * Output: bool
 * Description: Sets the color of the shape and returns true on success, false otherwise.
 *************************/
-bool Shape::setShapeColor(Color color)
+bool Shape::setShapeColor(Point:: Color color)
 {
 	bool res = true;
 	for (int i = 0; i < NUM_OF_POINTS&&res; i++) {
@@ -1037,7 +1036,8 @@ bool Shape::isToTheLeft(const Shape& shape) const
 ************************/
 bool Shape:: setShapeRotationDirection(RotationDirection shapeDirection)
 {
-	if (shapeDirection == FACE_UP || shapeDirection == FACE_RIGHT || shapeDirection == FACE_DOWN || shapeDirection == FACE_LEFT)
+	if (shapeDirection == RotationDirection:: FACE_UP || shapeDirection == RotationDirection:: FACE_RIGHT
+		|| shapeDirection == RotationDirection:: FACE_DOWN || shapeDirection == RotationDirection:: FACE_LEFT)
 	{
 		this->shapeDirection = shapeDirection;
 		return true;

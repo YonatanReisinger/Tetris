@@ -30,8 +30,8 @@ Computer:: Level Computer:: getLevelFromKeyboard()
 	{
 		levelChoice = (Level)_getch();
 	} while (levelChoice != Level::BEST && levelChoice != Level::GOOD && levelChoice != Level::NOVICE
-		&& tolower(levelChoice) != Level::BEST && tolower(levelChoice) != Level::GOOD && tolower(levelChoice) != Level::NOVICE);
-	return ('a' <= levelChoice <= 'z') ? levelChoice : (Level)tolower(levelChoice);
+		&& (Level)tolower((char)levelChoice) != Level::BEST && (Level)tolower((char)levelChoice) != Level::GOOD && (Level)tolower((char)levelChoice) != Level::NOVICE);
+	return ('a' <= (char)levelChoice <= 'z') ? levelChoice : (Level)tolower((char)levelChoice);
 }
 /************************
 * Name: setLevel
@@ -62,7 +62,7 @@ Key Computer::pressKey() const
 	Shape:: RotationDirection finalDirection = currShapeFinalState.getDirection();
 	int val;
 	if (currDirection != finalDirection) {
-		val = (4 + finalDirection - currDirection) % 4;
+		val = (4 + (int)finalDirection - (int)currDirection) % 4;
 		if (val == 3)
 			key = getKeys()[KeyInd::ROTATE_LEFT_IND];
 		else
@@ -337,7 +337,7 @@ bool Computer::shouldMakeRandomMove() const
 * Output: None
 * Description: Finds a random move for the computer player.
 ************************/
-void Computer:: findRandomMove()
+void Computer:: findRandomMove() const
 {
 	Shape tmpShape;
 	short int i, horizontalMovement, randomNumOfRotations;

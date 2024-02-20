@@ -1,29 +1,6 @@
 #include "global_functions.h"
 
 /************************
-* Name: printWelcomeMessage
-* Input: None
-* Output: None
-* Description: Prints a welcome message for the Tetris game.
-************************/
-void printWelcomeMessage()
-{
-    string message = "Welcome to Tetris! Have fun playing!";
-    int width = message.length() + 6;
-    // Print the top frame
-    for (int i = 0; i < width; ++i) {
-        cout << '*';
-    }
-    cout << endl;
-    // Print the message frame
-    cout << "* " << message << " *" << endl;
-    // Print the bottom frame
-    for (int i = 0; i < width; ++i) {
-        cout << '*';
-    }
-    cout << endl << endl;
-}
-/************************
 * Name: printChoiceError
 * Input: None
 * Output: None
@@ -78,4 +55,35 @@ void showConsoleCursor(bool showFlag)
     GetConsoleCursorInfo(out, &cursorInfo);
     cursorInfo.bVisible = showFlag; // set the cursor visibility
     SetConsoleCursorInfo(out, &cursorInfo);
+}
+ostream& operator<<(std::ostream& os, Choice choice)
+{
+    return cout << (unsigned int)choice;
+}
+void prepareCpuVsCpu(Player* &cpu1, Player* &cpu2, const Board& board1, const Board& board2)
+{
+    Computer* tempCpu1, * tempCpu2;
+
+    cpu1 = new Computer(board1, GameConfig::player1Keys, "CPU 1");
+    cpu2 = new Computer(board2, GameConfig::player2Keys, "CPU 2");
+
+    tempCpu1 = dynamic_cast<Computer*>(cpu1);
+    tempCpu2 = dynamic_cast<Computer*>(cpu2);
+
+    cout << "Player1:" << endl;
+    tempCpu1->setLevel(Computer::getLevelFromKeyboard());
+    clearScreen();
+    cout << "Player2:" << endl;
+    tempCpu2->setLevel(Computer::getLevelFromKeyboard());
+    clearScreen();
+}
+void prepareHumanVsCpu(Player*& cpu2, const Board& board2)
+{
+    Computer* tempCpu2;
+
+    cpu2 = new Computer(board2, GameConfig::player2Keys, "CPU 2");
+    tempCpu2 = dynamic_cast<Computer*>(cpu2);
+    cout << "Player2:" << endl;
+    tempCpu2->setLevel(Computer::getLevelFromKeyboard());
+    clearScreen();
 }
