@@ -3,8 +3,6 @@
 
 
 // Imports ->
-#include <iostream>
-using namespace std;
 #include <string>
 #include "Game.h"
 class Game;
@@ -15,11 +13,13 @@ class Game;
 #define RIGHT_ARROW 77
 // <- Macros and enums
 
-void printWelcomeMessage();
 void printChoiceError();
 void clearScreen();
 void clearCin();
 void printColorOption();
 void showConsoleCursor(bool showFlag);
+ostream& operator<<(std::ostream& os, Choice choice);
+void prepareCpuVsCpu(Player*& cpu1, Player*& cpu2, const Board& board1, const Board& board2);
+void prepareHumanVsCpu(Player*& cpu2, const Board& board2);
 
 #endif // global_functions.h

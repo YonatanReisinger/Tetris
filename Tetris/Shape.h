@@ -15,13 +15,13 @@ using namespace std;
 class Shape {
 public:
 	// Enums ->
-	enum Type { PLUS, SQUARE, STRAIGHT, SKEW, MIRROR_SKEW, L, MIRROR_L, BOMB };
-	enum RotationDirection { FACE_UP, FACE_RIGHT, FACE_DOWN, FACE_LEFT };
-	enum ShapeMovement { LEFT, RIGHT, ROTATE_LEFT, ROTATE_RIGHT, DROP };
+	enum class Type { PLUS, SQUARE, STRAIGHT, SKEW, MIRROR_SKEW, L, MIRROR_L, BOMB };
+	enum class RotationDirection { FACE_UP, FACE_RIGHT, FACE_DOWN, FACE_LEFT };
+	enum class ShapeMovement { LEFT, RIGHT, ROTATE_LEFT, ROTATE_RIGHT, DROP };
 	// <- Enums
 
 	Shape();
-	Shape(Type t, Point& start, GameColorStatus colorStatus, RotationDirection shapeDirection = FACE_UP);
+	Shape(Type t, Point& start, GameColorStatus colorStatus, RotationDirection shapeDirection = RotationDirection:: FACE_UP);
 	//void setColor(Color color);
 	void moveDown();
 	void moveLeft();
@@ -37,7 +37,7 @@ public:
 	bool isShapeClear() const;
 	short int getHighestY() const;
 	short int getLowestY() const;
-	bool setShapeColor(Color color);
+	bool setShapeColor(Point:: Color color);
 	Type getType() const;
 	Point* const getPoints();
 	const Point* const getPoints() const;

@@ -9,34 +9,21 @@
 #include "gameConfig.h"
 #include "Computer.h"
 #include "global_functions.h"
-#include <iostream>
 #include <conio.h> // for _kbhit() and _getch()
 #include <typeinfo>
 #include <vector>
-using namespace std;
 // <- Imports
 
 // Macros ans enums->
-enum class GameStatus {PAUSED, PLAYING, FINISHED} ;
 #define NO_WINNER -1
 #define TIE 0
 // <- Macros and enums
 
 class Game {
-private:
-	GameStatus status;
-	Player &player1, &player2;
-	short int winnerNum;
-	GameColorStatus const colorStatus;
-	vector<Key> keysPressed;
-
-	void run(); //game logic
-	bool checkAndProcessKeyboardInput();
-	void processPlayerInput(Player& player);
-	void printScores() const;
-	void determineWinner();
 
 public:
+	enum class GameStatus { PAUSED, PLAYING, FINISHED };
+
 	Game(Player& player1, Player& player2, GameColorStatus colorStatus);
 	void start();
 	inline bool pause() { return setStatus(GameStatus::PAUSED); };
@@ -50,8 +37,9 @@ public:
 	inline GameColorStatus const getColorStatus() const { return colorStatus; };
 	void printWinner() const;
 	static GameColorStatus getUserColorChoiceFromKeyboard();
-	void moveShapeOnScreen(Shape& shape, Shape:: ShapeMovement movement, GamePace pace) const;
+	void moveShapeOnScreen(Shape& shape, Shape::ShapeMovement movement, GamePace pace) const;
 	void setKeysPressed();
+	static void printWelcomeMessage();
 	static void printMenu(Game* pGame);
 	static void printInstructionsAndKeys();
 	static void printInstructions();
@@ -60,5 +48,18 @@ public:
 	inline void clearKeysPressed();
 	bool wasEscapePressed() const;
 	void clearCharFromKeysPressed(char ch);
+
+private:
+	GameStatus status;
+	Player &player1, &player2;
+	short int winnerNum;
+	GameColorStatus const colorStatus;
+	vector<Key> keysPressed;
+
+	void run(); //game logic
+	bool checkAndProcessKeyboardInput();
+	void processPlayerInput(Player& player);
+	void printScores() const;
+	void determineWinner();
 };
 #endif // Game.h

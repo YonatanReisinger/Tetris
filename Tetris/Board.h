@@ -5,8 +5,6 @@
 #include "Point.h"
 #include "Shape.h"
 #include "gameConfig.h"
-#include <iostream>
-using namespace std;
 // <- Imports
 
 // Macros and typedefs->

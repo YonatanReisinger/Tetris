@@ -7,7 +7,7 @@
 class Computer: public Player
 {
 public:
-	enum Level { BEST = 'a', GOOD = 'b', NOVICE = 'c'};
+	enum class Level { BEST = 'a', GOOD = 'b', NOVICE = 'c'};
 	Computer(const Board& board, const Key keys[], const string name, int bestMoveScore = 0, int score = 0);
 
 	bool setLevel(Level level);
@@ -16,9 +16,7 @@ public:
 	Key pressKey() const;
 	bool setCurrShapeFinalState(const Shape& shape) const;
 	void findBestMove();
-	int evaluatePlacement(Shape tmpShape);
-	Shape getcurrShapeFinalState() const;
-	inline bool setBestMoveScore(int newScore) const;
+	
 
 private:
 	Level level;
@@ -27,13 +25,16 @@ private:
 
 	void evaluatePossibleMovesFromSide(const Shape& tmpShape, Shape:: ShapeMovement direction);
 	inline bool updateBestMoveScoreAndCurrShapeFinalState(int newScore, const Shape& newShapeFinalState) const;
+	int evaluatePlacement(Shape tmpShape);
+	Shape getcurrShapeFinalState() const;
+	inline bool setBestMoveScore(int newScore) const;
 	int evaluate() const;
 	int evaluate(Shape& bomb) const;
 	void calculateEvaluationParameters(short int& maxHeight, short int& holesPenalty, short int& fullRows) const;
 	int getBlockedFromAbovePenalty(int row, int col) const;
 	int getBlockedFromSidePenalty(int row, int col) const;
 	bool shouldMakeRandomMove() const;
-	void findRandomMove();
+	void findRandomMove() const;
 };
 #endif //Computer.h
 
